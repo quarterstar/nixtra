@@ -1,0 +1,150 @@
+{
+    "reload_style_on_change": true,
+    "layer": "top",
+    "position": "top",
+    "disable-scroll": true,
+
+    // Misc
+    "modules-left": ["network", "cava"],
+
+    // Workspaces
+    "modules-center": [
+        "custom/separator", "hyprland/workspaces", "custom/separator",
+    ],
+
+    "modules-right": [
+        // Quick Links
+        "custom/record",
+        "custom/screenshot",
+        "custom/explorer",
+        "custom/github",
+
+        "custom/separator",
+
+        // Operating system information
+        // ---------------------------
+        "wireplumber", "temperature", "battery", "temperature", "cpu", "clock"
+        // ---------------------------
+    ],
+
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": "",
+            "9": "",
+            "active": "",
+            "default": ""
+        },
+        "active-only": false
+
+    },
+
+    // Misc
+
+    "network": {
+        "format": " {ifname}: {ipaddr}",
+        "format-disconnected": " {ifname}: Disconnected",
+        "tooltip": true
+    },
+    "cava": {
+        "framerate": 60,
+        "sensitivity": 1, // If audio spectrum never goes down, decrease this value
+        "bars": 22,
+        "lower_cutoff_freq": 2000,
+        "higher_cutoff_freq": 3000,
+        "method": "pipewire",
+        "source": "auto",
+        "stereo": true,
+        "reverse": false,
+        "bar_delimiter": 0,
+        "monstercat": false,
+        "waves": false,
+        "noise_reduction": 0.77,
+        "input_delay": 4,
+        "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
+        "actions": {
+            "on-click-right": "mode"
+        },
+        "sleep_timer": 2
+    },
+
+    // Quick links
+
+    "custom/explorer": {
+        "format": "  ",
+        "on-click": "/home/user/.nix-profile/bin/pcmanfm",
+        "tooltip": false,
+        "interval": "once"
+    },
+    "custom/screenshot": {
+        "format": "  ",
+        "on-click": "/run/current-system/sw/bin/nixtra-screenshot",
+        "on-click-right": "/run/current-system/sw/bin/nixtra-screenshot region",
+        "tooltip": false,
+        "interval": "once"
+    },
+
+    // https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1
+    "custom/record": {
+        "exec": "/run/current-system/sw/bin/nixtra-record status",
+	"format": "{}",
+	"on-click": "/run/current-system/sw/bin/nixtra-record toggle fullscreen",
+	"on-click-right": "/run/current-system/sw/bin/nixtra-record toggle region",
+	"restart-interval": 1,
+	"return-type": "json",
+	"tooltip": true
+    },
+
+    "custom/github": {
+        "format": "  ",
+        "on-click": "/home/user/.nix-profile/bin/librewolf https://github.com",
+        "tooltip": false,
+        "interval": "once"
+    },
+
+    // Operating system info
+
+    "cpu": {
+        "interval": 10,
+        "format": " {}%",
+        "max-length": 10
+    },
+    "wireplumber": {
+        "format": "{volume}% {icon}",
+        "format-muted": "",
+        "on-click": "helvum",
+        "format-icons": ["", "", ""]
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        // "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C ",
+        "format": "{temperatureC}°C "
+    },
+    "clock": {
+        "format": " {:%a, %d. %b  %H:%M}"
+    },
+
+    // Other
+
+    "tray": {
+        "icon-size": 21,
+        "spacing": 100
+    },
+    "custom/separator": {
+        "format": "│", // Unicode vertical bar
+        "tooltip": false
+    },
+    "custom/spacer": {
+        "format": " ", // Empty space
+        "tooltip": false
+    }
+}
