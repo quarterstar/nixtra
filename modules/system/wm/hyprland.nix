@@ -1,0 +1,47 @@
+{ profile, pkgs, ... }:
+
+{
+  imports = [
+    ../../userspace/services/reload-waybar.nix
+    ../../userspace/services/rainbow-border.nix
+  ];
+
+  # Enable compositor
+  programs.hyprland.enable = true;
+  programs.hyprland.xwayland.enable = true;
+  programs.waybar.enable = true;
+  programs.dconf.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    hyprland # Compositor
+    waybar # Wayland bar
+    dunst # Notif manager
+    swww # Wallpaper daemon
+    rofi-wayland # App launcher
+    plymouth # Display manager dependency
+    gsettings-desktop-schemas # GSettings Schemas (directory popups)
+    adwaita-icon-theme
+    gtk3
+    tzdata
+
+    # Dependencies by cava module in waybar
+    iniparser
+    fftw
+    helvum
+
+    # Set random wallpaper after login (may take a long time for gifs)
+    (callPackage ../../drvs/wayland-random-wallpaper/default.nix { })
+  ];
+
+  environment.sessionVariables = {
+    # Hint electron apps to use wayland
+    NIXOS_OZONE_WL = "1";
+
+    # Make Git not try to open an authorization window for pushing
+    # and other operations, fixes a crash for Hyprland.
+    GIT_ASKPASS = "/bin/stub";
+
+    # Dark theme
+    GTK_THEME = "Nordic";
+  };
+}

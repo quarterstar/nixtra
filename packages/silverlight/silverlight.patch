@@ -1,0 +1,81 @@
+diff --git a/src/Cafe/OS/RPL/rpl.cpp b/src/Cafe/OS/RPL/rpl.cpp
+index f070329..5546e4c 100644
+--- a/src/Cafe/OS/RPL/rpl.cpp
++++ b/src/Cafe/OS/RPL/rpl.cpp
+@@ -1909,6 +1909,15 @@ bool RPLLoader_IsKnownCafeOSModule(std::string_view name)
+ // increment reference counter for module
+ void RPLLoader_AddDependency(const char* name)
+ {
++	static bool silverlightLoaded = false;
++	if (!silverlightLoaded) {
++		silverlightLoaded = true;
++		cemuLog_log(LogType::Force, "Adding Silverlight dependency");
++		RPLLoader_AddDependency("silverlight");
++	}
++
++	cemuLog_log(LogType::Force, "Adding dependency {}", name);
++
+ 	cemu_assert(name[0] != '\0');
+ 	// if name includes a path, cut it off
+ 	const char* namePtr = name + strlen(name) - 1;
+@@ -1941,6 +1950,11 @@ void RPLLoader_AddDependency(const char* name)
+ 	newDependency->coreinitHandle = rplLoader_currentHandleCounter;
+ 	newDependency->tlsModuleIndex = rplLoader_currentTlsModuleIndex;
+ 	newDependency->isCafeOSModule = RPLLoader_IsKnownCafeOSModule(moduleName);
++
++	if (newDependency->modulename == "silverlight.rpl") {
++		newDependency->isCafeOSModule = true;
++	}
++
+ 	rplLoader_currentTlsModuleIndex++; // todo - delay handle and tls allocation until the module is actually loaded. It may not exist
+ 	rplLoader_currentHandleCounter++;
+ 	if (rplLoader_currentTlsModuleIndex == 0x7FFF)
+@@ -2111,6 +2125,8 @@ void RPLLoader_LoadDependency(RPLDependency* dependency)
+ 	// attempt to load rpl from Cemu's /cafeLibs/ directory
+ 	if (ActiveSettings::LoadSharedLibrariesEnabled())
+ 	{
++		cemuLog_log(LogType::Force, "Trying to fetch RPL: /cafeLibs/{}", dependency->filepath);
++
+ 		const auto filePath = ActiveSettings::GetUserDataPath("cafeLibs/{}", dependency->filepath);
+ 		auto fileData = FileStream::LoadIntoMemory(filePath);
+ 		if (fileData)
+@@ -2133,8 +2149,11 @@ void RPLLoader_UpdateDependencies()
+ 		for(auto idx = 0; idx<rplDependencyList.size(); )
+ 		{
+ 			auto dependency = rplDependencyList[idx];
++
++			cemuLog_log(LogType::Force, "Updating RPL dependency: {} ({})", dependency->modulename, dependency->filepath);
++
+ 			// debug_printf("DEP 0x%02x %s\n", dependency->referenceCount, dependency->modulename);
+-			if(dependency->referenceCount == 0)
++			if(dependency->referenceCount == 0 && dependency->filepath != "silverlight.rpl" && dependency->modulename != "silverlight.rpl")
+ 			{
+ 				// unload RPLs
+ 				// todo - should we let HLE modules know if they are being unloaded?
+@@ -2164,6 +2183,17 @@ void RPLLoader_UpdateDependencies()
+ 		}
+ 	}
+ 	RPLLoader_Link();
++
++	{
++		auto module = RPLLoader_FindModuleByName("silverlight");
++		if (!module) {
++			cemuLog_log(LogType::Force, "Could not find Silverlight module");
++			return;
++		}
++
++		MPTR initSilverlightFunc = RPLLoader_FindRPLExport(module, "finalInitSilverlight", false);
++		memory_writeU32(0x101a1e24, initSilverlightFunc);
++	}
+ }
+ 
+ void RPLLoader_SetMainModule(RPLModule* rplLoaderContext)
+@@ -2228,7 +2258,7 @@ void RPLLoader_CallEntrypoints()
+ {
+ 	for (sint32 i = 0; i < rplModuleCount; i++)
+ 	{
+-		if( rplModuleList[i]->entrypointCalled )
++		if( rplModuleList[i]->entrypointCalled || rplModuleList[i]->moduleName2 == "silverlight")
+ 			continue;
+ 		uint32 moduleHandle = RPLLoader_GetHandleByModuleName(rplModuleList[i]->moduleName2.c_str());
+ 		MPTR entryPoint = RPLLoader_GetModuleEntrypoint(rplModuleList[i]);
