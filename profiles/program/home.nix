@@ -22,6 +22,7 @@
     ../../modules/userspace/pkgs/api/insomnia.nix
     ../../modules/userspace/pkgs/cli/tldr.nix
     ../../modules/userspace/pkgs/cli/git.nix
+    ../../modules/userspace/pkgs/monitoring/htop.nix
     ../../modules/userspace/pkgs/editor/lunarvim.nix
     ../../modules/userspace/pkgs/audio/alsa.nix
     ../../modules/userspace/pkgs/re/ghidra.nix
