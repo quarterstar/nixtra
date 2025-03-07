@@ -41,7 +41,7 @@ createCommand {
                 ${pkgs.wf-recorder}/bin/wf-recorder $WF_RECORDER_OPTS -f "$vidf" > "$logf" 2>&1 &
             elif [ "$1" == "region" ]; then
                 ${pkgs.coreutils}/bin/sleep 1
-                ${pkgs.wf-recorder}/bin/wf-recorder $WF_RECORDER_OPTS -g "$(slurp)" -f "$vidf" > "$logf" 2>&1 &
+                ${pkgs.wf-recorder}/bin/wf-recorder $WF_RECORDER_OPTS -g "$(${pkgs.slurp}/bin/slurp)" -f "$vidf" > "$logf" 2>&1 &
             else
                 ${pkgs.coreutils}/bin/echo "Argument $1 not valid"
                 exit 1
