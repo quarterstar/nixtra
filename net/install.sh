@@ -21,7 +21,7 @@ memory_size_is_valid() {
   fi
 }
 
-write_propery() {
+write_property() {
   filename = $1;
   property = $2;
   value = $3;
