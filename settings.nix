@@ -9,8 +9,7 @@ rec {
     timezone = "America/New_York";
     locale = "en_US.UTF-8";
     version = "24.11";
-    initialVersion = "24.05";
-
+    initialVersion = "24.11";
     hostnameProfilePrefix = true;
   };
 
