@@ -16,15 +16,16 @@
         // Quick Links
         "custom/record",
         "custom/screenshot",
-        "custom/explorer",
-        "custom/github",
 
         "custom/separator",
 
         // Operating system information
-        // ---------------------------
-        "wireplumber", "temperature", "battery", "temperature", "cpu", "clock"
-        // ---------------------------
+        "wireplumber", "temperature", "battery", "temperature", "cpu", "clock",
+
+        "custom/separator",
+
+        // Power management buttons
+        "custom/suspend", "custom/reboot", "custom/shutoff"
     ],
 
     "hyprland/workspaces": {
@@ -77,29 +78,41 @@
 
     // Quick links
 
+    "custom/browser": {
+        "format": "  ",
+        "on-click": "/home/user/.nix-profile/bin/librewolf",
+        "tooltip": false,
+        "interval": "once"
+    },
+    "custom/terminal": {
+        "format": " ",
+        "on-click": "/home/user/.nix-profile/bin/kitty",
+        "tooltip": false,
+        "interval": "once"
+    },
     "custom/explorer": {
         "format": "  ",
         "on-click": "/home/user/.nix-profile/bin/pcmanfm",
         "tooltip": false,
         "interval": "once"
     },
+
     "custom/screenshot": {
-        "format": "  ",
+        "format": "   ",
         "on-click": "/run/current-system/sw/bin/nixtra-screenshot",
         "on-click-right": "/run/current-system/sw/bin/nixtra-screenshot region",
         "tooltip": false,
         "interval": "once"
     },
-
     // https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1
     "custom/record": {
-        "exec": "/run/current-system/sw/bin/nixtra-record status",
-	"format": "{}",
-	"on-click": "/run/current-system/sw/bin/nixtra-record toggle fullscreen",
-	"on-click-right": "/run/current-system/sw/bin/nixtra-record toggle region",
-	"restart-interval": 1,
-	"return-type": "json",
-	"tooltip": true
+      "exec": "/run/current-system/sw/bin/nixtra-record status",
+      "format": " {}",
+      "on-click": "/run/current-system/sw/bin/nixtra-record toggle fullscreen",
+      "on-click-right": "/run/current-system/sw/bin/nixtra-record toggle region",
+      "restart-interval": 1,
+      "return-type": "json",
+      "tooltip": true
     },
 
     "custom/github": {
@@ -131,6 +144,27 @@
     },
     "clock": {
         "format": " {:%a, %d. %b  %H:%M}"
+    },
+
+    // Power management buttons
+
+    "custom/suspend": {
+        "format": "  ",
+        "on-click": "systemctl suspend",
+        "tooltip": false,
+        "interval": "once"
+    },
+    "custom/reboot": {
+        "format": " ",
+        "on-click": "reboot",
+        "tooltip": false,
+        "interval": "once"
+    },
+    "custom/shutoff": {
+        "format": " ",
+        "on-click": "shutdown now",
+        "tooltip": false,
+        "interval": "once"
     },
 
     // Other
