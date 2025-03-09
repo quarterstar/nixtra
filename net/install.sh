@@ -51,7 +51,7 @@ while true; do
   read scheme
 
   if [ -z "$scheme" ]; then
-    scheme="gpt"
+    scheme="$default_partition_scheme"
   fi
 
   if ! [ "$scheme" = "gpt" ] && ! [ "$scheme" = "mbr" ]; then
@@ -66,10 +66,10 @@ while true; do
   read boot
 
   if [ -z "$boot" ]; then
-    boot=$default_boot
+    boot="$default_boot"
   fi
 
-  if ! memory_size_is_valid $boot; then
+  if ! memory_size_is_valid "$boot"; then
     echo "Memory size \"$boot\" is invalid."
   else
     break
@@ -81,10 +81,10 @@ while true; do
   read use_swap
 
   if [ -z "$use_swap" ]; then
-    use_swap=$default_use_swap
+    use_swap="$default_use_swap"
   fi
 
-  if ! [ $use_swap = "yes" ] && ! [ $use_swap = "no" ]; then
+  if ! [ "$use_swap" = "yes" ] && ! [ "$use_swap" = "no" ]; then
     echo "Option \"$use_swap\" is invalid."
   else
     break
@@ -97,10 +97,10 @@ if [ "$use_swap" = "yes" ]; then
     read swap
 
     if [ -z "$swap" ]; then
-      swap="8GB"
+      swap="$default_swap"
     fi
 
-    if ! memory_size_is_valid $swap; then
+    if ! memory_size_is_valid "$swap"; then
       echo "Memory size \"$swap\" is invalid."
     else
       break
@@ -123,6 +123,7 @@ echo "- Selected Options -"
 
 echo "Device: ${device}"
 echo "Partition scheme: ${scheme}"
+echo "Boot partition size: ${boot}"
 
 if [ "$use_swap" = "yes" ]; then
   echo "Swap size: ${swap}"
@@ -131,7 +132,7 @@ fi
 echo "GPU: ${gpu}"
 
 echo "--------------------"
-echo "Are you SURE you want to continue? Installation is destructive operation that will erase all existing data from the selected disk."
+echo "Are you SURE you want to continue? Installation is a destructive operation that will erase all existing data from the selected disk."
 echo -n "Type \"continue\" to continue anyway: "
 
 read consent
@@ -141,70 +142,86 @@ if ! [ "$consent" = "continue" ]; then
   exit 0
 fi
 
-echo -n "setting up partition scheme..."
+echo -n "Setting up partition scheme..."
 
 if [ "$scheme" = "gpt" ]; then
-  parted /dev/${device} -- mklabel gpt >> $log_file 2>&1
-  parted /dev/${device} -- mkpart root ext4 $boot -$swap >> $log_file 2>&1
-  parted /dev/${device} -- mkpart swap linux-swap -$swap 100% >> $log_file 2>&1
-  parted /dev/${device} -- mkpart ESP fat32 1MB $boot >> $log_file 2>&1
-  parted /dev/${device} -- set 3 esp on >> $log_file 2>&1
+  parted "/dev/${device}" -s -- mklabel gpt >> "$log_file" 2>&1
+
+  if [ "$use_swap" = "yes" ]; then
+    parted "/dev/${device}" -s -- mkpart root ext4 "$boot" "-$swap" >> "$log_file" 2>&1
+    parted "/dev/${device}" -s -- mkpart swap linux-swap "-$swap" 100% >> "$log_file" 2>&1
+  else
+    parted "/dev/${device}" -s -- mkpart root ext4 "$boot" 100% >> "$log_file" 2>&1
+  fi
+
+  parted "/dev/${device}" -s -- mkpart ESP fat32 1MB "$boot" >> "$log_file" 2>&1
+  parted "/dev/${device}" -s -- set 3 esp on >> "$log_file" 2>&1
 else
-  parted /dev/${device} -- mklabel msdos >> $log_file 2>&1
-  parted /dev/${device} -- mkpart primary $boot -$swap >> $log_file 2>&1
-  parted /dev/${device} -- set 1 boot on >> $log_file 2>&1
-  parted /dev/${device} -- mkpart primary linux-swap -$swap 100% >> $log_file 2>&1
+  parted "/dev/${device}" -s -- mklabel msdos >> "$log_file" 2>&1
+
+  if [ "$use_swap" = "yes" ]; then
+    parted "/dev/${device}" -s -- mkpart primary "$boot" "-$swap" >> "$log_file" 2>&1
+    parted "/dev/${device}" -s -- mkpart primary linux-swap "-$swap" 100% >> "$log_file" 2>&1
+  else
+    parted "/dev/${device}" -s -- mkpart primary "$boot" 100% >> "$log_file" 2>&1
+  fi
+
+  parted "/dev/${device}" -s -- set 1 boot on >> "$log_file" 2>&1
 fi
 
 echo "done"
-echo -n "formatting partitions..."
-
-mkfs.ext4 -L nixos /dev/${device}1 >> $log_file 2>&1
-mkswap -L swap /dev/${device}2 >> $log_file 2>&1
+echo -n "Formatting partitions..."
 
 if [ "$scheme" = "gpt" ]; then
-  mkfs.fat -F 32 -n boot /dev/${device}3 >> $log_file 2>&1
+  mkfs.ext4 -L nixos "/dev/${device}1" >> "$log_file" 2>&1
+  if [ "$use_swap" = "yes" ]; then
+    mkswap -L swap "/dev/${device}2" >> "$log_file" 2>&1
+  fi
+  mkfs.fat -F 32 -n boot "/dev/${device}3" >> "$log_file" 2>&1
+else
+  mkfs.ext4 -L nixos "/dev/${device}1" >> "$log_file" 2>&1
+  if [ "$use_swap" = "yes" ]; then
+    mkswap -L swap "/dev/${device}2" >> "$log_file" 2>&1
+  fi
 fi
 
 echo "done"
 
-echo -n "mounting partitions..."
+echo -n "Mounting partitions..."
 
-mount /dev/disk/by-label/nixos /mnt >> $log_file 2>&1
+mount "/dev/disk/by-label/nixos" /mnt >> "$log_file" 2>&1
 
 if [ "$scheme" = "gpt" ]; then
-  mkdir -p /mnt/boot >> $log_file 2>&1
-  mount -o umask=077 /dev/disk/by-label/boot /mnt/boot >> $log_file 2>&1
+  mkdir -p /mnt/boot >> "$log_file" 2>&1
+  mount -o umask=077 "/dev/disk/by-label/boot" /mnt/boot >> "$log_file" 2>&1
 fi
 
 echo "done"
 
 if [ "$use_swap" = "yes" ]; then
-  echo -n "enabling swap..."
-  swapon /dev/${device}2 >> $log_file 2>&1
+  echo -n "Enabling swap..."
+  swapon "/dev/${device}2" >> "$log_file" 2>&1
   echo "done"
 fi
 
-cd /mnt
+echo -n "Cloning nixtra repository..."
 
-echo -n "cloning nixtra repository..."
-
-git clone https://github.com/quarterstar/nixtra etc/nixos >> $log_file 2>&1
+git clone https://github.com/quarterstar/nixtra /mnt/etc/nixos >> "$log_file" 2>&1
 
 echo "done"
 
-echo -n "updating submodules..."
+echo -n "Updating submodules..."
 
-cd etc/nixos
-git submodule update --recursive --remote
-cd ../..
+cd /mnt/etc/nixos
+git submodule update --recursive --remote >> "$log_file" 2>&1
+cd -
 
 echo "done"
 
-echo -n "generating hardware config..."
-nixos-generate-config --show-hardware-config > etc/nixos/modules/system/hardware-configuration.nix >> $log_file 2>&1
+echo -n "Generating hardware config..."
+nixos-generate-config --show-hardware-config > /mnt/etc/nixos/modules/system/hardware-configuration.nix >> "$log_file" 2>&1
 echo "done"
 
-echo -n "installing nixtra (will take a while)..."
-nixos-install --root . --flake etc/nixos#default >> $log_file 2>&1
+echo -n "Installing nixtra (will take a while)..."
+nixos-install --root /mnt --flake /mnt/etc/nixos#default >> "$log_file" 2>&1
 echo "done"
