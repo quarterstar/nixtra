@@ -11,8 +11,9 @@
 {
   user = {
     username = "user"; # Warning: compilation and distribution of software from your host system without virtualization may lead to username leakage!
-    terminal = "kitty"; # The kitty terminal is preferred for the Hyprland setup provided by Nixtra.
-    editor = "lvim"; # Default: LunarVim
+    browser = "tor-browser"; # The preferred browser for applications to use
+    terminal = "kitty"; # The preferred terminal for applications to use
+    editor = "lvim"; # The preferred editor for applications to use
     groups = [
       "wheel" # sudo/doas
       "docker" # For using docker on userspace
@@ -61,7 +62,8 @@
       ];
     };
 
-    # All permitted insecure packages may only be used under a profile with no networking enabled.
+    # All permitted insecure packages may only be used under a profile whose `networking` is disabled.
+    # If `networking` is enabled, their installation will not be permitted.
     permittedInsecurePackages = [
       # Python2 is required for some scripts, but you can use `2to3` script to automatically migrate to Python3.
       # "python-2.7.18.8"
@@ -100,10 +102,12 @@
     closeOnSuspend = true;
   };
 
-  services = {
-    # Run Tor node.
-    tor = {
-      #enable = true;
+  tor = {
+    aliases = {
+      enable = true;
+
+      # List of programs to run over Tor (requires torsocks)
+      programs = [ "git" ];
     };
   };
 
@@ -120,6 +124,8 @@
       # The prefix to use for Nixtra commands.
       # For example, to change `nixtra-screenshot` command to `nixos-screenshot`,
       # change this to `nixos`.
+      # WARNING: changing this may break raw configs that expect it to be the default.
+      # It is advised that you do not modify it.
       prefix = "nixtra";
     };
   };
