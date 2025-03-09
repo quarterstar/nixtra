@@ -231,11 +231,6 @@ label:focus {
     background-color: #ffa000;
 }
 
-/* TODO: figure out a way to center elements succeeding the workspace module at the center */
-#custom-screenshot {
-    margin-left: 20px;
-}
-
 #custom-spacer {
     min-width: 20px;
     /* Adjust this value to control the spacing */
