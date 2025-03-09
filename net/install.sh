@@ -12,6 +12,8 @@ default_swap="8GB"
 # Trigger in case of error
 trap "echo \"The installation failed because an error was received. Please check \"${log_file}\" for a detailed log.\"; umount -q -R /mnt; exit 1" ERR
 
+trap "umount -q -R /mnt" EXIT
+
 memory_size_is_valid() {
   local size=$1
   if [[ $size =~ ^[0-9]+(KB|MB|GB|TB)$ ]]; then
@@ -26,7 +28,7 @@ write_property() {
   local property=$2;
   local value=$3;
 
-  sed -E "s/${property}\s*=\s*\"[^\"]*\";/profile = \"'\"$value\"'\";/" $filename
+  sed -E "s/${property}\s*=\s*\"[^\"]*\";/profile = \"'\"$value\"'\";/" $filename >> "$log_file" 2>&1
 }
 
 echo -n "" > $log_file
