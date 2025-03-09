@@ -47,7 +47,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable NUR
-  nixpkgs.config.packageOverrides = pkgs: if profile.system.nur then {
+  nixpkgs.config.packageOverrides = pkgs: if settings.system.nur then {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
     };
