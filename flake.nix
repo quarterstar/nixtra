@@ -15,15 +15,17 @@
     settings = import ./settings.nix;
     profile = import ./profiles/${settings.config.profile}/profile-settings.nix;
   in {
-    nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-      modules = [
-        ./modules/system/configuration.nix
-        inputs.home-manager.nixosModules.default
-      ];
-      specialArgs = {
-        inherit settings;
-        inherit profile;
-        inherit inputs;
+    nixosConfigurations = {
+      default = nixpkgs.lib.nixosSystem {
+        modules = [
+          ./modules/system/configuration.nix
+          inputs.home-manager.nixosModules.default
+        ];
+        specialArgs = {
+          inherit settings;
+          inherit profile;
+          inherit inputs;
+        };
       };
     };
   };
