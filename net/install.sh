@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p bash coreutils git e2fsprogs util-linux parted
+#! nix-shell -i bash -p bash coreutils coreutils-full git e2fsprogs util-linux parted
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
@@ -21,7 +21,18 @@ memory_size_is_valid() {
   fi
 }
 
-echo "" > $log_file
+write_propery() {
+  filename = $1;
+  property = $2;
+  value = $3;
+
+  sed -E "s/${property}\s*=\s*\"[^\"]*\";/profile = \"'\"$value\"'\";/" $filename
+}
+
+echo -n "" > $log_file
+uname -a >> $log_file
+date >> $log_file
+echo "" >> $log_file
 
 echo "- Nixtra Installation Script -"
 echo "- by quarterstar -"
@@ -109,11 +120,22 @@ if [ "$use_swap" = "yes" ]; then
 fi
 
 while true; do
-  echo -n "Please enter your desired GPU drivers [\"amd\" | \"nvidia\" | \"none\"] "
+  echo -n "Please enter desired GPU drivers [\"amd\" | \"nvidia\" | \"none\"] "
   read gpu
 
   if ! [ "$gpu" = "amd" ] && ! [ "$gpu" = "nvidia" ] && ! [ "$gpu" = "none" ]; then
     echo "Graphics card \"$gpu\" is not supported."
+  else
+    break
+  fi
+done
+
+while true; do
+  echo -n 'Please select a profile ["personal" | "program" | "exploit" | "math" | "untrusted"] '
+  read profile
+
+  if ! [ "$profile" = "personal" ] && ! [ "$profile" = "program" ] && ! [ "$profile" = "exploit" ] && ! [ "$profile" = "math" ] && ! [ "$profile" = "untrusted" ]; then
+    echo "Profile \"$profile\" does not exist."
   else
     break
   fi
@@ -130,6 +152,7 @@ if [ "$use_swap" = "yes" ]; then
 fi
 
 echo "GPU: ${gpu}"
+echo "Profile: ${profile}"
 
 echo "--------------------"
 echo "Are you SURE you want to continue? Installation is a destructive operation that will erase all existing data from the selected disk."
@@ -141,6 +164,8 @@ if ! [ "$consent" = "continue" ]; then
   echo "Cancelled installation."
   exit 0
 fi
+
+echo "Installation initiated. Feel free to take a coffee break - no more user input will be requested henceforth."
 
 echo -n "Setting up partition scheme..."
 
@@ -229,8 +254,17 @@ cd - > /dev/null
 
 echo "done"
 
+echo -n "Configuring..."
+
+cd /mnt/etc/nixos
+write_property "settings.nix" "gpu" $gpu
+write_property "settings.nix" "profile" $profile
+cd - > /dev/null
+
+echo "done"
+
 echo -n "Generating hardware config..."
-nixos-generate-config --show-hardware-config > /mnt/etc/nixos/modules/system/hardware-configuration.nix >> "$log_file" 2>&1
+nixos-generate-config --show-hardware-config > /mnt/etc/nixos/modules/system/hardware-configuration.nix 2>&1
 echo "done"
 
 echo -n "Installing nixtra (will take a while)..."
