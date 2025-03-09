@@ -10,7 +10,7 @@ default_use_swap="no"
 default_swap="8GB"
 
 # Trigger in case of error
-trap "echo \"The installation failed because an error was received. Please check \"${log_file}\" for a detailed log.\"; exit 1" ERR
+trap "echo \"The installation failed because an error was received. Please check \"${log_file}\" for a detailed log.\"; umount -q -R /mnt; exit 1" ERR
 
 memory_size_is_valid() {
   local size=$1
