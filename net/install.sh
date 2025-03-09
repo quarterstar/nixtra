@@ -109,10 +109,10 @@ if [ "$use_swap" = "yes" ]; then
 fi
 
 while true; do
-  echo -n "Please enter your desired GPU drivers [\"amd\" | \"nvidia\"] "
+  echo -n "Please enter your desired GPU drivers [\"amd\" | \"nvidia\" | \"none\"] "
   read gpu
 
-  if ! [ "$gpu" = "amd" ] && ! [ "$gpu" = "nvidia" ]; then
+  if ! [ "$gpu" = "amd" ] && ! [ "$gpu" = "nvidia" ] && ! [ "$gpu" = "none" ]; then
     echo "Graphics card \"$gpu\" is not supported."
   else
     break
@@ -147,7 +147,13 @@ echo -n "Setting up partition scheme..."
 if [ "$scheme" = "gpt" ]; then
   parted "/dev/${device}" -s -- mklabel gpt >> "$log_file" 2>&1
 
+  storage_idx=1
+  boot_idx=2
+
   if [ "$use_swap" = "yes" ]; then
+    swap_idx=2
+    boot_idx=3
+
     parted "/dev/${device}" -s -- mkpart root ext4 "$boot" "-$swap" >> "$log_file" 2>&1
     parted "/dev/${device}" -s -- mkpart swap linux-swap "-$swap" 100% >> "$log_file" 2>&1
   else
@@ -155,33 +161,38 @@ if [ "$scheme" = "gpt" ]; then
   fi
 
   parted "/dev/${device}" -s -- mkpart ESP fat32 1MB "$boot" >> "$log_file" 2>&1
-  parted "/dev/${device}" -s -- set 3 esp on >> "$log_file" 2>&1
+  parted "/dev/${device}" -s -- set $boot_idx esp on >> "$log_file" 2>&1
 else
   parted "/dev/${device}" -s -- mklabel msdos >> "$log_file" 2>&1
 
+  storage_idx=1
+  boot_idx=2
+
   if [ "$use_swap" = "yes" ]; then
+    swap_idx=3
+
     parted "/dev/${device}" -s -- mkpart primary "$boot" "-$swap" >> "$log_file" 2>&1
     parted "/dev/${device}" -s -- mkpart primary linux-swap "-$swap" 100% >> "$log_file" 2>&1
   else
     parted "/dev/${device}" -s -- mkpart primary "$boot" 100% >> "$log_file" 2>&1
   fi
 
-  parted "/dev/${device}" -s -- set 1 boot on >> "$log_file" 2>&1
+  parted "/dev/${device}" -s -- set $boot_idx boot on >> "$log_file" 2>&1
 fi
 
 echo "done"
 echo -n "Formatting partitions..."
 
 if [ "$scheme" = "gpt" ]; then
-  mkfs.ext4 -L nixos "/dev/${device}1" >> "$log_file" 2>&1
+  mkfs.ext4 -L nixos "/dev/${device}${storage_idx}" >> "$log_file" 2>&1
   if [ "$use_swap" = "yes" ]; then
-    mkswap -L swap "/dev/${device}2" >> "$log_file" 2>&1
+    mkswap -L swap "/dev/${device}${swap_idx}" >> "$log_file" 2>&1
   fi
-  mkfs.fat -F 32 -n boot "/dev/${device}3" >> "$log_file" 2>&1
+  mkfs.fat -F 32 -n boot "/dev/${device}${boot_idx}" >> "$log_file" 2>&1
 else
-  mkfs.ext4 -L nixos "/dev/${device}1" >> "$log_file" 2>&1
+  mkfs.ext4 -L nixos "/dev/${device}${storage_idx}" >> "$log_file" 2>&1
   if [ "$use_swap" = "yes" ]; then
-    mkswap -L swap "/dev/${device}2" >> "$log_file" 2>&1
+    mkswap -L swap "/dev/${device}${swap_idx}" >> "$log_file" 2>&1
   fi
 fi
 
@@ -214,7 +225,7 @@ echo -n "Updating submodules..."
 
 cd /mnt/etc/nixos
 git submodule update --recursive --remote >> "$log_file" 2>&1
-cd -
+cd - > /dev/null
 
 echo "done"
 
