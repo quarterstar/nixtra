@@ -44,6 +44,7 @@ Some example security features Nixtra employs are:
 - Clipboard's buffer is cleared 10 seconds after being written, regardless of the application modifying it or the data being pasted.
 - A set of sensitive applications like Tor Browser is pre-configured to automatically close upon the PC receiving a suspend signal.
 - Sound access is disabled for Tor Browser.
+- Certain software like Git can be configured to route all traffic through Tor for anonymity.
 
 For a complete list, view [SECURITY.md](SECURITY.md).
 
@@ -52,17 +53,17 @@ For a complete list, view [SECURITY.md](SECURITY.md).
 Nixtra is bundled with software for:
 
 - Programming
+- Web Development
 - Security Researching
 - Penetration Testing
 - Reverse Engineering
 - Gaming
 - Virtualization
-- Secret Management
 - Multimedia Applications
 - Social Media Applications
 - ...and more
 
-All software provided by the mainstream Nixtra repository must strictly be free and open source software. Popular software packages for proprietary applications can exist but are to be commented out.
+All software provided by the mainstream Nixtra repository must strictly be free and open source software. Popular software packages and configurations for proprietary applications can exist but are to be commented out.
 
 ## Security Considerations
 
