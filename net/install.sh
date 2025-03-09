@@ -22,9 +22,9 @@ memory_size_is_valid() {
 }
 
 write_property() {
-  filename = $1;
-  property = $2;
-  value = $3;
+  local filename=$1;
+  local property=$2;
+  local value=$3;
 
   sed -E "s/${property}\s*=\s*\"[^\"]*\";/profile = \"'\"$value\"'\";/" $filename
 }
