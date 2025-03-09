@@ -1,4 +1,4 @@
-{ profile, pkgs, ... }:
+{ profile, pkgs, createCommand, ... }:
 
 {
   imports = [
@@ -41,7 +41,7 @@
     # and other operations, fixes a crash for Hyprland.
     GIT_ASKPASS = "/bin/stub";
 
-    # Dark theme
-    GTK_THEME = "Nordic";
+    # https://stackoverflow.com/a/71402854
+    QT_QPA_PLATFORM = "wayland";
   };
 }
