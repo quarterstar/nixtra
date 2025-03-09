@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p bash coreutils coreutils-full git e2fsprogs util-linux parted
+#! nix-shell -i bash -p bash coreutils coreutils-full git e2fsprogs util-linux parted gnused
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
