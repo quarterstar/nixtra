@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 { settings, profile, config, lib, pkgs, inputs, ... }:
 
 {
@@ -9,6 +5,9 @@
   imports =
     [
       inputs.home-manager.nixosModules.default
+
+      # Overlays
+      ../overlays.nix
 
       # Profile-based configuration
       (../../profiles + ("/" + settings.config.profile) + "/configuration.nix")
@@ -37,14 +36,8 @@
       ./fs/windows.nix
       ./patches/udev.nix
 
-      # Services
-      #./services/tor.nix
-
       # Shell
       ./shell/commands.nix
-
-      # Overlay
-      ../overlays.nix
 
       # Other
       ./fonts.nix
@@ -54,19 +47,18 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable NUR
-  nixpkgs.config.packageOverrides = pkgs: {
+  nixpkgs.config.packageOverrides = pkgs: if profile.system.nur then {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
     };
-  };
+  } else {};
 
   # Save configurations from old generations
-  # system.copySystemConfiguration = true;
+  #system.copySystemConfiguration = true;
 
   # "Unsafe" packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) profile.security.permittedUnfreePackages;
-  #nixpkgs.config.permittedInsecurePackages = lib.mkIf (!profile.security.networking) profile.security.permittedInsecurePackages;
-  nixpkgs.config.permittedInsecurePackages = profile.security.permittedInsecurePackages;
+  nixpkgs.config.permittedInsecurePackages = if !profile.security.networking then profile.security.permittedInsecurePackages else [];
 
   # Enable docker containers support
   virtualisation.docker.enable = lib.mkIf profile.security.virtualization true;
@@ -76,8 +68,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Enable networking
+  networking.wireless.enable = false;
   networking.networkmanager.enable = lib.mkIf profile.security.networking true;
 
+  # Set system's name
   networking.hostName = if settings.system.hostnameProfilePrefix
     then "${settings.system.hostname}-${settings.config.profile}"
     else settings.system.hostname;
@@ -90,13 +85,6 @@
 
   # Make users immutable
   #users.mutableUsers = false;
-
-  # Choose default editor
-  environment.variables = {
-    EDITOR = profile.user.editor;
-    TERMINAL = profile.user.terminal;
-    VISUAL = profile.user.editor;
-  };
 
   # Configure home manager
   home-manager = {

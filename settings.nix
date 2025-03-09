@@ -10,6 +10,7 @@ rec {
     locale = "en_US.UTF-8";
     version = "24.11";
     initialVersion = "24.11";
+    nur = false;
     hostnameProfilePrefix = true;
   };
 
