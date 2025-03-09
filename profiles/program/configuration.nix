@@ -10,6 +10,7 @@
     ../../modules/system/pkgs/cli/git.nix
     ../../modules/system/pkgs/signing/gnupg.nix
     ../../modules/system/pkgs/file/gparted.nix
+    ../../modules/system/pkgs/proxy/torsocks.nix
     ../../modules/system/shell/aliases.nix
 
     # Services
