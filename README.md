@@ -1,10 +1,10 @@
-# Nixtra
+<div align="center">
+ <img src="./assets/nixtra/logo.jpg">
+ ## ⚡ Your Supercharged NixOS Config
+ <img style="border-radius: 15px;" src="./assets/nixtra/sample.png">
+</div>
 
-## Screenshots
-
-TODO
-
-## About Project
+## ❓ About Project
 
 Nixtra is a fully-featured, hardened, extensible and well-documented NixOS configuration designed to:
 
@@ -14,7 +14,7 @@ Nixtra is a fully-featured, hardened, extensible and well-documented NixOS confi
 - Be easily understandable, customizable and extensible by other NixOS users interested in the use and/or further development of the configuration.
 - Patch out the weird quirks that come with using NixOS on personal computers.
 
-## Table of Contents
+## 📚 Table of Contents
 
 - [Features](#features)
 - [Security Considerations](#security_considerations)
@@ -27,14 +27,14 @@ Nixtra is a fully-featured, hardened, extensible and well-documented NixOS confi
 - [See Also](#see)
 - [Credits](#credits)
 
-## Features
+## ⭐ Features
 
 - Pre-installed, beautifully-riced Hyprland window manager. (More in the future.)
 - Different flavors of profiles pre-configured with a variety of packages to fullfill your needs.
 - A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues.
 - High-level configuration system.
 
-## Security Features
+## 🔒 Security Features
 
 Some example security features Nixtra employs are:
 
@@ -48,7 +48,7 @@ Some example security features Nixtra employs are:
 
 For a complete list, view [SECURITY.md](SECURITY.md).
 
-## Installed Software
+## 🖥️ Installed Software
 
 Nixtra is bundled with software for:
 
@@ -65,28 +65,17 @@ Nixtra is bundled with software for:
 
 All software provided by the mainstream Nixtra repository must strictly be free and open source software. Popular software packages and configurations for proprietary applications can exist but are to be commented out.
 
-## Security Considerations
+## 🖊️ Security Considerations
 
-- Do NOT set your password or secrets in NixOS modules! Nix generates `.drv` files after building which may contain the password, allowing anyone to view it worldwide. Instead, either use SOPS or provide secrets to programs imperatively.
+Do NOT set your password or secrets in NixOS modules! Nix generates `.drv` files after building which may contain the password, allowing anyone to view it worldwide. Instead, either use SOPS or provide secrets to programs imperatively.
 
-## User Accounts
+## 👤 User Accounts
 
 This config is intended for single-user systems. A default `user` account configuration is provided. However, the user may pick a profile based on their software needs.
 
-## Profiles
+## ♦️ Profiles
 
 Nixtra is a single-user NixOS configuration, but the user may have multiple profiles. Profiles dictate what software shall be installed on your system, as well as how they shall be configured. For instance, you can have a personal profile, a work profile and a gaming profile each equipped with different or shared pieces of software.
-
-## Configuration
-
-Nixtra configuration comes in two flavors:
-
-- `settings.nix`: Root system-level configuration dictating your hardware specifications and such. Shared amongst all profiles. Located at `settings.nix`.
-- `profile-settings.nix`: Profile-specific user-level configuration. Located at `profiles/$PROFILE/profile-settings.nix`.
-
-For configuring either of them, refer to the [Configuring Profiles]() section of the docs.
-
-## Default Profiles
 
 Nixtra provides the following default profiles:
 
@@ -98,9 +87,16 @@ Nixtra provides the following default profiles:
 | `math`      | -            | subset of all software needed to study math.
 | `untrusted` | -            | minimal profile that provides only absolutely necessary cli tools.
 
-* If a profile has dependencies, it inherits all software and selections of each dependency but does not inherit their profile-specific `profile-settings.nix` configuration.
+## ⚙️ Configuration
 
-## Project Structure
+Nixtra configuration comes in two flavors:
+
+- `settings.nix`: Root system-level configuration dictating your hardware specifications and such. Shared amongst all profiles. Located at `settings.nix`.
+- `profile-settings.nix`: Profile-specific user-level configuration. Located at `profiles/$PROFILE/profile-settings.nix`.
+
+For configuring either of them, refer to the [Configuring Profiles]() section of the docs.
+
+## 🚧 Project Structure
 
 Inside `modules`, the project uses the following directory hierarchy:
 
@@ -108,12 +104,14 @@ Inside `modules`, the project uses the following directory hierarchy:
 - `userspace`: all the installed userspace applications and configurations.
 - `config`: non-nix configurations for applications. [Read More](./docs/01-configuration.md)
 
-## See Also
+## ⚓ See Also
 
 - [My easy-to-use framework for building hardened, customizable and extensible NixOS routers](https://github.com/quarterstar/nixter)
 - [My notes for NixOS and computer science -related topics](https://github.com/quarterstar/notes)
 
-## Credits
+## 🔗 Credits
+
+All of the works below have been altered, modified or kept in their original state respectively for their successful and seamless integration into Nixtra's environment:
 
 - [Wallpaper](https://steamcommunity.com/sharedfiles/filedetails/?id=3323190978)
 - [Firejail Overlay](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix)
