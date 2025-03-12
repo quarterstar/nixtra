@@ -1,7 +1,7 @@
 <div align="center">
- <img src="./assets/nixtra/logo.jpg">
+ <img src="./assets/nixtra/logo.png">
  ## ⚡ Your Supercharged NixOS Config
- <img style="border-radius: 15px;" src="./assets/nixtra/sample.png">
+ <img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
 </div>
 
 ## ❓ About Project
