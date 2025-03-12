@@ -18,7 +18,7 @@ self: super: {
           mkdir -p $out/share/applications
           cat <<'_EOF' >"$command_path"
           #! ${super.runtimeShell} -e
-          exec /run/wrappers/bin/firejail ${firejailArgs} -- ${toString executable} "\$@"
+          exec /run/wrappers/bin/firejail ${firejailArgs} -- ${toString executable} "$@"
           _EOF
           chmod 0755 "$command_path"
         '' + super.lib.optionalString (desktop != null) ''
