@@ -18,11 +18,13 @@
       (./server + ("/" + profile.display.server) + ".nix")
       (./wm + ("/" + profile.display.type) + ".nix")
       (./theme + ("/" + profile.display.theme) + ".nix")
+      (./shell/backend + ("/" + profile.user.shell) + ".nix")
 
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
 
       # Security
+      ./security/update.nix
       ./security/doas.nix
       ./security/firewall.nix
       ./security/audit.nix
@@ -41,6 +43,9 @@
 
       # Other
       ./fonts.nix
+
+      # Proxy
+      ./services/tor.nix
     ];
 
   # Enable Flakes
@@ -67,6 +72,9 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Define default shell for all users globally
+  users.defaultUserShell = pkgs.${profile.user.shell};
 
   # Enable networking
   networking.wireless.enable = false;
@@ -98,6 +106,9 @@
       "user" = import ../../profiles/${settings.config.profile}/home.nix;
     };
   };
+
+  # Automatically fix collisions
+  home-manager.backupFileExtension = "backup";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${profile.user.username} = {
