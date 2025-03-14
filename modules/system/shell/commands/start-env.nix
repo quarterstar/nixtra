@@ -6,6 +6,7 @@ if profile.display.type == "hyprland" then createCommand {
     name = "start-env";
     buildInputs = with pkgs; [ keepassxc ];
 
+    # Waybar is started with reload-waybar userspace service
     command = ''
       ${profile.user.terminal}
       ${profile.user.browser}
@@ -17,7 +18,7 @@ if profile.display.type == "hyprland" then createCommand {
     inherit pkgs;
     inherit profile;
     name = "start-env";
-    buildInputs = with pkgs; [ ];
+    buildInputs = [ ];
 
     command = ''
       echo "unsupported env"

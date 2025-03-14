@@ -3,7 +3,12 @@
 {
   imports = [
     (./pkgs/terminal + ("/" + profile.user.terminal) + ".nix") 
+    (./pkgs/shell + ("/" + profile.user.shell) + ".nix")
+
     ./theme/type.nix
+
+    ./config/global/prelude.nix
+    (./config + ("/" + profile.user.config) + "/prelude.nix")
   ];
 
   home.sessionVariables = {
@@ -11,4 +16,5 @@
     BROWSER = profile.user.browser;
     TERMINAL = profile.user.terminal;
   };
+
 }

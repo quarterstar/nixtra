@@ -13,11 +13,6 @@
     ../math/home.nix
     ../gaming/home.nix
 
-    # Config
-    ../../modules/userspace/config/hyprland/quarterstar/hypr.nix
-    ../../modules/userspace/config/hyprland/quarterstar/waybar.nix
-    ../../modules/userspace/config/hyprland/quarterstar/rofi.nix
-
     # Modules
     ../../modules/userspace/pkgs/torrent/qbittorrent.nix
     ../../modules/userspace/pkgs/video/vlc.nix
