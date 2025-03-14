@@ -1,12 +1,12 @@
 <div align="center">
- <img src="./assets/nixtra/logo.png">
- ## ⚡ Your Supercharged NixOS Config
+ <img src="./assets/icons/nixtra.png">
  <img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
+ <h2>⚡ Your Supercharged NixOS Config</h2>
 </div>
 
 ## ❓ About Project
 
-Nixtra is a fully-featured, hardened, extensible and well-documented NixOS configuration designed to:
+Nixtra is a fully-featured, hardened, extensible and security-focused NixOS configuration designed to:
 
 - Provide me an ideal environment for: gaming; programming; the use of multimedia applications; security analysis and virtualization.
 - Give me the ability to switch between different profiles in within a single user, each designated a different role, to prevent distractions and straighten my workflow.
@@ -31,7 +31,7 @@ Nixtra is a fully-featured, hardened, extensible and well-documented NixOS confi
 
 - Pre-installed, beautifully-riced Hyprland window manager. (More in the future.)
 - Different flavors of profiles pre-configured with a variety of packages to fullfill your needs.
-- A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues.
+- A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues and annoyances. (For example, you do not need to `git add` a file when rebuilding with Flakes so that it registers it.)
 - High-level configuration system.
 
 ## 🔒 Security Features
