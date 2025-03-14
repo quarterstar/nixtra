@@ -25,6 +25,7 @@
           inherit settings;
           inherit profile;
           inherit inputs;
+          timestamp = self.lastModified;
         };
       };
     };
