@@ -9,5 +9,10 @@
       hyprland
       coreutils
     ];
+    serviceConfig = {
+      Type = "simple"; # Use "simple" for long-running services
+      Restart = "always";
+      RestartSec = 0;
+    };
   };
 }

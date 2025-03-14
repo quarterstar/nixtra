@@ -11,6 +11,8 @@
 {
   user = {
     username = "user"; # Warning: compilation and distribution of software from your host system without virtualization may lead to username leakage!
+    config = "quarterstar"; # Available options: quarterstar, empty (use `empty` if you want to cherrypick individual configs in home.nix)
+    shell = "zsh"; # Available options: zsh (recommended), fish, bash
     browser = "tor-browser"; # The preferred browser for applications to use
     terminal = "kitty"; # The preferred terminal for applications to use
     editor = "lvim"; # The preferred editor for applications to use
@@ -37,6 +39,32 @@
     themeType = "dark";
   };
 
+  env = {
+    wm = {
+      # Bottom bar with applications
+      taskbar = {
+        enable = true;
+
+        # Icons are stored in $HOME/.config/waybar/icons
+        apps = [
+          { program = "kitty"; icon = "terminal.png"; workspace = 1; }
+          { program = "librewolf"; icon = "librewolf.png"; workspace = 2; }
+          { program = "tor-browser"; icon = "tor-browser.png"; workspace = 3; }
+          { program = "virt-manager"; icon = "vm.png"; workspace = 5; }
+          { program = "keepassxc"; icon = "keepassxc.png"; workspace = 10; }
+        ];
+
+        # Size of icons to be used in bottom taskbar
+        # e.g. 50 = 50x50
+        iconSize = 38;
+      };
+    };
+
+    de = {
+      # TODO
+    };
+  };
+
   audio = {
     backend = "pipewire"; # Available options: pipewire, pulseaudio, none
   };
@@ -59,6 +87,7 @@
         "firefox"
         "librewolf"
         "tor-browser"
+        "freetube"
       ];
     };
 
@@ -102,17 +131,36 @@
     closeOnSuspend = true;
   };
 
+  git = {
+    useTorProxy = true;
+  };
+
   tor = {
+    enable = true;
+
     aliases = {
       enable = true;
 
       # List of programs to run over Tor (requires torsocks)
-      programs = [ "git" ];
+      programs = [
+        # Native Tor SOCKS5 proxy supported for Git, so no need for torsocks
+        # Refer to `git.useTorProxy`
+        #"git"
+
+        "freetube"
+      ];
     };
   };
 
   shell = {
     enable = true;
+
+    aliases = {
+      rm = "trash"; # Safe rm alternative so that directories do not get accidentally permanently deleted by the user or scripts
+      neofetch = "fastfetch"; # Replacement for neofetch, which has been abandoned
+      ls = "eza"; # Modern alternative to ls; most arguments are functionally equivalent
+      ssh = "TERM=\"xterm-256color\" ssh"; # Fix unknown terminal error when connecting over SSH with Kitty
+    };
 
     # Show information similar to neofetch on startup
     fastfetchOnStartup = true;

@@ -33,18 +33,11 @@
     ../../modules/userspace/pkgs/schedule/calcurse.nix
     ../../modules/userspace/pkgs/music/termusic.nix
     ../../modules/userspace/pkgs/music/cava.nix
-    ../../modules/userspace/pkgs/shell/bash.nix
-    ../../modules/userspace/pkgs/shell/starship.nix
     ../../modules/userspace/pkgs/file/dolphin.nix
     ../../modules/userspace/pkgs/file/pcmanfm.nix
     ../../modules/userspace/pkgs/compression/p7zip.nix
-
-    # Config
-    ../../modules/userspace/config/global/gnupg.nix
-    ../../modules/userspace/config/global/lunarvim.nix
-    ../../modules/userspace/config/hyprland/quarterstar/hypr.nix
-    ../../modules/userspace/config/hyprland/quarterstar/waybar.nix
-    ../../modules/userspace/config/hyprland/quarterstar/rofi.nix
+    ../../modules/userspace/pkgs/proxy/proxychains.nix
+    ../../modules/userspace/pkgs/video/freetube.nix
   ];
 
   home.packages = with pkgs; [
