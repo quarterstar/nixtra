@@ -1,6 +1,8 @@
-{ settings, profile, config, lib, pkgs, inputs, ... }:
+{ settings, profile, timestamp, config, lib, pkgs, inputs, ... }:
 
-{
+let
+  currentTimestamp = lib.readFile "${pkgs.runCommand "timestamp" { env.when = timestamp; } "echo -n `date -d @$when +%Y-%m-%d_%H-%M-%S` > $out"}";
+in {
   # Basic
   imports =
     [
@@ -108,7 +110,7 @@
   };
 
   # Automatically fix collisions
-  home-manager.backupFileExtension = "backup";
+  home-manager.backupFileExtension = "backup.${currentTimestamp}";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${profile.user.username} = {
