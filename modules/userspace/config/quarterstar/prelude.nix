@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./terminal/kitty.nix
     ./shell/zsh.nix
     ./editor/lunarvim.nix
     ./video/freetube.nix
