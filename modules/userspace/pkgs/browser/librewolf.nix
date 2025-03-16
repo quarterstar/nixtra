@@ -3,24 +3,40 @@
 {
   programs.librewolf = {
     enable = true;
+    #package = pkgs.tor-browser;
     policies = {
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
 
-      preferences = [
-        { name = "browser.sessionstore.max_resumed_crashes"; value = 0; } # Disable Session Restore feature
-        { name = "cookiebanners.service.mode.privateBrowsing"; value = 2; } # Block cookie banners in private browsing
-        { name = "cookiebanners.service.mode"; value = 2; } # Block cookie banners
-        { name = "privacy.donottrackheader.enabled"; value = true; }
-        { name = "privacy.fingerprintingProtection"; value = true; }
-        { name = "privacy.resistFingerprinting"; value = true; }
-        { name = "privacy.trackingprotection.emailtracking.enabled"; value = true; }
-        { name = "privacy.trackingprotection.enabled"; value = true; }
-        { name = "privacy.trackingprotection.fingerprinting.enabled"; value = true; }
-        { name = "privacy.trackingprotection.socialtracking.enabled"; value = true; }
-      ] ++ (if profile.display.themeType == "dark" then [
-        { name = "ui.systemUsesDarkTheme"; value = 1; } # In case of websites not adhering to system theme
-      ] else []);
+      Preferences = {
+        "browser.sessionstore.max_resumed_crashes" = 0;  # Disable Session Restore feature
+        "browser.sessionhistory.max_entries" = 0; 
+        "browser.sessionstore.debug.no_auto_updates" = true; 
+        "browser.sessionstore.disable_platform_collection" = true; 
+        "cookiebanners.service.mode.privateBrowsing" = 2;  # Block cookie banners in private browsing
+        "cookiebanners.service.mode" = 2;  # Block cookie banners
+        "privacy.donottrackheader.enabled" = true; 
+        "privacy.fingerprintingProtection" = true; 
+        "privacy.resistFingerprinting" = true; 
+        "privacy.trackingprotection.emailtracking.enabled" = true; 
+        "privacy.trackingprotection.enabled" = true; 
+        "privacy.trackingprotection.fingerprinting.enabled" = true; 
+        "privacy.trackingprotection.socialtracking.enabled" = true; 
+        "browser.privatebrowsing.autostart" = true; 
+        "browser.privatebrowsing.vpnpromourl" = ""; 
+        "network.http.sendRefererHeader" = 0; 
+        "network.cookie.cookieBehavior" = 2; 
+        "browser.cache.memory.enable" = false; 
+        "browser.cache.disk.enable" = false; 
+        "browser.chrome.site_icons" = false; 
+        "browser.shell.shortcutFavicons" = false; 
+        "geo.enabled" = false; 
+        "media.peerconnection.enabled" = false; 
+        "services.sync.prefs.sync.media.autoplay.default" = false; 
+        "messaging-system.rsexperimentloader.enabled" = false;
+      } // (if profile.display.themeType == "dark" then
+        { "ui.systemUsesDarkTheme" = 1; } # In case of websites not adhering to system theme
+      else {});
 
         ExtensionSettings = {
           #"*".installation_mode = "blocked"; # Block all addons except the ones specified below
