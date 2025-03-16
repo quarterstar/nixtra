@@ -1,5 +1,8 @@
 self: super: {
   wrapFirejail = { executable, desktop ? null, profile ? null, extraArgs ? [] }:
+    let
+      profilePath = if profile != null then (builtins.toString ../../firejail + ("/" + profile) + ".profile") else null;
+    in
     super.runCommand "firejail-wrap"
       {
         preferLocalBuild = true;
@@ -9,7 +12,7 @@ self: super: {
       (
         let
           firejailArgs = super.lib.concatStringsSep " " (
-            extraArgs ++ (super.lib.optional (profile != null) "--profile=${toString profile}")
+            extraArgs ++ (super.lib.optional (profile != null) "--profile=${profilePath}")
           );
         in
         ''
