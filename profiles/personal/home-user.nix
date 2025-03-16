@@ -1,17 +1,11 @@
 { settings, profile, config, pkgs, ... }:
 
 {
-  home.username = profile.user.username;
-  home.homeDirectory = "/home/${profile.user.username}";
-  home.stateVersion = settings.system.version;
-
   imports = [
-    ../../modules/userspace/base.nix
-
     # Dependencies
-    ../program/home.nix
-    ../math/home.nix
-    ../gaming/home.nix
+    ../program/home-user.nix
+    ../math/home-user.nix
+    ../gaming/home-user.nix
 
     # Modules
     ../../modules/userspace/pkgs/torrent/qbittorrent.nix
