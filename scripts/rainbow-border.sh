@@ -33,5 +33,5 @@ while true; do
     hyprctl keyword general:col.active_border "$gradient" > /dev/null
 
     # Adjust the sleep duration to control the speed of the animation
-    sleep 0.25
+    sleep 0.5
 done
