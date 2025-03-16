@@ -4,8 +4,28 @@ Congratulations on installing Nixtra! To get you fully settled in, below you wil
 
 ## Table of Contents
 
+- [Commands](##commands)
 - [Applications](##applications)
-- [Shortcuts](##shortcuts)
+- [Keybindings](##keybindings)
+
+## Commands
+
+Nixtra provides a set of custom commands to make managing NixOS easy. Below are the most important ones:
+
+- `nixtra-rebuild`: Rebuild the system according to its configuration in `/etc/nixos`.
+- `nixtra-update`: Update your system and its dependencies.
+- `nixtra-clean`: General system cleanup; clean up logs, Nix store, Nix cache, etc.
+- `nixtra-record`: Start a video recording of the entire screen or a region.
+- `nixtra-screenshot`: Take a screenshot of the entire screen or a region.
+- `nixtra-create-iso`: Generate an ISO file based on your Nixtra configuration.
+- `nixtra-fix-bootloader`: Automatically troubleshoot and fix the bootloader, if it breaks and your system does not boot.
+- `nixtra-regen-hardware`: Regenerate the configuration describing the hardware used by the system; graphics card, mount points etc.
+
+You can find more of them by checking for commands with the following prefixes:
+
+- `nix-`: Commands related to the Nix package manager.
+- `nixos-`: Commands related to the Nix Operating System (NixOS).
+- `nixtra-`: Commands related to the Nixtra configuration for NixOS.
 
 ## Applications
 
@@ -31,7 +51,7 @@ This is ideal if you want to log into websites like Reddit, which bans any Tor u
 
 This flavor is simply the regular Tor browser with a regular Tor connection, ideal for most anonymous activities. Unless otherwise specified in its connection settings, no additional proxy will be used.
 
-## Shortcuts
+## Keybindings
 
 > [!IMPORTANT]
 > All window managers and desktop environments are configured to adhere to the standard shortcuts used by Nixtra, listed below respectively. If you are using a modified version of Nixtra, these may not apply.
@@ -58,11 +78,3 @@ This flavor is simply the regular Tor browser with a regular Tor connection, ide
 ### Desktop Environment
 
 Nixtra does not yet support any desktop environment.
-
-## Important Commands
-
-### Rebuild the system
-
-```
-sudo nixtra-rebuild
-```
