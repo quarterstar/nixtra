@@ -6,26 +6,27 @@
 
 ## ❓ About Project
 
-Nixtra is a fully-featured, hardened, extensible and security-focused NixOS configuration designed to:
+Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, privacy and security. It is designed to:
 
-- Provide me an ideal environment for: gaming; programming; the use of multimedia applications; security analysis and virtualization.
-- Give me the ability to switch between different profiles in within a single user, each designated a different role, to prevent distractions and straighten my workflow.
-- Harden the security of my system and implement sane defaults for opsec.
+- Provide an ideal environment for: gaming; programming; the use of multimedia applications; security analysis and virtualization.
+- Give the ability to switch between different profiles in within a single user, each designated a different role, to prevent distractions and straighten my workflow.
+- Harden the security of any system and implement sane defaults for opsec.
 - Be easily understandable, customizable and extensible by other NixOS users interested in the use and/or further development of the configuration.
 - Patch out the weird quirks that come with using NixOS on personal computers.
+- Make NixOS easier to use and customize.
 
 ## 📚 Table of Contents
 
-- [Features](#features)
-- [Security Considerations](#security_considerations)
-- [Security Practices](#security_practices)
-- [User Accounts](#user)
-- [Profiles Accounts](#profiles)
-- [Configuration](#configuration)
-- [Default Profiles](#default)
-- [Project Structure](#project)
-- [See Also](#see)
-- [Credits](#credits)
+- [Features](##features)
+- [Security Considerations](##security_considerations)
+- [Security Features](##security_practices)
+- [User Accounts](##user)
+- [Profiles Accounts](##profiles)
+- [Configuration](##configuration)
+- [Default Profiles](##default)
+- [Project Structure](##project)
+- [See Also](##see)
+- [Credits](##credits)
 
 ## ⭐ Features
 
@@ -38,15 +39,22 @@ Nixtra is a fully-featured, hardened, extensible and security-focused NixOS conf
 
 Some example security features Nixtra employs are:
 
+- [Tor browsing uses a unique flavor-based system with separate Tor browsers.](./docs/01-usage.md##)
 - All permitted insecure packages may only be used under a profile with no networking enabled.
 - `rm` is replaced with an alias of `trash` to prevent accidental permanent file deletion and many other aliases are included.
 - Untrusted applications are encapsulated by a firejail wrapper to restrict their scope and permissions.
 - Clipboard's buffer is cleared 10 seconds after being written, regardless of the application modifying it or the data being pasted.
 - A set of sensitive applications like Tor Browser is pre-configured to automatically close upon the PC receiving a suspend signal.
-- Sound access is disabled for Tor Browser.
-- Certain software like Git can be configured to route all traffic through Tor for anonymity.
+- Sound access is disabled for Tor Browser and other sensitive applications.
+- Certain software like Git are configured to route all traffic through Tor for anonymity.
+- Many core components utilities (like gnu coreutils) are replaced with mature Rust-written equivalents which patch out many security vulnerabilities often found in C programs, without breaking userspace.
+- ...and more
 
-For a complete list, view [SECURITY.md](SECURITY.md).
+For a complete list and elaboration for the above, view [SECURITY.md](SECURITY.md).
+
+## 🖊️ Security Considerations
+
+- Do NOT set your password or secrets in NixOS modules! Nix generates `.drv` files after building which may contain the password, allowing anyone to view it worldwide. Instead, either use SOPS or provide secrets to programs imperatively.
 
 ## 🖥️ Installed Software
 
@@ -64,10 +72,6 @@ Nixtra is bundled with software for:
 - ...and more
 
 All software provided by the mainstream Nixtra repository must strictly be free and open source software. Popular software packages and configurations for proprietary applications can exist but are to be commented out.
-
-## 🖊️ Security Considerations
-
-Do NOT set your password or secrets in NixOS modules! Nix generates `.drv` files after building which may contain the password, allowing anyone to view it worldwide. Instead, either use SOPS or provide secrets to programs imperatively.
 
 ## 👤 User Accounts
 
@@ -94,7 +98,7 @@ Nixtra configuration comes in two flavors:
 - `settings.nix`: Root system-level configuration dictating your hardware specifications and such. Shared amongst all profiles. Located at `settings.nix`.
 - `profile-settings.nix`: Profile-specific user-level configuration. Located at `profiles/$PROFILE/profile-settings.nix`.
 
-For configuring either of them, refer to the [Configuring Profiles]() section of the docs.
+For more information, refer to the [configuration page](./docs/02-configuration.md).
 
 ## 🚧 Project Structure
 
@@ -114,5 +118,6 @@ Inside `modules`, the project uses the following directory hierarchy:
 All of the works below have been altered, modified or kept in their original state respectively for their successful and seamless integration into Nixtra's environment:
 
 - [Wallpaper](https://steamcommunity.com/sharedfiles/filedetails/?id=3323190978)
+- [Startup Sound Effect](https://pixabay.com/sound-effects/soft-startup-sound-269291)
 - [Firejail Overlay](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix)
 - [Waybar Record Module](https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1)
