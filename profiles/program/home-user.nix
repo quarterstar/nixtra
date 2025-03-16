@@ -38,13 +38,7 @@
     ../../modules/userspace/pkgs/compression/p7zip.nix
     ../../modules/userspace/pkgs/proxy/proxychains.nix
     ../../modules/userspace/pkgs/video/freetube.nix
-  ];
-
-  home.packages = with pkgs; [
-    (pkgs.wrapFirejail {
-      executable = "${pkgs.tor-browser}/bin/tor-browser";
-      profile = ../../firejail/tor-browser.profile;
-    })
+    ../../modules/userspace/pkgs/aesthetic/lxappearance.nix
   ];
 
   programs.home-manager.enable = true;

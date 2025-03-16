@@ -32,6 +32,7 @@ in {
       ./security/audit.nix
       ./security/firejail.nix
       ./security/close-on-suspend.nix
+      ./security/uutils.nix
 
       # Networks
       ./networks/tornet.nix
@@ -42,12 +43,17 @@ in {
 
       # Shell
       ./shell/commands.nix
+      ./shell/aliases.nix
 
       # Other
       ./fonts.nix
 
       # Proxy
       ./services/tor.nix
+
+      # Configuration
+      ./config/global/prelude.nix
+      (./config + ("/" + profile.user.config) + "/prelude.nix")
     ];
 
   # Enable Flakes
@@ -105,7 +111,8 @@ in {
     };
     useGlobalPkgs = true;
     users = {
-      "user" = import ../../profiles/${settings.config.profile}/home.nix;
+      "user" = import ../userspace/base/user.nix;
+      "root" = import ../userspace/base/root.nix;
     };
   };
 
