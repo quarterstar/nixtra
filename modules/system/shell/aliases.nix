@@ -11,10 +11,10 @@ in {
     ../pkgs/cli/security.nix
   ];
 
-  environment.shellAliases = profile.shell.aliases // torAliases;
+  environment.shellAliases = (profile.shell.aliases pkgs) // torAliases;
 
-  # In addition to shell alias, replace the program
+  # In addition to shell alias, replace chosen programs
   # with a stub so that GUI applications use the replaced
   # program.
-  environment.systemPackages = (map (program: pkgs.writeScriptBin program ''exec torsocks ${program} "$@"'') profile.tor.aliases.programs);
+  environment.systemPackages = map (program: pkgs.writeScriptBin program ''exec torsocks ${program} "$@"'') profile.tor.aliases.programs;
 }

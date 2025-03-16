@@ -12,6 +12,6 @@ if profile.shell.commands.enable then
     (pkgs.callPackage ./commands/fix-bootloader.nix { inherit profile; })
     (pkgs.callPackage ./commands/create-iso.nix { inherit profile; })
     (pkgs.callPackage ./commands/clean.nix { inherit profile; })
-    (pkgs.callPackage ./commands/start-env.nix { inherit profile; })
+    (pkgs.callPackage ./commands/hyprland/play-startup-sound.nix { inherit profile; })
   ];
 } else {}
