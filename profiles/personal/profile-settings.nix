@@ -40,17 +40,34 @@
   };
 
   env = {
+    wallpaper = {
+      # Preferred wallpaper - if not set, will use a random one.
+      preference = "";
+
+      useLiveWallpapers = true; # Whether to use animated wallpapers (can impact performance)
+
+      # Minutes after which wallpaper should be switched.
+      switchInterval = 45;
+    };
+
+    # Window Manager configuration
     wm = {
       # Bottom bar with applications
       taskbar = {
         enable = true;
 
-        # Icons are stored in $HOME/.config/waybar/icons
+        # Programs to add to your bottom taskbar
+        # Icons are stored in $REPO/assets/icons
+        # Icons are copied into $HOME/.config/waybar/icons
         apps = [
           { program = "kitty"; icon = "terminal.png"; workspace = 1; }
           { program = "librewolf"; icon = "librewolf.png"; workspace = 2; }
+          { program = "tor-browser-clearnet"; icon = "tor-browser-clearnet.png"; workspace = 2; }
+          { program = "tor-browser-proxy"; icon = "tor-browser-proxy.png"; workspace = 3; }
           { program = "tor-browser"; icon = "tor-browser.png"; workspace = 3; }
+          { program = "thunar"; icon = "file-manager.png"; workspace = 5; }
           { program = "virt-manager"; icon = "vm.png"; workspace = 5; }
+          { program = "krita"; icon = "krita.png"; workspace = 5; }
           { program = "keepassxc"; icon = "keepassxc.png"; workspace = 10; }
         ];
 
@@ -60,9 +77,15 @@
       };
     };
 
+    # Desktop Environment configuration
     de = {
       # TODO
     };
+    
+    programs = [
+      { program = "ssh"; envVars = { TERM = "xterm-256color"; }; }
+      { program = "lxappearance"; envVars = { GDK_BACKEND = "x11"; }; }
+    ];
   };
 
   audio = {
@@ -90,6 +113,8 @@
         "freetube"
       ];
     };
+
+    replaceCoreutilsWithUutils = true;
 
     # All permitted insecure packages may only be used under a profile whose `networking` is disabled.
     # If `networking` is enabled, their installation will not be permitted.
@@ -133,6 +158,13 @@
 
   git = {
     useTorProxy = true;
+
+    # Add repositories you would like cloned into
+    # your user account at ~/Repositories
+    repositories = [
+      { service = "github"; owner = "quarterstar"; repository = "opsec-index"; }
+      { service = "github"; owner = "quarterstar"; repository = "opsec-infra"; }
+    ];
   };
 
   tor = {
@@ -150,16 +182,21 @@
         "freetube"
       ];
     };
+
+    publicProxy = {
+      address = "43.157.34.94";
+      port = 1777;
+    };
   };
 
   shell = {
     enable = true;
 
-    aliases = {
-      rm = "trash"; # Safe rm alternative so that directories do not get accidentally permanently deleted by the user or scripts
-      neofetch = "fastfetch"; # Replacement for neofetch, which has been abandoned
-      ls = "eza"; # Modern alternative to ls; most arguments are functionally equivalent
-      ssh = "TERM=\"xterm-256color\" ssh"; # Fix unknown terminal error when connecting over SSH with Kitty
+    # Alternative ways to reference programs in shell
+    aliases = pkgs: {
+      rm = "${pkgs.trash-cli}/bin/trash";
+      neofetch = "${pkgs.fastfetch}/bin/fastfetch";
+      ls = "${pkgs.eza}/bin/eza";
     };
 
     # Show information similar to neofetch on startup
