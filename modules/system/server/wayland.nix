@@ -12,5 +12,9 @@
     plymouth # Display manager dependency
     xorg.libX11   # Optional, for XWayland fallback
     xorg.libxcb   # Optional
+
+    # Utils
+    swayimg
+    clipman
   ];
 }
