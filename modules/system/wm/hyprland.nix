@@ -4,6 +4,7 @@
   imports = [
     ../../userspace/services/reload-waybar.nix
     ../../userspace/services/rainbow-border.nix
+    ../../userspace/services/switch-wallpaper.nix
   ];
 
   # Enable compositor
@@ -29,8 +30,10 @@
     fftw
     helvum
 
+    vlc # Startup sound effect
+
     # Set random wallpaper after login (may take a long time for gifs)
-    (callPackage ../../drvs/wayland-random-wallpaper/default.nix { })
+    (callPackage ../../drvs/wayland-random-wallpaper/default.nix {})
   ];
 
   environment.sessionVariables = {
