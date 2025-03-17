@@ -19,6 +19,8 @@ let
       lockPref("extensions.torbutton.use_nontor_proxy", true)
       lockPref("network.proxy.socks", "127.0.0.1")
       lockPref("network.proxy.socks_port", 1080)
+      lockPref("extensions.torlauncher.start_tor", false)
+      lockPref("browser.startup.homepage", "file:///etc/nixos/web/pages/tor-browser-proxy-warning.html")
     '';
   };
   

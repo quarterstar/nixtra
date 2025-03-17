@@ -41,7 +41,9 @@ This flavor is ideal if you want simple browsing with privacy but not the anonym
 
 **<img width="32" height="32" src="../assets/icons/tor-browser-proxy.png"> Proxy Tor Browser**
 
-This flavor replaces the built-in Tor proxy to use a chain of proxies. The first proxy in the chain is the Tor service, which is functionally equivalent to the regular Tor Browser. However, the second proxy in the chain is a public proxy of your choice, which is right after the exit node.
+This flavor replaces the built-in Tor proxy to use a chain of proxies. The first proxy in the chain is the Tor service, which is functionally equivalent to the regular Tor Browser. However, the second proxy in the chain is a public proxy of your choice, which is right after the exit node. The chain of proxies looks like this:
+
+<img alt="Layout of Tor Browser Proxy profile" width="486" height="187" src="../web/assets/tor-browser-proxy-layout.png">
 
 The purpose of this flavor is to mask the exit node's IP address so that websites that block Tor do not know you are using Tor. Unlike Tor bridges, which bypass censorship by putting a private proxy in between you and the guard (entry) node, this flavor provides a proxy in between the exit node and the destination website.
 
