@@ -113,17 +113,22 @@ in {
     users = {
       "user" = import ../userspace/base/user.nix;
       "root" = import ../userspace/base/root.nix;
-    };
+    } // (builtins.listToAttrs
+      (map (username:
+        { name = username; value = import ../userspace/base/custom-user.nix { inherit username; inherit settings; }; }
+      ) settings.security.extraUsers));
   };
 
   # Automatically fix collisions
   home-manager.backupFileExtension = "backup.${currentTimestamp}";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${profile.user.username} = {
-    isNormalUser = true;
-    extraGroups = profile.user.groups;
-  };
+  users.users = {
+    ${profile.user.username} = {
+      isNormalUser = true;
+      extraGroups = profile.user.groups;
+    };
+  } // (builtins.listToAttrs (map (username: { name = username; value = { isNormalUser = true; }; }) settings.security.extraUsers));
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
