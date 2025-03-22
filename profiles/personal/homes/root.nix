@@ -3,7 +3,7 @@
 {
   imports = [
     # Dependencies
-    ../program/home-root.nix
+    ../../program/homes/root.nix
   ];
 
   programs.home-manager.enable = true;

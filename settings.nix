@@ -1,4 +1,4 @@
-rec {
+{
   hardware = {
     gpu = "amd"; # Available options: amd
   };
@@ -12,6 +12,10 @@ rec {
     initialVersion = "24.11";
     nur = false;
     hostnameProfilePrefix = true;
+  };
+
+  security = {
+    extraUsers = [ "protected-documents" ];
   };
 
   config = {

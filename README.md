@@ -75,7 +75,9 @@ All software provided by the mainstream Nixtra repository must strictly be free 
 
 ## 👤 User Accounts
 
-This config is intended for single-user systems. A default `user` account configuration is provided. However, the user may pick a profile based on their software needs.
+The Nixtra environment is intended to be used as a single-user system. A default `user` account configuration is provided. However, the user may pick a profile based on their software needs.
+
+Also, additional users may be defined in the `security.extraUsers` attribute provided in `settings.nix`. These users only exist for the sole purpose of storing secret documents and files that should not be accessible to programs that are run under the main `user`.
 
 ## ♦️ Profiles
 

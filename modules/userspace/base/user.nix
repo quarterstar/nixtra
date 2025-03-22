@@ -3,7 +3,7 @@
 {
   imports = [
     ./common.nix
-    ../../../profiles/${settings.config.profile}/home-user.nix
+    ../../../profiles/${settings.config.profile}/homes/user.nix
   ];
 
   home.username = profile.user.username;

@@ -10,7 +10,7 @@
 
 {
   user = {
-    username = "user"; # Warning: compilation and distribution of software from your host system without virtualization may lead to username leakage!
+    username = "user"; # Username of the main user.
     config = "quarterstar"; # Available options: quarterstar, empty (use `empty` if you want to cherrypick individual configs in home.nix)
     shell = "zsh"; # Available options: zsh (recommended), fish, bash
     browser = "tor-browser"; # The preferred browser for applications to use
