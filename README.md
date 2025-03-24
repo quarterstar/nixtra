@@ -104,11 +104,11 @@ For more information, refer to the [configuration page](./docs/02-configuration.
 
 ## 🚧 Project Structure
 
-Inside `modules`, the project uses the following directory hierarchy:
-
-- `system`: all system-level services, applications and configurations.
-- `userspace`: all the installed userspace applications and configurations.
+- `profiles`: configuration for the [profiles mechanism](./docs/02-configuration.md).
 - `config`: non-nix configurations for applications. [Read More](./docs/01-configuration.md)
+- `firejail`: configuration files for [hardening user and system applications](./docs/03-hardening.md) with firejail.
+- `modules/system`: all system-level services, applications and configurations.
+- `modules/userspace`: all the installed userspace applications and configurations.
 
 ## ⚓ See Also
 
@@ -123,3 +123,13 @@ All of the works below have been altered, modified or kept in their original sta
 - [Startup Sound Effect](https://pixabay.com/sound-effects/soft-startup-sound-269291)
 - [Firejail Overlay](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix)
 - [Waybar Record Module](https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1)
+
+## 📜 License
+
+All Nixtra code included in this repository is licensed under the terms of the [GNU Affero General Public License](LICENSE). Further, all text including, but not limited to:
+
+- Documentation in the `./docs` directory;
+- GitHub Wiki entries; and
+- GitHub Pages associated with Nixtra
+
+are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en), unless otherwise stated explicitly by the respective author of the software and text.
