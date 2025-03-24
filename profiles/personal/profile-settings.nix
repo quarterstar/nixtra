@@ -60,15 +60,17 @@
         # Icons are stored in $REPO/assets/icons
         # Icons are copied into $HOME/.config/waybar/icons
         apps = [
-          { program = "kitty"; icon = "terminal.png"; workspace = 1; }
-          { program = "librewolf"; icon = "librewolf.png"; workspace = 2; }
-          { program = "tor-browser-clearnet"; icon = "tor-browser-clearnet.png"; workspace = 2; }
-          { program = "tor-browser-proxy"; icon = "tor-browser-proxy.png"; workspace = 3; }
-          { program = "tor-browser"; icon = "tor-browser.png"; workspace = 3; }
-          { program = "thunar"; icon = "file-manager.png"; workspace = 5; }
-          { program = "virt-manager"; icon = "vm.png"; workspace = 5; }
-          { program = "krita"; icon = "krita.png"; workspace = 5; }
-          { program = "keepassxc"; icon = "keepassxc.png"; workspace = 10; }
+          { program = "kitty"; icon = "terminal.png"; }
+          { program = "librewolf"; icon = "librewolf.png"; }
+          { program = "freetube"; icon = "freetube.png"; }
+          { program = "tor-browser-clearnet"; icon = "tor-browser-clearnet.png"; }
+          { program = "tor-browser-proxy"; icon = "tor-browser-proxy.png"; }
+          { program = "tor-browser"; icon = "tor-browser.png"; }
+          { program = "thunar"; icon = "file-manager.png"; }
+          { program = "okular"; icon = "okular.png"; }
+          { program = "virt-manager"; icon = "vm.png"; }
+          { program = "krita"; icon = "krita.png"; }
+          { program = "keepassxc"; icon = "keepassxc.png"; }
         ];
 
         # Size of icons to be used in bottom taskbar
