@@ -60,11 +60,12 @@ This flavor is simply the regular Tor browser with a regular Tor connection, ide
 
 ### Window Manager
 
-- `SUPER S`: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
-- `SUPER SHIFT S`: Take a screenshot of a specific region of the window. (Stored in `~/Pictures/Screenshots`)
-- `SUPER R`: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
-- `SUPER SHIFT R`: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
 - `SUPER WHEEL`: Switch to next or previous workspace.
+- `SUPER SHIFT V`: Cycle through clipboard history.
+- `SUPER SHIFT S`: Take a screenshot of a specific region of the window. (Stored in `~/Pictures/Screenshots`)
+- `SUPER SHIFT R`: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
+- `SUPER S`: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
+- `SUPER R`: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
 - `ALT J`: Switch from vertical tiling to horizontal or vice versa for active window.
 - `ALT F`: Toggle fullscreen.
 - `ALT Q`: Create new window.
@@ -75,7 +76,7 @@ This flavor is simply the regular Tor browser with a regular Tor connection, ide
 - Arrow keys: Move focus to any neighbor window.
 
 > [!NOTE]
-> `SUPER` key is the Windows key on most keyboards.
+> `SUPER` is the Windows key on most keyboards.
 
 ### Desktop Environment
 

@@ -14,7 +14,9 @@
     xorg.libxcb   # Optional
 
     # Utils
-    swayimg
-    clipman
+    swayimg # Display images
+    clipman # Copy text to clipboard
+    cliphist # View clipboard history
+    wl-clipboard # Watch event for clipboard
   ];
 }

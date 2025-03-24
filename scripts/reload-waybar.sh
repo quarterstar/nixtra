@@ -6,5 +6,4 @@ while true; do
   waybar -c ~/.config/waybar/config-top -s ~/.config/waybar/style-top.css &
   waybar -c ~/.config/waybar/config-bottom -s ~/.config/waybar/style-bottom.css &
   inotifywait -e create,modify $CONFIG_FILES
-  pkill waybar
 done
