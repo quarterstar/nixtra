@@ -3,7 +3,8 @@
 if profile.tor.enable then
 {
   # Define the microsocks service
-  systemd.services.microsocks = {
+  systemd.user.services.microsocks = {
+    enable = true;
     description = "MicroSocks SOCKS5 Proxy";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -12,7 +13,6 @@ if profile.tor.enable then
       ExecStart = "${pkgs.proxychains}/bin/proxychains4 ${pkgs.microsocks}/bin/microsocks -p 1080";
       Restart = "on-failure";
       RestartSec = "5s";
-      User = "nobody"; # Run as an unprivileged user
     };
   };
 
