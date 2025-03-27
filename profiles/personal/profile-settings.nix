@@ -96,7 +96,18 @@
 
   security = {
     networking = true; # Any kind of networking capability for the system
-    firewall = true; # Packet filtering and forwarding
+
+    # Packet filtering and forwarding
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        80 # HTTP
+        443 # HTTPS
+        18089 # Monerod restricted RPC port
+      ];
+      allowedUDPPorts = [ ];
+    };
+
     virtualization = true; # Virtual machines
     scanning = true; # Intrusion Detection System with Sirucata
     aliases = true; # Aliases for commands such as `rm` to prevent accidental data loss
