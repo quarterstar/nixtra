@@ -42,7 +42,7 @@ in {
       ./patches/udev.nix
 
       # Shell
-      ./shell/commands.nix
+      ./shell/commands/commands.nix
       ./shell/aliases.nix
 
       # Other

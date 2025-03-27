@@ -1,8 +1,6 @@
-{ pkgs, profile, createCommand, ... }:
+{ pkgs, createCommand, ... }:
 
 createCommand {
-  inherit pkgs;
-  inherit profile;
   name = "rebuild";
   buildInputs = with pkgs; [ grim slurp ];
 

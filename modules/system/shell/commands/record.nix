@@ -1,8 +1,6 @@
-{ pkgs, profile, createCommand, ... }:
+{ pkgs, createCommand, ... }:
 
 createCommand {
-  inherit pkgs;
-  inherit profile;
   name = "record";
   buildInputs = with pkgs; [ gawk coreutils findutils wf-recorder slurp ];
 

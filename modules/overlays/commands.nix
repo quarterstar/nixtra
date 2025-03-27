@@ -1,7 +1,9 @@
 self: super: {
-  createCommand = { profile, name, command, buildInputs ? [], ... }:
+  createCommand = { name, command, buildInputs ? [], ... }:
     let
       script = super.writeScript "${profile.shell.commands.prefix}-${name}" command;
+      settings = import ../../settings.nix;
+      profile = import ../../profiles/${settings.config.profile}/profile-settings.nix;
     in
       super.stdenv.mkDerivation {
         inherit buildInputs;

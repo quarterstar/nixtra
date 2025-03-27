@@ -1,8 +1,6 @@
-{ pkgs, profile, createCommand, ... }:
+{ createCommand, ... }:
 
 createCommand {
-  inherit pkgs;
-  inherit profile;
   name = "regen-bootloader";
   buildInputs = [];
 

@@ -1,8 +1,6 @@
-{ pkgs, profile, createCommand, ... }:
+{ profile, createCommand, ... }:
 
 createCommand {
-  inherit pkgs;
-  inherit profile;
   name = "update";
   buildInputs = [];
 

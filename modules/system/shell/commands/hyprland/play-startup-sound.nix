@@ -1,8 +1,6 @@
 { pkgs, profile, createCommand, ... }:
 
 if profile.display.type == "hyprland" then createCommand {
-  inherit pkgs;
-  inherit profile;
   name = "hyprland-play-startup-sound";
   buildInputs = with pkgs; [ grim slurp ];
 
