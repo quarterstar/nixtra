@@ -105,6 +105,12 @@
     # Refer to `03-hardening.md` in docs for more information.
     firejail = true;
 
+    # Applications which clipboard listeners (for clipboard history) like cliphist should
+    # not listen to, e.g. password managers
+    excludedClipboardPrograms = [
+      "x-kde-passwordManagerHint"
+    ];
+
     # Applications to close when suspending PC or putting it to sleep.
     closeOnSuspend = {
       enable = true;
