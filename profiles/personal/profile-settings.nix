@@ -182,6 +182,7 @@
         #"git"
 
         "freetube"
+        "com.cakewallet.CakeWallet"
       ];
     };
 
@@ -215,5 +216,17 @@
       # It is advised that you do not modify it.
       prefix = "nixtra";
     };
+  };
+
+  flatpak = {
+    enable = true;
+
+    sources = [
+      { name = "flathub"; source = "https://dl.flathub.org/repo/flathub.flatpakrepo"; allowForUser = true; }
+    ];
+
+    apps = [
+      { app = "com.cakewallet.CakeWallet"; url = "https://github.com/cake-tech/cake_wallet/releases/download/v4.24.0/Cake_Wallet_v4.24.0_Linux.flatpak"; }
+    ];
   };
 }
