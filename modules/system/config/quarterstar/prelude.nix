@@ -2,5 +2,6 @@
 
 {
   imports = [
+    ./login/sddm.nix
   ];
 }
