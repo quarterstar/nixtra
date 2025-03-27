@@ -30,7 +30,7 @@ Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, p
 
 ## ⭐ Features
 
-- Pre-installed, beautifully-riced Hyprland window manager. (More in the future.)
+- Pre-installed, beautifully-riced window managers and desktop environments. (Currently Hyprland; more in the future.)
 - Different flavors of profiles pre-configured with a variety of packages to fullfill your needs.
 - A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues and annoyances. (For example, you do not need to `git add` a file when rebuilding with Flakes so that it registers it.)
 - High-level configuration system.
