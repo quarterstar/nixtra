@@ -16,5 +16,6 @@
 
     # Services
     ../../modules/system/services/ollama.nix
+    ../../modules/system/services/flatpak.nix
   ];
 }
