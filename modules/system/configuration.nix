@@ -26,13 +26,7 @@ in {
       ./hardware-configuration.nix
 
       # Security
-      ./security/update.nix
-      ./security/doas.nix
-      ./security/firewall.nix
-      ./security/audit.nix
-      ./security/firejail.nix
-      ./security/close-on-suspend.nix
-      ./security/uutils.nix
+      ./security/security.nix
 
       # Networks
       ./networks/tornet.nix
@@ -67,6 +61,7 @@ in {
   } else {};
 
   # Save configurations from old generations
+  # Not currently supported by Flakes
   #system.copySystemConfiguration = true;
 
   # "Unsafe" packages
