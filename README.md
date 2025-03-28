@@ -37,7 +37,7 @@ Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, p
 
 ## 🔒 Security Features
 
-Some example security features Nixtra employs are:
+Some example security features (which can be toggled on or off) Nixtra employs are:
 
 - [Tor browsing uses a unique flavor-based system with separate Tor browsers.](./docs/01-usage.md##)
 - All permitted insecure packages may only be used under a profile with no networking enabled.
@@ -48,6 +48,7 @@ Some example security features Nixtra employs are:
 - Sound access is disabled for Tor Browser and other sensitive applications.
 - Certain software like Git are configured to route all traffic through Tor for anonymity.
 - Many core components utilities (like gnu coreutils) are replaced with mature Rust-written equivalents which patch out many security vulnerabilities often found in C programs, without breaking userspace.
+- Features like commits in Git use a randomized date to make it harder to pinpoint someone's timezone.
 - ...and more
 
 For a complete list and elaboration for the above, view [SECURITY.md](SECURITY.md).
