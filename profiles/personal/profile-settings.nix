@@ -177,13 +177,25 @@
 
   git = {
     useTorProxy = true;
+    randomizeCommitDate = true;
 
-    # Add repositories you would like cloned into
-    # your user account at ~/Repositories
-    repositories = [
-      { service = "github"; owner = "quarterstar"; repository = "opsec-index"; }
-      { service = "github"; owner = "quarterstar"; repository = "opsec-infra"; }
-    ];
+    autoPush = {
+      enable = true;
+      time = "00:00";
+      repositories = [
+        # Automatically push to all repositories
+        { service = "*"; owner = "*"; repository = "*"; }
+      ];
+    };
+
+    autoClone = {
+      enable = true;
+
+      repositories = [
+        { service = "github"; owner = "quarterstar"; repository = "opsec-index"; }
+        { service = "github"; owner = "quarterstar"; repository = "opsec-infra"; }
+      ];
+    };
   };
 
   tor = {
@@ -196,10 +208,10 @@
       programs = [
         # Native Tor SOCKS5 proxy supported for Git, so no need for torsocks
         # Refer to `git.useTorProxy`
-        #"git"
+        #{ name = "git"; hardAlias = true; }
 
-        "freetube"
-        "com.cakewallet.CakeWallet"
+        { name = "freetube"; hardAlias = true; }
+        { name = "com.cakewallet.CakeWallet"; hardAlias = true; }
       ];
     };
 
