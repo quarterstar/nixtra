@@ -68,7 +68,7 @@ Must be one of the following:
 | Scope        | Description
 | -------      | ----------- 
 | **nixos**    | Changes to NixOS system configuration (configuration.nix)
-| **flake**    | Changes to files related to Nix Flakes
+| **flakes**    | Changes to files related to Nix Flakes
 | **boot**     | Changes related to the bootloader
 | **kernel**   | New kernel modules or settings
 | **hardware** | Hardware-specific configuration
