@@ -9,7 +9,8 @@ in {
       inputs.home-manager.nixosModules.default
 
       # Overlays
-      ../overlays.nix
+      ../overlays/overlays.nix
+      ../overrides/overrides.nix
 
       # Profile-based configuration
       (../../profiles + ("/" + settings.config.profile) + "/configuration.nix")

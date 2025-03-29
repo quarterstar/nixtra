@@ -12,8 +12,9 @@
     ../../../modules/userspace/pkgs/virt/virtualbox.nix
   ];
 
-  home.packages = with pkgs; [
+  home.packages = [
     (pkgs.wrapFirejail {
+      #executable = (pkgs.torify "${pkgs.prismlauncher}/bin/prismlauncher");
       executable = "${pkgs.prismlauncher}/bin/prismlauncher";
       profile = "prismlauncher";
     })

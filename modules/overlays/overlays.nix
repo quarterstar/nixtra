@@ -3,7 +3,7 @@
 {
   # Set extra functionality for `pkgs`
   nixpkgs.overlays = [
-    (import ./overlays/commands.nix)
-    (import ./overlays/sandbox.nix)
+    (import ./commands.nix)
+    (import ./sandbox.nix)
   ];
 }
