@@ -6,8 +6,47 @@ While Nixtra is hardened by default, there are some additional things you can do
 
 ## Table of Contents
 
+- [Sandboxing](##sandboxing)
 - [Disable IPv6](##disable)
 - [Spoof the Tor Exit Node IP address in Tor Browser](##spoofing)
+
+## Sandboxing
+
+You can sandbox applications in Nixtra to restrict their permissions, filesystem scope, networking capabilities, run them in some sort of container or anything else supported by the environment.
+
+### Torify your applications
+
+You can specify specific applications to be routed over the Tor network in your profile's configuration to maintain anonymity. To do so, simply call the `torify` function and provide the program you wish to be affected as an argument:
+
+```nix
+(pkgs.torify "${pkgs.freetube}/bin/freetube")
+```
+
+### Wrap applications with firejail
+
+Firejail can encapsulate applications and force them to not use networking, or do things like restrict their filesystem access to a specific directory. Nixtra stores all firejail profiles in the `firejail` directory.
+
+To wrap a program with Firejail, utilize the following Nixtra function in your [profile configuration](./02-configuration.md) inside `environment.systemPackages` or `home.packages`. For this example, the prismlauncher client for Minecraft is sandboxed as follows:
+
+```nix
+pkgs.wrapFirejail {
+  executable = "${pkgs.prismlauncher}/bin/prismlauncher";
+  profile = "prismlauncher";
+}
+```
+
+Notice that the `profile` is set to the string `"prismlauncher"`. The overlay will implicitly translate this to the path `/etc/nixos/firejail/prismlauncher.profile` at build time.
+
+Replace the package with the one you wish to encapsulate and the profile with a new one that you should create for it. For security reasons, the original package will be made inaccessible unless explicitly cloned in some way.
+
+You can also compose different sandboxing solutions such as firejail with torify:
+
+```nix
+pkgs.wrapFirejail {
+  executable = (pkgs.torify "${pkgs.prismlauncher}/bin/prismlauncher");
+  profile = "prismlauncher";
+}
+```
 
 ## Disable IPv6
 
