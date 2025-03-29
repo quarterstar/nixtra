@@ -20,8 +20,26 @@ if profile.tor.enable then
   # This is done so that the tor user is created and managed by NixOS
   services.tor = {
     enable = true;
-    settings.SOCKSPort = 9000;
-  };
+    settings = {
+      SOCKSPort = 9000;
+    };
+  } // (if profile.tor.isRunMoneroNode then {
+    relay.onionServices.monero = {
+      version = 3;
+      map = [
+        {
+          port = 18080;
+          target.port = 18080;
+          target.addr = "127.0.0.1";
+        }
+        {
+          port = 18089;
+          target.port = 18089;
+          target.addr = "127.0.0.1";
+        }
+      ];
+    };
+  } else {});
 
   systemd.services.tor1 = {
     description = "Tor Service (No Proxy)";

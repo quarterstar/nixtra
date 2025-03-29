@@ -9,8 +9,6 @@
 
     ../config/global/prelude.nix
     (../config + ("/" + profile.user.config) + "/prelude.nix")
-
-    ../security/tor.nix
   ];
 
   home.sessionVariables = {
