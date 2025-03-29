@@ -205,13 +205,13 @@
       enable = true;
 
       # List of programs to run over Tor (requires torsocks)
-      programs = [
+      programs = pkgs: [
         # Native Tor SOCKS5 proxy supported for Git, so no need for torsocks
         # Refer to `git.useTorProxy`
-        #{ name = "git"; hardAlias = true; }
+        #{ name = "git"; hardAlias = true; systemWideInstall = true; }
 
-        { name = "freetube"; hardAlias = true; }
-        { name = "com.cakewallet.CakeWallet"; hardAlias = true; }
+        #{ program = "${pkgs.freetube}/bin/freetube"; }
+        { program = "com.cakewallet.CakeWallet"; }
       ];
     };
 

@@ -29,4 +29,9 @@ self: super: {
             --replace ${executable} "$command_path"
         ''
       );
+
+  torify = program:
+    super.writeShellScriptBin (builtins.baseNameOf program) ''
+      exec ${super.torsocks}/bin/torsocks ${program} "$@"
+    '';
 }

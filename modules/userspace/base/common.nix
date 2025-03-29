@@ -9,6 +9,8 @@
 
     ../config/global/prelude.nix
     (../config + ("/" + profile.user.config) + "/prelude.nix")
+
+    ../security/tor.nix
   ];
 
   home.sessionVariables = {
@@ -17,4 +19,7 @@
     TERMINAL = profile.user.terminal;
   };
 
+  # Enable automatic management of directories specified in the XDG specification
+  # https://xdgbasedirectoryspecification.com/
+  xdg.enable = true;
 }

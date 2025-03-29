@@ -38,8 +38,11 @@
     ../../../modules/userspace/pkgs/file/pcmanfm.nix
     ../../../modules/userspace/pkgs/compression/p7zip.nix
     ../../../modules/userspace/pkgs/proxy/proxychains.nix
-    ../../../modules/userspace/pkgs/video/freetube.nix
     ../../../modules/userspace/pkgs/aesthetic/lxappearance.nix
+  ];
+
+  home.packages = [
+    (pkgs.torify "${pkgs.freetube}/bin/freetube")
   ];
 
   programs.home-manager.enable = true;
