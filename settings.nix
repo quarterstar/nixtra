@@ -5,7 +5,7 @@
 
   swap = {
     enable = true;
-    size = 8; # GB
+    size = 8 * 1024;
   };
 
   system = {
