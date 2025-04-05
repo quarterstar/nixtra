@@ -69,6 +69,7 @@
           { program = "thunar"; icon = "file-manager.png"; }
           { program = "okular"; icon = "okular.png"; }
           { program = "virt-manager"; icon = "vm.png"; }
+          { program = "OpenBoard"; icon = "openboard.png"; }
           { program = "krita"; icon = "krita.png"; }
           { program = "keepassxc"; icon = "keepassxc.png"; }
         ];
@@ -103,7 +104,6 @@
       allowedTCPPorts = [
         80 # HTTP
         443 # HTTPS
-        18089 # Monerod restricted RPC port
       ];
       allowedUDPPorts = [ ];
     };
@@ -200,6 +200,10 @@
 
   tor = {
     enable = true;
+
+    # Whether to listen to ports for hidden service
+    # if running a monero node locally
+    isRunMoneroNode = true;
 
     aliases = {
       enable = true;
