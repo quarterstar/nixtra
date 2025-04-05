@@ -12,7 +12,6 @@ createCommand {
       echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1"
     }
 
-    # Step 1: Remove unused packages from the Nix store
     log "Running garbage collection to remove unused packages..."
     nix-collect-garbage --delete-old
     if [ $? -eq 0 ]; then
@@ -22,7 +21,6 @@ createCommand {
       exit 1
     fi
 
-    # Step 2: Optimize the Nix store by hard-linking duplicate files
     log "Optimizing the Nix store..."
     nix-store --optimise
     if [ $? -eq 0 ]; then
@@ -32,13 +30,11 @@ createCommand {
       exit 1
     fi
 
-    # Step 3: Clean up temporary files in /tmp and /var/tmp
     log "Cleaning up temporary files..."
     find /tmp -type f -atime +7 -delete
     find /var/tmp -type f -atime +7 -delete
     log "Temporary files cleanup completed."
 
-    # Step 4: Remove old generations of the system profile
     log "Removing old system generations..."
     nix-env --delete-generations old
     if [ $? -eq 0 ]; then
@@ -48,7 +44,6 @@ createCommand {
       exit 1
     fi
 
-    # Step 5: Clean up the Nix user profile (if applicable)
     log "Cleaning up user profile generations..."
     nix-env --delete-generations old --profile /nix/var/nix/profiles/per-user/$USER/profile
     if [ $? -eq 0 ]; then
@@ -58,18 +53,19 @@ createCommand {
       exit 1
     fi
 
-    # Step 6: Clean up flake-related caches (optional)
     log "Cleaning up flake caches..."
     rm -rf ~/.cache/nix/eval-cache-v*
     rm -rf ~/.cache/nix/flake-registry.json
     log "Flake caches cleaned up."
 
-    # Step 7: Clean up Nix build logs (optional)
     log "Cleaning up Nix build logs..."
     rm -rf /nix/var/log/nix/drvs/*
     log "Nix build logs cleaned up."
 
-    # Step 8: Final report
+    log "Cleaning up old profiles..."
+    nix-store --gc --print-roots | egrep -v "^(/nix/var|/run/\w+-system|\{memory|/proc)"
+    log "Old profiles cleaned up."
+
     log "NixOS cleanup completed successfully!"
   '';
 }
