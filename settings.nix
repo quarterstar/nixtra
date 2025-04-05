@@ -3,6 +3,11 @@
     gpu = "amd"; # Available options: amd
   };
 
+  swap = {
+    enable = true;
+    size = 8; # GB
+  };
+
   system = {
     arch = "x86_64-linux";
     hostname = "nixtra";

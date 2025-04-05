@@ -34,6 +34,7 @@ in {
 
       # Settings-based imports
       ./fs/windows.nix
+      ./fs/swap.nix
       ./patches/udev.nix
 
       # Shell
