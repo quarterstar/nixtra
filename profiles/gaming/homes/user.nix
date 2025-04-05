@@ -10,6 +10,8 @@
     ../../../modules/userspace/pkgs/notes/zettlr.nix
     ../../../modules/userspace/pkgs/audio/alsa.nix
     ../../../modules/userspace/pkgs/virt/virtualbox.nix
+    ../../../modules/userspace/pkgs/virt/virtualbox.nix
+    ../../../modules/userspace/pkgs/performance/gamescope.nix
   ];
 
   home.packages = [
