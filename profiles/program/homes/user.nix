@@ -25,6 +25,7 @@
     ../../../modules/userspace/pkgs/monitoring/htop.nix
     ../../../modules/userspace/pkgs/editor/lunarvim.nix
     ../../../modules/userspace/pkgs/editor/neovim.nix
+    ../../../modules/userspace/pkgs/video/freetube.nix
     ../../../modules/userspace/pkgs/audio/alsa.nix
     ../../../modules/userspace/pkgs/re/ghidra.nix
     ../../../modules/userspace/pkgs/sandbox/virt-manager.nix
@@ -42,7 +43,6 @@
   ];
 
   home.packages = [
-    (pkgs.torify "${pkgs.freetube}/bin/freetube")
   ];
 
   programs.home-manager.enable = true;
