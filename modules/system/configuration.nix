@@ -49,6 +49,8 @@ in {
       # Configuration
       ./config/global/prelude.nix
       (./config + ("/" + profile.user.config) + "/prelude.nix")
+
+      ./extra.nix
     ];
 
   # Enable Flakes
@@ -68,6 +70,12 @@ in {
   # "Unsafe" packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) profile.security.permittedUnfreePackages;
   nixpkgs.config.permittedInsecurePackages = if !profile.security.networking then profile.security.permittedInsecurePackages else [];
+
+  # Use automatic garbage collection
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
+  };
 
   # Enable docker containers support
   virtualisation.docker.enable = lib.mkIf profile.security.virtualization true;
