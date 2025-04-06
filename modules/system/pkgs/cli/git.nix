@@ -87,6 +87,10 @@ in {
 
   programs.git.enable = true;
   programs.git.config = {
+    commit = {
+      gpgsign = profile.git.signCommits;
+    };
+
     http = if profile.git.useTorProxy then {
       proxy = "socks5://127.0.0.1:9050";
     } else {};

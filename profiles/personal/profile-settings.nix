@@ -176,6 +176,7 @@
   };
 
   git = {
+    signCommits = true;
     useTorProxy = true;
     randomizeCommitDate = true;
 
