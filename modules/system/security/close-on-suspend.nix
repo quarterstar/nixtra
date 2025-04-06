@@ -4,7 +4,7 @@ if profile.security.closeOnSuspend.enable then {
   systemd.services."close-on-suspend" = {
     enable = true;
     script = "${pkgs.writeShellScript "close-on-suspend.sh" ''
-      #!/bin/bash
+      #!/usr/bin/env bash
 
       # List of applications to kill
       APPS=(${lib.strings.concatStringsSep " " profile.security.closeOnSuspend.applications})
