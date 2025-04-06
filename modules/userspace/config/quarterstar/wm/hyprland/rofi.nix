@@ -8,7 +8,7 @@
       force = true;
     };
 
-    ".local/share/themes/rofi/nixtra.rasi" = {
+    ".local/share/rofi/themes/nixtra.rasi" = {
       source = ../../../../../../config/${profile.user.config}/wm/hyprland/rofi/nixtra.rasi;
       executable = false;
       force = true;
