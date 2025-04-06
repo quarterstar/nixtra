@@ -1,7 +1,12 @@
 <div align="center">
- <img src="./assets/icons/nixtra.png">
- <img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
- <h2>⚡ Your Supercharged NixOS Config</h2>
+<img src="./assets/icons/nixtra.png">
+
+<img src="https://badgen.net/github/stars/quarterstar/nixtra">
+<img src="https://badgen.net/github/watchers/quarterstar/nixtra">
+<img src="https://badgen.net/github/license/quarterstar/nixtra">
+
+<img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
+<h2>⚡ Your Supercharged NixOS Config</h2>
 
 ---
 
