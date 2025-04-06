@@ -31,9 +31,6 @@
     helvum
 
     vlc # Startup sound effect
-
-    # Set random wallpaper after login (may take a long time for gifs)
-    (callPackage ../../drvs/wayland-random-wallpaper/default.nix {})
   ];
 
   environment.sessionVariables = {
