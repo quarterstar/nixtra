@@ -66,6 +66,7 @@ This flavor is simply the regular Tor browser with a regular Tor connection, ide
 - `SUPER SHIFT R`: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
 - `SUPER S`: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
 - `SUPER R`: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
+- `SUPER C`: Pick a color from the screen.
 - `ALT J`: Switch from vertical tiling to horizontal or vice versa for active window.
 - `ALT F`: Toggle fullscreen.
 - `ALT Q`: Create new window.

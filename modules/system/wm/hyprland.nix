@@ -23,6 +23,7 @@
     adwaita-icon-theme
     gtk3
     tzdata
+    hyprpicker
 
     # Dependencies by cava module in waybar
     iniparser
