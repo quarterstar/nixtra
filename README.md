@@ -4,6 +4,15 @@
  <h2>⚡ Your Supercharged NixOS Config</h2>
 </div>
 
+---
+
+**[<kbd> <br> Install <br> </kbd>][Install]** 
+**[<kbd> <br> Usage <br> </kbd>][Usage]** 
+**[<kbd> <br> Configure <br> </kbd>][Configure]** 
+**[<kbd> <br> Contribute <br> </kbd>][Contribute]**
+
+---
+
 ## ❓ About Project
 
 Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, privacy and security. It is designed to:
@@ -134,3 +143,8 @@ All Nixtra code included in this repository is licensed under the terms of the [
 - GitHub Pages associated with Nixtra
 
 are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en), unless otherwise stated explicitly by the respective author of the software and text.
+
+[Install]: ./docs/00-installation.md
+[Usage]: ./docs/01-usage.md
+[Configure]: ./docs/02-configuration.md
+[Contribute]: ./CONTRIBUTING.md
