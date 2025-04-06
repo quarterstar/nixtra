@@ -33,7 +33,6 @@ in {
       ./networks/tornet.nix
 
       # Settings-based imports
-      ./fs/windows.nix
       ./fs/swap.nix
       ./patches/udev.nix
 
@@ -81,10 +80,6 @@ in {
   # Enable docker containers support
   virtualisation.docker.enable = lib.mkIf profile.security.virtualization true;
   virtualisation.libvirtd.enable = lib.mkIf profile.security.virtualization true;
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   # Define default shell for all users globally
   users.defaultUserShell = pkgs.${profile.user.shell};
