@@ -2,7 +2,6 @@
  <img src="./assets/icons/nixtra.png">
  <img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
  <h2>⚡ Your Supercharged NixOS Config</h2>
-</div>
 
 ---
 
@@ -12,6 +11,8 @@
 **[<kbd> <br> Contribute <br> </kbd>][Contribute]**
 
 ---
+
+</div>
 
 ## ❓ About Project
 
