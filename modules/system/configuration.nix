@@ -88,6 +88,7 @@ in {
   # Enable networking
   networking.wireless.enable = false;
   networking.networkmanager.enable = lib.mkIf profile.security.networking true;
+  networking.networkmanager.ethernet.macAddress = "random";
 
   # Set system's name
   networking.hostName = if settings.system.hostnameProfilePrefix
