@@ -45,6 +45,7 @@ in {
 
       # Proxy
       ./services/tor.nix
+      ./services/i2p.nix
 
       # Configuration
       ./config/global/prelude.nix
