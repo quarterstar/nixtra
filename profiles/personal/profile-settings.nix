@@ -59,19 +59,20 @@
         # Programs to add to your bottom taskbar
         # Icons are stored in $REPO/assets/icons
         # Icons are copied into $HOME/.config/waybar/icons
-        apps = [
-          { program = "kitty"; icon = "terminal.png"; }
-          { program = "librewolf"; icon = "librewolf.png"; }
-          { program = "freetube"; icon = "freetube.png"; }
+        apps = pkgs: [
+          { program = "${pkgs.kitty}/bin/kitty"; icon = "terminal.png"; }
+          { program = "${pkgs.xfce.thunar}/bin/thunar"; icon = "file-manager.png"; }
+          { program = "${pkgs.lunarvim}/bin/lunarvim"; icon = "lunarvim.png"; }
+          { program = "${pkgs.librewolf}/bin/librewolf"; icon = "librewolf.png"; }
+          { program = "${pkgs.freetube}/bin/freetube"; icon = "freetube.png"; }
           { program = "tor-browser-clearnet"; icon = "tor-browser-clearnet.png"; }
           { program = "tor-browser-proxy"; icon = "tor-browser-proxy.png"; }
           { program = "tor-browser"; icon = "tor-browser.png"; }
-          { program = "thunar"; icon = "file-manager.png"; }
-          { program = "okular"; icon = "okular.png"; }
-          { program = "virt-manager"; icon = "vm.png"; }
-          { program = "OpenBoard"; icon = "openboard.png"; }
-          { program = "krita"; icon = "krita.png"; }
-          { program = "keepassxc"; icon = "keepassxc.png"; }
+          { program = "${pkgs.okular}/bin/okular"; icon = "okular.png"; }
+          { program = "${pkgs.virt-manager}/bin/virt-manager"; icon = "vm.png"; }
+          { program = "${pkgs.openboard}/bin/OpenBoard"; icon = "openboard.png"; }
+          { program = "${pkgs.krita}/bin/krita"; icon = "krita.png"; }
+          { program = "${pkgs.keepassxc}/bin/keepassxc"; icon = "keepassxc.png"; }
         ];
 
         # Size of icons to be used in bottom taskbar
