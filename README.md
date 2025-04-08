@@ -9,8 +9,9 @@
 
 <br>
 
-<img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
 <h2>⚡ Your Supercharged NixOS Config</h2>
+
+<img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
 
 ---
 
