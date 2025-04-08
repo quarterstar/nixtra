@@ -1,12 +1,15 @@
-{ config, profile, ... }:
+{ pkgs, config, profile, ... }:
 
 let
   # Function to generate Waybar custom modules
-  mkAppModule = app: {
-    name = "custom/${app.program}";
+  mkAppModule = app:
+    let
+      program = builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
+    in {
+    name = "custom/${program}";
     value = {
       format = "    ";
-      on-click = "/home/user/.nix-profile/bin/${app.program}";
+      on-click = "/home/user/.nix-profile/bin/${program}";
       tooltip = false;
       class = "app-icon";
     };
@@ -14,8 +17,11 @@ let
 
   iconSize = builtins.toString profile.env.wm.taskbar.iconSize;
 
-  mkCssRule = app: ''
-    #custom-${app.program} {
+  mkCssRule = app:
+    let
+      program = builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
+    in ''
+    #custom-${program} {
       background-image: url('/home/${profile.user.username}/.config/waybar/icons/${app.icon}');
       background-position: center;
       background-repeat: no-repeat;
@@ -31,9 +37,6 @@ let
       background-image: url('/home/${profile.user.username}/.config/waybar/icons/nixtra.png');
       background-position: center;
       background-repeat: no-repeat;
-      /*background-size: 128px 42px;*/
-      /*min-width: 128px;*/
-      /*min-height: 42px;*/
       background-size: 96px 32px;
       min-width: 96px;
       min-height: 32px;
@@ -41,13 +44,28 @@ let
     }
   '';
 
+  hoverActiveCss = ''
+    .app-icon:hover {
+        animation: hover-animation 0.2s ease forwards;
+    }
+
+    .app-icon:active {
+        animation: active-animation 0.1s ease forwards;
+    }
+  '';
+
+  apps = (profile.env.wm.taskbar.apps pkgs);
+
   # Generate all custom modules
-  customModules = builtins.listToAttrs (map mkAppModule profile.env.wm.taskbar.apps);
-  customCssRules = builtins.concatStringsSep "\n" (map mkCssRule profile.env.wm.taskbar.apps);
-  cssRules = customCssRules + "\n" + nixtraCssRule;
+  customModules = builtins.listToAttrs (map mkAppModule apps);
+  customCssRules = builtins.concatStringsSep "\n" (map mkCssRule apps);
+  cssRules = hoverActiveCss + "\n" + customCssRules + "\n" + nixtraCssRule;
 
   # Generate the modules-center array
-  appModules = map (app: "custom/${app.program}") profile.env.wm.taskbar.apps;
+  appModules = map (app:
+    let
+      program = builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
+    in "custom/${program}") apps;
 in {
   home.file = {
     ".config/waybar/config-top" = {
