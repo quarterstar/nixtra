@@ -1,4 +1,4 @@
-{ pkgs, createCommand, ... }:
+{ profile, pkgs, createCommand, ... }:
 
 createCommand {
   name = "clean";
@@ -65,6 +65,10 @@ createCommand {
     log "Cleaning up old profiles..."
     nix-store --gc --print-roots | egrep -v "^(/nix/var|/run/\w+-system|\{memory|/proc)"
     log "Old profiles cleaned up."
+
+    log "Cleaning up Home Manager backup files..."
+    find /home/${profile.user.username} -type f -name "*.hm.backup.*" -exec rm -f {} \;
+    log "Home Manager backup files cleaned up."
 
     log "NixOS cleanup completed successfully!"
   '';

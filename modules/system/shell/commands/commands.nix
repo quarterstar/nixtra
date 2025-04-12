@@ -11,8 +11,9 @@ if profile.shell.commands.enable then
     (pkgs.callPackage ./regen-bootloader.nix { })
     (pkgs.callPackage ./fix-bootloader.nix { inherit profile; })
     (pkgs.callPackage ./create-iso.nix { })
-    (pkgs.callPackage ./clean.nix { })
+    (pkgs.callPackage ./clean.nix { inherit profile; })
     (pkgs.callPackage ./check-cliphist-store.nix { inherit profile; })
     (pkgs.callPackage ./hyprland/play-startup-sound.nix { inherit profile; })
+    (pkgs.callPackage ./theme/reset-cursor.nix { })
   ];
 } else {}
