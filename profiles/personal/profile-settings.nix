@@ -62,7 +62,7 @@
         apps = pkgs: [
           { program = "${pkgs.kitty}/bin/kitty"; icon = "terminal.png"; }
           { program = "${pkgs.xfce.thunar}/bin/thunar"; icon = "file-manager.png"; }
-          { program = "${pkgs.lunarvim}/bin/lunarvim"; icon = "lunarvim.png"; }
+          { program = "${pkgs.kitty}/bin/kitty ${pkgs.lunarvim}/bin/lunarvim"; icon = "lunarvim.png"; }
           { program = "${pkgs.librewolf}/bin/librewolf"; icon = "librewolf.png"; }
           { program = "${pkgs.freetube}/bin/freetube"; icon = "freetube.png"; }
           { program = "tor-browser-clearnet"; icon = "tor-browser-clearnet.png"; }
@@ -217,18 +217,37 @@
         #{ name = "git"; hardAlias = true; systemWideInstall = true; }
 
         #{ program = "${pkgs.freetube}/bin/freetube"; }
-        { program = "com.cakewallet.CakeWallet"; }
+        #{ program = "com.cakewallet.CakeWallet"; }
       ];
     };
 
-    publicProxy = {
-      address = "43.157.34.94";
-      port = 1777;
-    };
+    services = [
+      { enable = true; tag = "yellow"; port = 9150; }
+      { enable = true; tag = "cakewallet"; port = 9151; }
+    ];
+  };
+
+  microsocks = {
+    enable = true;
+
+    services = [
+      { # Used by Tor Browser yellow flavor
+        enable = true;
+        tag = "yellow";
+        port = 1080;
+        entries = [
+          { type = "socks5"; address = "127.0.0.1"; port = 9150; } # Tor proxy
+          { type = "socks5"; address = "43.157.34.94"; port = 1777; } # Public anonymous proxy (supports HTTPS)
+        ];
+      }
+    ];
   };
 
   shell = {
     enable = true;
+
+    # Code complete and chat AI integration for Kitty terminal
+    ai_integration = true;
 
     # Alternative ways to reference programs in shell
     aliases = pkgs: {
@@ -262,7 +281,9 @@
     ];
 
     apps = [
-      { app = "com.cakewallet.CakeWallet"; url = "https://github.com/cake-tech/cake_wallet/releases/download/v4.24.0/Cake_Wallet_v4.24.0_Linux.flatpak"; }
+      { app = "com.cakewallet.CakeWallet"; url = "https://github.com/cake-tech/cake_wallet/releases/download/v4.25.0/Cake_Wallet_v4.25.0_Linux_Beta.flatpak"; }
+      { app = "com.stremio.Stremio"; source = "flathub"; }
+      { app = "network.bisq.Bisq"; source = "flathub"; }
     ];
   };
 }
