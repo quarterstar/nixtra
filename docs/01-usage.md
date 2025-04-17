@@ -27,6 +27,59 @@ You can find more of them by checking for commands with the following prefixes:
 - `nixos-`: Commands related to the Nix Operating System (NixOS).
 - `nixtra-`: Commands related to the Nixtra configuration for NixOS.
 
+## Keybindings
+
+> [!IMPORTANT]
+> All window managers and desktop environments are configured to adhere to the standard shortcuts used by Nixtra, listed below respectively. If you are using a modified version of Nixtra, these may not apply.
+
+### Window Manager
+
+- <kbd>SUPER</kbd> + <kbd>WHEEL</kbd>: Switch to next or previous workspace.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> +  <kbd>V</kbd>: Cycle through clipboard history.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> <kbd>S</kbd>: Take a screenshot of a specific region of the window. (Stored in `~/Pictures/Screenshots`)
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> R</kbd>: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
+- <kbd>SUPER</kbd> + <kbd>S</kbd>: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
+- <kbd>SUPER</kbd> + <kbd>R</kbd>: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
+- <kbd>SUPER</kbd> + <kbd>C</kbd>: Pick a color from the screen.
+- <kbd>SUPER</kbd> + <kbd>N</kbd>: Switch from vertical tiling to horizontal or vice versa for active window.
+- <kbd>SUPER</kbd> + <kbd>F</kbd>: Toggle fullscreen.
+- <kbd>SUPER</kbd> + <kbd>Q</kbd>: Create new window.
+- <kbd>SUPER</kbd> + <kbd>Z</kbd>: Close active window.
+- <kbd>SUPER</kbd> + <kbd>M</kbd>: Log out of active user.
+- <kbd>SUPER</kbd> + <kbd>Function</kbd>: Switch workspace.
+- <kbd>SUPER</kbd> + <kbd>V</kbd>: Toggle floating window mode.
+- <kbd>SUPER</kbd> + <kbd>Right</kbd>: Increase volume by 5%.
+- <kbd>SUPER</kbd> + <kbd>Left</kbd>: Decrease volume by 5%.
+- <kbd>SUPER</kbd> + <kbd>Down</kbd>: Toggle volume mute.
+- <kbd>SUPER</kbd> + <kbd>,</kbd>: Switch to left workspace.
+- <kbd>SUPER</kbd> + <kbd>.</kbd>: Switch to right workspace.
+
+> [!NOTE]
+> `SUPER` is the Windows key on most keyboards.
+
+### Desktop Environment
+
+Nixtra does not yet support any desktop environment.
+
+## AI Integration
+
+Since a lot of people use AI for quick-and-dirty debugging nowadays, Nixtra has out-of-the-box tools for it fresh from the oven. Nixtra divides these inference tools into two categories; completion and chatting.
+
+### AI Code Completion
+
+Nixtra supports code completion suggestions - from an LLM of your choice - right inside your terminal. Currently, this feature is supported for the Kitty terminal emulator because, instead of having a standalone completion program like other tools, the Kitty API is used to make it feels more "native."
+
+As such, a tool was specifically developed for Nixtra, [kittyai](https://github.com/quarterstar/kittyai), which is a descendant of the [GPTKitten](https://github.com/TIAcode/GPTKitten), because it supports more API providers and more features.
+
+To use this tool, press `CTRL` `SHIFT` `I` in a Kitty window and enter your desired query in a comment. For example:
+
+```
+$ # Greet the user
+> echo "Hello there, user!"
+```
+
+### AI Chatting
+
 ## Applications
 
 ### Tor Browser
@@ -52,33 +105,3 @@ This is ideal if you want to log into websites like Reddit, which bans any Tor u
 **<img width="32" height="32" src="../assets/icons/tor-browser.png"> Regular Tor Browser**
 
 This flavor is simply the regular Tor browser with a regular Tor connection, ideal for most anonymous activities. Unless otherwise specified in its connection settings, no additional proxy will be used.
-
-## Keybindings
-
-> [!IMPORTANT]
-> All window managers and desktop environments are configured to adhere to the standard shortcuts used by Nixtra, listed below respectively. If you are using a modified version of Nixtra, these may not apply.
-
-### Window Manager
-
-- `SUPER WHEEL`: Switch to next or previous workspace.
-- `SUPER SHIFT V`: Cycle through clipboard history.
-- `SUPER SHIFT S`: Take a screenshot of a specific region of the window. (Stored in `~/Pictures/Screenshots`)
-- `SUPER SHIFT R`: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
-- `SUPER S`: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
-- `SUPER R`: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
-- `SUPER C`: Pick a color from the screen.
-- `ALT J`: Switch from vertical tiling to horizontal or vice versa for active window.
-- `ALT F`: Toggle fullscreen.
-- `ALT Q`: Create new window.
-- `ALT Z`: Close active window.
-- `ALT M`: Log out of active user.
-- `ALT F<0->`: Switch workspace.
-- `ALT V`: Toggle floating window mode.
-- Arrow keys: Move focus to any neighbor window.
-
-> [!NOTE]
-> `SUPER` is the Windows key on most keyboards.
-
-### Desktop Environment
-
-Nixtra does not yet support any desktop environment.
