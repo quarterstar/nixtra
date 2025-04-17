@@ -16,6 +16,7 @@
     ../../../modules/userspace/pkgs/programming/lang/node.nix
     ../../../modules/userspace/pkgs/programming/lang/rust.nix
     ../../../modules/userspace/pkgs/programming/lang/c.nix
+    ../../../modules/userspace/pkgs/programming/lang/latex.nix
     ../../../modules/userspace/pkgs/programming/build/cmake.nix
     # ../../../modules/userspace/pkgs/programming/ide/jetbrains.nix
     ../../../modules/userspace/pkgs/programming/ide/codium.nix
