@@ -8,11 +8,11 @@
 -- Plugins --
 -------------
 
-lvim.plugins ={
+lvim.plugins = {
     {
-      "iamcco/markdown-preview.nvim",
-      build = "cd app && npm install",
-      ft = "markdown",
+        "iamcco/markdown-preview.nvim",
+        build = "cd app && npm install",
+        ft = "markdown",
     },
 }
 
@@ -25,6 +25,11 @@ vim.opt.shiftwidth = 4
 lvim.builtin.terminal.open_mapping = "<c-t>" -- Ctrl + T
 
 -----------------
+
+-- Enable line wrapping
+vim.opt.wrap = true      -- Enable line wrapping
+vim.opt.linebreak = true -- Break lines at word boundaries
+vim.opt.scrolloff = 8    -- Keep 8 lines visible above and below the cursor
 
 -- Format code on save
 lvim.format_on_save.enabled = true
