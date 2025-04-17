@@ -1,4 +1,4 @@
-{ settings, profile, timestamp, config, lib, pkgs, inputs, ... }:
+{ settings, profile, timestamp, lib, pkgs, inputs, ... }:
 
 let
   currentTimestamp = lib.readFile "${pkgs.runCommand "timestamp" { env.when = timestamp; } "echo -n `date -d @$when +%Y-%m-%d_%H-%M-%S` > $out"}";
@@ -45,6 +45,7 @@ in {
 
       # Proxy
       ./services/tor.nix
+      ./services/microsocks.nix
       ./services/i2p.nix
 
       # Configuration
@@ -90,6 +91,10 @@ in {
   networking.networkmanager.enable = lib.mkIf profile.security.networking true;
   networking.networkmanager.ethernet.macAddress = "random";
 
+  # Enable debug symbols for NixOS packages
+  # to make them easier to troubleshoot
+  environment.enableDebugInfo = true;
+
   # Set system's name
   networking.hostName = if settings.system.hostnameProfilePrefix
     then "${settings.system.hostname}-${settings.config.profile}"
@@ -122,7 +127,7 @@ in {
   };
 
   # Automatically fix collisions
-  home-manager.backupFileExtension = "backup.${currentTimestamp}";
+  home-manager.backupFileExtension = "hm.backup.${currentTimestamp}";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users = {
