@@ -254,7 +254,6 @@
       rm = "${pkgs.trash-cli}/bin/trash"; # Remove files and put them to trash
       neofetch = "${pkgs.fastfetch}/bin/fastfetch"; # Neofetch alternative written in C
       ls = "${pkgs.eza}/bin/eza"; # Modern alternative to ls command
-      clear = "${pkgs.ncurses}/bin/clear && printf '\033[3J'"; # Clear screen and scrollback buffer in WMs
     };
 
     # Show information similar to neofetch on startup
