@@ -1,7 +1,8 @@
 { profile, pkgs, createCommand, ... }:
 
 let
-  excludedPattern = pkgs.lib.concatStringsSep "|" profile.security.excludedClipboardPrograms;
+  excludedPattern =
+    pkgs.lib.concatStringsSep "|" profile.security.excludedClipboardPrograms;
 in createCommand {
   name = "check-cliphist-store";
   buildInputs = with pkgs; [ wl-clipboard cliphist gnugrep ];

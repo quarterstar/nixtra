@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    torsocks
-  ];
+  environment.systemPackages = with pkgs; [ torsocks ];
 }

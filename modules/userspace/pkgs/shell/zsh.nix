@@ -3,12 +3,7 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    oh-my-posh
-    git
-  ];
+  home.packages = with pkgs; [ oh-my-posh git ];
 
-  programs.zsh = {
-    enable = true;
-  };
+  programs.zsh = { enable = true; };
 }

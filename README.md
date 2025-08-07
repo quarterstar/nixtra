@@ -142,8 +142,10 @@ All of the works below have been altered, modified or kept in their original sta
 
 - [Wallpaper](https://steamcommunity.com/sharedfiles/filedetails/?id=3323190978)
 - [Startup Sound Effect](https://pixabay.com/sound-effects/soft-startup-sound-269291)
+- [Chat Notification Sound Effect](https://pixabay.com/sound-effects/new-notification-07-210334)
 - [Firejail Overlay](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix)
 - [Waybar Record Module](https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1)
+- [SDDM Theme Base](https://github.com/siddrs/tokyo-night-sddm)
 
 ## 📜 License
 
@@ -154,6 +156,8 @@ All Nixtra code included in this repository is licensed under the terms of the [
 - GitHub Pages associated with Nixtra
 
 are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en), unless otherwise stated explicitly by the respective author of the software and text.
+
+All third-party open source projects that are subject to copyleft obligations have their license included in the [licenses](licenses) directory.
 
 [Install]: ./docs/00-installation.md
 [Usage]: ./docs/01-usage.md

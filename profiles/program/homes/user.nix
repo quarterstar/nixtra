@@ -6,11 +6,17 @@
     ../../../modules/userspace/pkgs/browser/librewolf.nix
     ../../../modules/userspace/pkgs/browser/tor.nix
     ../../../modules/userspace/pkgs/notes/zettlr.nix
+    ../../../modules/userspace/pkgs/notes/planify.nix
     ../../../modules/userspace/pkgs/text/office.nix
     ../../../modules/userspace/pkgs/reading/okular.nix
+    ../../../modules/userspace/pkgs/reading/kiwix.nix
+    ../../../modules/userspace/pkgs/reading/newsflash.nix
     ../../../modules/userspace/pkgs/drawing/openboard.nix
     # ../../../modules/userspace/pkgs/drawing/drawio.nix
     ../../../modules/userspace/pkgs/social/element.nix
+    ../../../modules/userspace/pkgs/social/dissent.nix
+    ../../../modules/userspace/pkgs/emu/wine.nix
+    ../../../modules/userspace/pkgs/emu/bottles.nix
     ../../../modules/userspace/pkgs/programming/lang/python.nix
     ../../../modules/userspace/pkgs/programming/lang/java.nix
     ../../../modules/userspace/pkgs/programming/lang/node.nix
@@ -33,6 +39,10 @@
     ../../../modules/userspace/pkgs/lib/wxwidgets.nix
     ../../../modules/userspace/pkgs/ai/ollama.nix
     ../../../modules/userspace/pkgs/forensics/binwalk.nix
+    ../../../modules/userspace/pkgs/forensics/volatility.nix
+    ../../../modules/userspace/pkgs/forensics/foremost.nix
+    ../../../modules/userspace/pkgs/forensics/autopsy.nix
+    ../../../modules/userspace/pkgs/forensics/zsteg.nix
     ../../../modules/userspace/pkgs/schedule/calcurse.nix
     ../../../modules/userspace/pkgs/music/termusic.nix
     ../../../modules/userspace/pkgs/music/cava.nix
@@ -41,6 +51,7 @@
     ../../../modules/userspace/pkgs/compression/p7zip.nix
     ../../../modules/userspace/pkgs/proxy/proxychains.nix
     ../../../modules/userspace/pkgs/aesthetic/lxappearance.nix
+    ../../../modules/userspace/pkgs/electronics/logisim-evolution.nix
   ];
 
   home.packages = [

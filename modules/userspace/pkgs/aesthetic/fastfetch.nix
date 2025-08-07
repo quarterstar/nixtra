@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 let
-  newline = { type = "custom"; format = ""; };
+  newline = {
+    type = "custom";
+    format = "";
+  };
 in {
   programs.fastfetch.enable = true;
   programs.fastfetch.settings = {
@@ -15,9 +18,7 @@ in {
       };
     };
     display = {
-      size = {
-        binaryPrefix = "si";
-      };
+      size = { binaryPrefix = "si"; };
       color = "blue";
       separator = "  ";
     };

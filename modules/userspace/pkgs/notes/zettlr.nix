@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    zettlr
-  ];
+  home.packages = with pkgs; [ zettlr ];
 }

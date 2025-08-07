@@ -1,7 +1,6 @@
 { profile, ... }:
 
-if profile.networks.tornet.enable then
-{
+if profile.networks.tornet.enable then {
   services.tor = {
     enable = true;
     openFirewall = true;
@@ -14,7 +13,7 @@ if profile.networks.tornet.enable then
 
   networking = {
     useNetworkd = true;
-    bridges."tornet".interfaces = [];
+    bridges."tornet".interfaces = [ ];
     nftables = {
       enable = true;
       ruleset = ''
@@ -29,13 +28,11 @@ if profile.networks.tornet.enable then
     };
     nat = {
       internalInterfaces = [ "tornet " ];
-      forwardPorts = [
-        {
-          destination = "127.0.0.1:5353";
-          proto = "udp";
-          sourcePort = 53;
-        }
-      ];
+      forwardPorts = [{
+        destination = "127.0.0.1:5353";
+        proto = "udp";
+        sourcePort = 53;
+      }];
     };
     firewall = {
       enable = true;
@@ -59,7 +56,6 @@ if profile.networks.tornet.enable then
     };
   };
 
-  boot.kernel.sysctl = {
-    "net.ipv4.conf.tornet.route_localnet" = 1;
-  };
-} else { }
+  boot.kernel.sysctl = { "net.ipv4.conf.tornet.route_localnet" = 1; };
+} else
+  { }

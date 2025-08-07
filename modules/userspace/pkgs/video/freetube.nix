@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    freetube
-  ];
+  home.packages = with pkgs; [ freetube ];
 }

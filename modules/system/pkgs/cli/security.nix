@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    trash-cli
-  ];
+  environment.systemPackages = with pkgs; [ trash-cli ];
 }

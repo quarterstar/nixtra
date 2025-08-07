@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    wxGTK32
-  ];
+  home.packages = with pkgs; [ wxGTK32 ];
 }

@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    p7zip
-  ];
+  home.packages = with pkgs; [ p7zip ];
 }

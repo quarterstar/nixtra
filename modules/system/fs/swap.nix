@@ -5,4 +5,5 @@ if settings.swap.enable then {
     device = "/swapfile";
     size = settings.swap.size;
   }];
-} else {}
+} else
+  { }

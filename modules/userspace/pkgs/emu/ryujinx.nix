@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    ryujinx
-  ];
+  home.packages = with pkgs; [ ryujinx ];
 }

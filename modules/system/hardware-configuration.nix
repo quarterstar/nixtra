@@ -4,38 +4,40 @@
 { settings, config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules =
+    [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
   boot.initrd.supportedFilesystems = settings.system.supportedFilesystems;
 
+  # Fix bwrap exec error on Flatpak
+  boot.kernel.sysctl = { "kernel.unprivileged_userns_clone" = 1; };
+
   # Full Disk Encryption
   boot.initrd.luks = if settings.encryption.enable then {
     devices.cryptroot.device = settings.partitions.storage;
-  } else {};
+  } else
+    { };
 
-  fileSystems."/" =
-    { device =
-        if settings.encryption.enable then
-          settings.encryption.decryptedRootDevice
-        else
-          settings.partitions.storage;
+  fileSystems."/" = {
+    device = if settings.encryption.enable then
+      settings.encryption.decryptedRootDevice
+    else
+      settings.partitions.storage;
 
-      fsType = settings.system.filesystem;
-    };
+    fsType = settings.system.filesystem;
+  };
 
-  fileSystems."/boot" =
-    { device = settings.partitions.boot;
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = settings.partitions.boot;
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+  };
 
   swapDevices = [ ];
 
@@ -50,5 +52,6 @@
   # networking.interfaces.virbr2.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

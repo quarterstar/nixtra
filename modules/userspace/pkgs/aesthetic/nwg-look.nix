@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    nwg-look
-  ];
+  home.packages = with pkgs; [ nwg-look ];
 }

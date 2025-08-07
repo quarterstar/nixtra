@@ -5,5 +5,6 @@
 
   programs.bash.initExtra = if profile.shell.fastfetchOnStartup then ''
     fastfetch
-  '' else "";
+  '' else
+    "";
 }

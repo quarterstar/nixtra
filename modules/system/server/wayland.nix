@@ -9,9 +9,10 @@
   environment.systemPackages = with pkgs; [
     wayland
     wayland-protocols
+    wayland-utils # Commands like wayland-info
     plymouth # Display manager dependency
-    xorg.libX11   # Optional, for XWayland fallback
-    xorg.libxcb   # Optional
+    xorg.libX11 # Optional, for XWayland fallback
+    xorg.libxcb # Optional
 
     # Utils
     swayimg # Display images

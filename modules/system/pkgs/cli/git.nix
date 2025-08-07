@@ -80,28 +80,29 @@ let
 in {
   environment.systemPackages = with pkgs; [
     git
-    git-filter-repo # Rewrite Git repositories; 
+    git-filter-repo # Rewrite Git repositories;
     gh
     git-redact-repository
   ];
 
   programs.git.enable = true;
   programs.git.config = {
-    commit = {
-      gpgsign = profile.git.signCommits;
-    };
+    commit = { gpgsign = profile.git.signCommits; };
 
-    http = if profile.git.useTorProxy then {
-      proxy = "socks5://127.0.0.1:9050";
-    } else {};
+    http = if profile.git.proxy.enable then {
+      proxy = profile.git.proxy.address;
+    } else
+      { };
 
-    https = if profile.git.useTorProxy then {
-      proxy = "socks5://127.0.0.1:9050";
-    } else {};
+    https = if profile.git.proxy.enable then {
+      proxy = profile.git.proxy.address;
+    } else
+      { };
 
     init = if profile.git.randomizeCommitDate then {
       templateDir = "/etc/git-templates";
-    } else {};
+    } else
+      { };
 
     # Force ISO 8601 format for date parsing
     log.date = "iso-strict";

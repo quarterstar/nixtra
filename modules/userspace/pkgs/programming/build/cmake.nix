@@ -1,8 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    cmake
-    clang-tools
-  ];
+  home.packages = with pkgs; [ cmake clang-tools ];
 }

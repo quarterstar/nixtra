@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    ghidra
-  ];
+  home.packages = with pkgs; [ ghidra ];
 }

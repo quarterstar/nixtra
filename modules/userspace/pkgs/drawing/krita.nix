@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    krita # General drawing tool
-  ];
+  home.packages = with pkgs;
+    [
+      krita # General drawing tool
+    ];
 }

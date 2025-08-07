@@ -1,9 +1,9 @@
 { profile, pkgs, lib, ... }:
 
 {
-  systemd.user.services = builtins.listToAttrs ((map (proxy: let
-    config =
-      pkgs.writeText "proxychains-${proxy.tag}.conf" (''
+  systemd.user.services = builtins.listToAttrs ((map (proxy:
+    let
+      config = pkgs.writeText "proxychains-${proxy.tag}.conf" (''
         # Ensure that traffic will not be sent if any of the proxies in the below chain are not currently functional.
         strict_chain
 
@@ -19,7 +19,9 @@
 
         # The proxy chain list
         [ProxyList]
-      '' + (lib.concatStringsSep "\n" (map (entry: "${entry.type} ${entry.address} ${builtins.toString entry.port}") proxy.entries)));
+      '' + (lib.concatStringsSep "\n" (map (entry:
+        "${entry.type} ${entry.address} ${builtins.toString entry.port}")
+        proxy.entries)));
     in {
       name = "microsocks-${proxy.tag}";
       value = {
@@ -29,11 +31,13 @@
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          ExecStart = "${pkgs.proxychains}/bin/proxychains4 -f ${config} ${pkgs.microsocks}/bin/microsocks -p ${builtins.toString proxy.port}";
+          ExecStart =
+            "${pkgs.proxychains}/bin/proxychains4 -f ${config} ${pkgs.microsocks}/bin/microsocks -p ${
+              builtins.toString proxy.port
+            }";
           Restart = "on-failure";
           RestartSec = "5s";
         };
       };
-    }
-  ) profile.microsocks.services));
+    }) profile.microsocks.services));
 }

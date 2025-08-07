@@ -7,7 +7,10 @@ if profile.security.closeOnSuspend.enable then {
       #!/usr/bin/env bash
 
       # List of applications to kill
-      APPS=(${lib.strings.concatStringsSep " " profile.security.closeOnSuspend.applications})
+      APPS=(${
+        lib.strings.concatStringsSep " "
+        profile.security.closeOnSuspend.applications
+      })
 
       # Kill each application
       for app in "''${APPS[@]}"; do
@@ -18,8 +21,7 @@ if profile.security.closeOnSuspend.enable then {
     ''}";
     wantedBy = [ "sleep.target" ];
     before = [ "sleep.target" ];
-    path = with pkgs; [
-      procps
-    ];
+    path = with pkgs; [ procps ];
   };
-} else {}
+} else
+  { }

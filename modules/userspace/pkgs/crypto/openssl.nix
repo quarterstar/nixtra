@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    openssl
-  ];
+  home.packages = with pkgs; [ openssl ];
 }

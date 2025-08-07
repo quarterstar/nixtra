@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    keepassxc
-  ];
+  home.packages = with pkgs; [ keepassxc ];
 }

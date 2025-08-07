@@ -1,4 +1,5 @@
-{ pkgs, ... }: let
+{ pkgs, ... }:
+let
   sddm-quarterstar = pkgs.stdenv.mkDerivation {
     name = "sddm-quarterstar";
     dontBuild = true;
@@ -13,10 +14,13 @@
       cp -aR $src $out/share/sddm/themes/quarterstar
     '';
   };
-in {
-  environment.systemPackages = [ sddm-quarterstar ];
 
-  services.displayManager.sddm = {
-    theme = "quarterstar";
-  };
+  tokyo-night-sddm =
+    pkgs.libsForQt5.callPackage ../../../../../packages/sddm-theme/default.nix
+    { };
+in {
+  #environment.systemPackages = [ sddm-quarterstar ];
+  #services.displayManager.sddm = { theme = "quarterstar"; };
+  environment.systemPackages = [ tokyo-night-sddm ];
+  services.displayManager.sddm.theme = "tokyo-night-sddm";
 }

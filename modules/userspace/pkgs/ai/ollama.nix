@@ -1,9 +1,7 @@
-{ pkgs, ... }:
+{ unstable-pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    ollama
-  ];
+  home.packages = with unstable-pkgs; [ ollama ];
 
-  programs.bash.bashrcExtra = "export OLLAMA_MODELS=\"/mnt/data/models\"";
+  programs.bash.bashrcExtra = ''export OLLAMA_MODELS="/mnt/data/models"'';
 }

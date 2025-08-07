@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    geogebra
-  ];
+  home.packages = with pkgs; [ geogebra ];
 }

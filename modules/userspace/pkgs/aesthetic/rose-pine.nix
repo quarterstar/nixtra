@@ -1,10 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    rose-pine-cursor
-    rose-pine-hyprcursor
-  ];
+  home.packages = with pkgs; [ rose-pine-cursor rose-pine-hyprcursor ];
 
   gtk.cursorTheme = {
     name = "rose-pine";

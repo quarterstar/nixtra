@@ -1,4 +1,6 @@
-# Define the rainbow colors
+#!/usr/bin/env bash
+
+# Define the rainbow colors in correct Hyprland format
 colors=(
     "rgba(ff0000ff)"  # Red
     "rgba(ff7f00ff)"  # Orange
@@ -9,29 +11,33 @@ colors=(
     "rgba(8b00ffff)"  # Purple
 )
 
-# Number of colors in the array
-num_colors=${#colors[@]}
+# Get original border setting to restore on exit
+original_border=$(hyprctl getoption general:col.active_border | awk -F'"' '/str:/ {print $2}')
 
-# Function to shift the colors
-shift_colors() {
-    local first_color=$1
-    local rest_colors=("${@:2}")
-    echo "${rest_colors[@]}" "$first_color"
+# Cleanup function to restore original border
+cleanup() {
+    hyprctl keyword general:col.active_border "$original_border" > /dev/null
+    exit 0
 }
+trap cleanup SIGINT SIGTERM
 
-# Infinite loop to animate the gradient
+# Main animation loop
 while true; do
-    # Shift the colors array
-    colors=($(shift_colors "${colors[@]}"))
+    # Rotate colors array
+    first_color="${colors[0]}"
+    new_colors=("${colors[@]:1}")
+    colors=("${new_colors[@]}" "$first_color")
 
-    # Construct the gradient string
-    gradient=$(IFS=" " ; echo "${colors[*]} 45deg")
+    # Build gradient string
+    gradient=""
+    for color in "${colors[@]}"; do
+        gradient+="$color "
+    done
+    gradient+="45deg"
 
-    echo $gradient
-
-    # Update the active border color in Hyprland
+    # Apply to Hyprland
     hyprctl keyword general:col.active_border "$gradient" > /dev/null
 
-    # Adjust the sleep duration to control the speed of the animation
-    sleep 0.5
+    # Control animation speed (adjust as needed)
+    sleep 0.2
 done

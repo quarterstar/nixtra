@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    cava
-  ];
+  home.packages = with pkgs; [ cava ];
 }

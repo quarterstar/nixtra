@@ -4,32 +4,42 @@ let
   # Function to generate Waybar custom modules
   mkAppModule = app:
     let
-      program = builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
+      program =
+        builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
     in {
-    name = "custom/${program}";
-    value = {
-      format = "    ";
-      on-click = "/home/user/.nix-profile/bin/${program}";
-      tooltip = false;
-      class = "app-icon";
+      name = "custom/${program}";
+      value = {
+        format = "    ";
+        on-click = "/home/user/.nix-profile/bin/${program}";
+        tooltip = false;
+        class = "app-icon";
+      };
     };
-  };
 
   iconSize = builtins.toString profile.env.wm.taskbar.iconSize;
+  scaledSize = builtins.toString
+    (profile.env.wm.taskbar.iconSize + profile.env.wm.taskbar.iconSize * 0.1);
 
   mkCssRule = app:
     let
-      program = builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
+      program =
+        builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
     in ''
-    #custom-${program} {
-      background-image: url('/home/${profile.user.username}/.config/waybar/icons/${app.icon}');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: ${iconSize}px ${iconSize}px;
-      min-width: ${iconSize}px;
-      min-height: ${iconSize}px;
-    }
-  '';
+      #custom-${program} {
+        background-image: url('/home/${profile.user.username}/.config/waybar/icons/${app.icon}');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: ${iconSize}px ${iconSize}px;
+        min-width: ${iconSize}px;
+        min-height: ${iconSize}px;
+        transition: min-width 0.1s ease-in-out, min-height 0.1s ease-in-out;
+      }
+
+      #custom-${program}:hover {
+        min-width: ${scaledSize}px;
+        min-height: ${scaledSize}px;
+      }
+    '';
 
   # Nixtra's logo
   nixtraCssRule = ''
@@ -46,7 +56,6 @@ let
 
   hoverActiveCss = ''
     .app-icon:hover {
-        animation: hover-animation 0.2s ease forwards;
     }
 
     .app-icon:active {
@@ -64,18 +73,21 @@ let
   # Generate the modules-center array
   appModules = map (app:
     let
-      program = builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
+      program =
+        builtins.unsafeDiscardStringContext (builtins.baseNameOf app.program);
     in "custom/${program}") apps;
 in {
   home.file = {
     ".config/waybar/config-top" = {
-      source = ../../../../../../config/${profile.user.config}/wm/hyprland/waybar/config-top;
+      source =
+        ../../../../../../config/${profile.user.config}/wm/hyprland/waybar/config-top;
       executable = false;
       force = true;
     };
 
-    ".config/waybar/style-top.css" = {
-      source = ../../../../../../config/${profile.user.config}/wm/hyprland/waybar/style-top.css;
+    ".config/waybar/config-top.css" = {
+      source =
+        ../../../../../../config/${profile.user.config}/wm/hyprland/waybar/config-top.css;
       executable = false;
       force = true;
     };
@@ -98,12 +110,16 @@ in {
 
       "custom/nixtra" = {
         format = "    ";
-        on-click = "/home/user/.nix-profile/bin/${profile.user.browser} https://github.com/quarterstar/nixtra";
+        on-click =
+          "/home/user/.nix-profile/bin/${profile.user.browser} https://github.com/quarterstar/nixtra";
         tooltip = false;
       };
     } // customModules;
   };
 
-  xdg.configFile."waybar/config-bottom".text = builtins.toJSON config.programs.waybar.settings."config-bottom";
-  xdg.configFile."waybar/style-bottom.css".text = builtins.readFile ../../../../../../config/${profile.user.config}/wm/hyprland/waybar/style-bottom.css + "\n" + cssRules;
+  xdg.configFile."waybar/config-bottom".text =
+    builtins.toJSON config.programs.waybar.settings."config-bottom";
+  xdg.configFile."waybar/config-bottom.css".text = builtins.readFile
+    ../../../../../../config/${profile.user.config}/wm/hyprland/waybar/config-bottom.css
+    + "\n" + cssRules;
 }

@@ -1,8 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    gamescope
-    qt6.full
-  ];
+  home.packages = with pkgs; [ gamescope qt6.full ];
 }

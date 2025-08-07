@@ -8,18 +8,19 @@
 #                                                      #
 ########################################################
 
-{
-  user = {
+rec {
+  user = rec {
     username = "user"; # Username of the main user.
     config = "quarterstar"; # Available options: quarterstar, empty (use `empty` if you want to cherrypick individual configs in home.nix)
     shell = "zsh"; # Available options: zsh (recommended), fish, bash
-    browser = "tor-browser"; # The preferred browser for applications to use
+    browser = "librewolf"; # The preferred browser for applications to use
     terminal = "kitty"; # The preferred terminal for applications to use
     editor = "lvim"; # The preferred editor for applications to use
     groups = [
       "wheel" # sudo/doas
       "docker" # For using docker on userspace
       "libvirtd" # For managing VMs on userspace
+      "video" "render" # For access to GPU functions by user; required for OpenCL by some installation
     ];
   };
 
@@ -40,14 +41,35 @@
   };
 
   env = {
+    startupPrograms = [
+      "keepassxc"
+      user.terminal
+      user.browser
+    ];
+
+    # A program to appear like an animated wallpaper in the background.
+    # Has a higher Z-offset than wallpaper set via env.wallpaper.
+    background = {
+      enable = false;
+      # The program to use.
+      # On Hyprland, this should be set to the class of the program.
+      program = "amdgpu_top";
+    };
+
     wallpaper = {
+      directory = "$HOME/Wallpapers";
+
       # Preferred wallpaper - if not set, will use a random one.
+      # Should be a path relative to the wallpaper directory, if set.
       preference = "";
 
-      useLiveWallpapers = true; # Whether to use animated wallpapers (can impact performance)
+      # Files with which locations to look for in
+      # the wallpaper directory (.gif is for animated wallpapers)
+      extensions = [ "png" "jpg" "gif" ];
 
-      # Minutes after which wallpaper should be switched.
-      switchInterval = 45;
+      # Seconds after which wallpaper should be switched.
+      # Default: 2 hours
+      switchInterval = 120 * 60;
     };
 
     # Window Manager configuration
@@ -68,7 +90,7 @@
           { program = "tor-browser-clearnet"; icon = "tor-browser-clearnet.png"; }
           { program = "tor-browser-proxy"; icon = "tor-browser-proxy.png"; }
           { program = "tor-browser"; icon = "tor-browser.png"; }
-          { program = "${pkgs.okular}/bin/okular"; icon = "okular.png"; }
+          { program = "${pkgs.kdePackages.okular}/bin/okular"; icon = "okular.png"; }
           { program = "${pkgs.virt-manager}/bin/virt-manager"; icon = "vm.png"; }
           { program = "${pkgs.openboard}/bin/OpenBoard"; icon = "openboard.png"; }
           { program = "${pkgs.krita}/bin/krita"; icon = "krita.png"; }
@@ -79,6 +101,9 @@
         # e.g. 50 = 50x50
         iconSize = 38;
       };
+      
+      # Available options: mako, dunst
+      notifDaemon = "mako";
     };
 
     # Desktop Environment configuration
@@ -98,6 +123,7 @@
 
   security = {
     networking = true; # Any kind of networking capability for the system
+    overwriteSudoWithDoas = true; # Replace sudo command with a more lightweight alternative
 
     # Packet filtering and forwarding
     firewall = {
@@ -105,13 +131,21 @@
       allowedTCPPorts = [
         80 # HTTP
         443 # HTTPS
+        1935 # Owncast
+        8080 # Owncast
+        25565
       ];
-      allowedUDPPorts = [ ];
+      allowedUDPPorts = [
+        8080 # Owncast
+        25565
+      ];
     };
 
     virtualization = true; # Virtual machines
     scanning = true; # Intrusion Detection System with Sirucata
     aliases = true; # Aliases for commands such as `rm` to prevent accidental data loss
+    appimage = true; # Run programs that are packed into the AppImage file format
+    unpatchedBinaries = true; # Run unpatched dynamic binaries
 
     # Sandboxing for userspace applications without the use of virtual machines or Docker.
     # Refer to `03-hardening.md` in docs for more information.
@@ -146,16 +180,19 @@
     # Permitted unfree packages must explicitly be set to ensure the acknowledgement of the user.
     permittedUnfreePackages = [
       # Example unfree packages:
-      # "drawio" # Unfree since 24.11; 24.05 contains old build
       # "charles"
       # "geogebra"
       # "ida-free"
-      # "steam"
-      # "steam-original"
-      # "steam-run"
+      "steam"
+      "steam-original"
+      "steam-run"
+      "steam-unwrapped"
       # "aseprite"
       # "rust-rover"
       # "clion"
+      "drawio" # Unfree since 24.11; 24.05 contains old build
+      "volatility3" # volatility2-bin is labelled as free
+      "davinci-resolve"
     ];
   };
 
@@ -178,8 +215,12 @@
 
   git = {
     signCommits = true;
-    useTorProxy = true;
     randomizeCommitDate = true;
+
+    proxy = {
+      enable = true;
+      address = "socks5://127.0.0.1:9152";
+    };
 
     autoPush = {
       enable = true;
@@ -222,6 +263,7 @@
     };
 
     services = [
+      { enable = true; tag = "git"; port = 9152; }
       { enable = true; tag = "yellow"; port = 9150; }
       { enable = true; tag = "cakewallet"; port = 9151; }
     ];
@@ -231,13 +273,13 @@
     enable = true;
 
     services = [
-      { # Used by Tor Browser yellow flavor
+      { # Used by Tor Browser yellow flavor (see 04-hardening.md)
         enable = true;
         tag = "yellow";
         port = 1080;
         entries = [
           { type = "socks5"; address = "127.0.0.1"; port = 9150; } # Tor proxy
-          { type = "socks5"; address = "43.157.34.94"; port = 1777; } # Public anonymous proxy (supports HTTPS)
+          { type = "socks5"; address = "72.37.217.3"; port = 4145; } # Public anonymous proxy (supports HTTPS)
         ];
       }
     ];
@@ -254,6 +296,7 @@
       rm = "${pkgs.trash-cli}/bin/trash"; # Remove files and put them to trash
       neofetch = "${pkgs.fastfetch}/bin/fastfetch"; # Neofetch alternative written in C
       ls = "${pkgs.eza}/bin/eza"; # Modern alternative to ls command
+      cat = "${pkgs.bat}/bin/bat";
     };
 
     # Show information similar to neofetch on startup
@@ -279,10 +322,18 @@
       { name = "flathub"; source = "https://dl.flathub.org/repo/flathub.flatpakrepo"; allowForUser = true; }
     ];
 
+    # Apps to install via flatpak.
+    # Note: User level installation not recommended because of common
+    # execvp permission denied error; do system-wide installation instead
+    # by setting "type" of each respective app to "system".
     apps = [
-      { app = "com.cakewallet.CakeWallet"; url = "https://github.com/cake-tech/cake_wallet/releases/download/v4.25.0/Cake_Wallet_v4.25.0_Linux_Beta.flatpak"; }
-      { app = "com.stremio.Stremio"; source = "flathub"; }
-      { app = "network.bisq.Bisq"; source = "flathub"; }
+      { app = "com.cakewallet.CakeWallet"; url = "https://github.com/cake-tech/cake_wallet/releases/download/v4.25.0/Cake_Wallet_v4.25.0_Linux_Beta.flatpak"; user = false; }
+      { app = "com.stremio.Stremio"; source = "flathub"; user = false; }
+      { app = "network.bisq.Bisq"; source = "flathub"; user = false; }
+      { app = "com.valvesoftware.Steam"; source = "flathub"; user = false; }
+      { app = "net.lutris.Lutris"; source = "flathub"; user = false; }
+      { app = "org.vinegarhq.Sober"; source = "flathub"; user = false; }
+      { app = "com.discordapp.Discord"; source = "flathub"; user = false; }
     ];
   };
 }

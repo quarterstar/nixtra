@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    prismlauncher-unwrapped
-  ];
+  home.packages = with pkgs; [ prismlauncher-unwrapped ];
 }

@@ -1,8 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    session-desktop
-    dissent
-  ];
+  home.packages = with pkgs; [ session-desktop dissent ];
 }

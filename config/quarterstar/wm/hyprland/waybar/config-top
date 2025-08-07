@@ -100,6 +100,7 @@
     },
 
     "custom/screenshot": {
+        "name": "cwidget",
         "format": "   ",
         "on-click": "/run/current-system/sw/bin/nixtra-screenshot",
         "on-click-right": "/run/current-system/sw/bin/nixtra-screenshot region",
@@ -108,6 +109,7 @@
     },
     // https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1
     "custom/record": {
+        "name": "cwidget",
       "exec": "/run/current-system/sw/bin/nixtra-record status",
       "format": " {}",
       "on-click": "/run/current-system/sw/bin/nixtra-record toggle fullscreen",
@@ -127,17 +129,20 @@
     // Operating system info
 
     "cpu": {
+        "name": "cwidget",
         "interval": 10,
         "format": " {}%",
         "max-length": 10
     },
     "wireplumber": {
+        "name": "cwidget",
         "format": "{volume}% {icon}",
         "format-muted": "",
         "on-click": "helvum",
         "format-icons": ["", "", ""]
     },
     "temperature": {
+        "name": "cwidget",
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         // "critical-threshold": 80,
@@ -151,18 +156,21 @@
     // Power management buttons
 
     "custom/suspend": {
+        "name": "cwidget",
         "format": "  ",
         "on-click": "systemctl suspend",
         "tooltip": false,
         "interval": "once"
     },
     "custom/reboot": {
+        "name": "cwidget",
         "format": " ",
         "on-click": "reboot",
         "tooltip": false,
         "interval": "once"
     },
     "custom/shutoff": {
+        "name": "cwidget",
         "format": " ",
         "on-click": "shutdown now",
         "tooltip": false,

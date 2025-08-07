@@ -1,5 +1,8 @@
 # Nixtra - Installation
 
+> [!WARNING]
+> Nixtra uses a lot of disk space as a consequence of coming with many applications and services pre-configured and pre-installed. Choose a disk for installation with caution.
+
 Thank you for choosing to try Nixtra! This section focuses on the installation of it os that the other ones go more in depth about operation and customization. The following are the instructions for installation:
 
 1. Download the latest [NixOS minimal installation ISO](https://channels.nixos.org/nixos-24.11/latest-nixos-minimal-x86_64-linux.iso)

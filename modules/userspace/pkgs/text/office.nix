@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    libreoffice
-  ];
+  home.packages = with pkgs; [ libreoffice ];
 }

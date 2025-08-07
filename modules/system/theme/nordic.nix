@@ -1,9 +1,7 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    nordic
-  ];
+  environment.systemPackages = with pkgs; [ nordic ];
 
   environment.sessionVariables = {
     # Dark theme

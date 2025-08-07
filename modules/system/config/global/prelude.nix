@@ -1,7 +1,5 @@
 { ... }:
 
 {
-  imports = [
-    ./proxy/proxychains.nix
-  ];
+  imports = [ ];
 }

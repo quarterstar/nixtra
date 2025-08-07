@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    lxappearance
-  ];
+  home.packages = with pkgs; [ lxappearance ];
 }

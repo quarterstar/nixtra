@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    lunarvim
-  ];
+  home.packages = with pkgs; [ lunarvim ];
 }

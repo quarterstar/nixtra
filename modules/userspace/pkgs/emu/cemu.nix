@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    cemu
-  ];
+  home.packages = with pkgs; [ cemu ];
 }

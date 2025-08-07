@@ -20,6 +20,16 @@ Nixtra provides a set of custom commands to make managing NixOS easy. Below are 
 - `nixtra-create-iso`: Generate an ISO file based on your Nixtra configuration.
 - `nixtra-fix-bootloader`: Automatically troubleshoot and fix the bootloader, if it breaks and your system does not boot.
 - `nixtra-regen-hardware`: Regenerate the configuration describing the hardware used by the system; graphics card, mount points etc.
+- `nixtra-unlock`: Make a home file managed by Home Manager no longer managed by it.
+    - Arguments: `file`
+    - Should be used for testing live configurations without the need for rebuilding.
+    - Gets overwritten by a rebuild.
+- `nixtra-enter-temp-fhs`: Get a temporary shell with an FHS (uses `steam-run`).
+    - ⚠️ Should not be used as a permanent solution for fixing software that does not work properly in NixOS.
+- `nixtra-hide-git-dir`: Run `git update-index --skip-worktree $FILE` recursively for an entire directory.
+    - Arguments: `directory`
+    - Use this if you want a directory to be hidden from the Git tree (so that it is not committed), but you still want it to be tracked by Nix Flakes.)
+    - Undo the command's effect with `nixtra-unhide-git-dir`.
 
 You can find more of them by checking for commands with the following prefixes:
 
@@ -35,6 +45,7 @@ You can find more of them by checking for commands with the following prefixes:
 ### Window Manager
 
 - <kbd>SUPER</kbd> + <kbd>WHEEL</kbd>: Switch to next or previous workspace.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>M</kbd>: Log out of active user.
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> +  <kbd>V</kbd>: Cycle through clipboard history.
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> <kbd>S</kbd>: Take a screenshot of a specific region of the window. (Stored in `~/Pictures/Screenshots`)
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> R</kbd>: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
@@ -45,7 +56,6 @@ You can find more of them by checking for commands with the following prefixes:
 - <kbd>SUPER</kbd> + <kbd>F</kbd>: Toggle fullscreen.
 - <kbd>SUPER</kbd> + <kbd>Q</kbd>: Create new window.
 - <kbd>SUPER</kbd> + <kbd>Z</kbd>: Close active window.
-- <kbd>SUPER</kbd> + <kbd>M</kbd>: Log out of active user.
 - <kbd>SUPER</kbd> + <kbd>Function</kbd>: Switch workspace.
 - <kbd>SUPER</kbd> + <kbd>V</kbd>: Toggle floating window mode.
 - <kbd>SUPER</kbd> + <kbd>Right</kbd>: Increase volume by 5%.

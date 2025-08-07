@@ -2,7 +2,7 @@
 
 createCommand {
   name = "fix-bootloader";
-  buildInputs = [];
+  buildInputs = [ ];
 
   command = ''
     ${profile.shell.commands.prefix}-regen-hardware

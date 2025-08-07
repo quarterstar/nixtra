@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    okular
-  ];
+  home.packages = with pkgs; [ kdePackages.okular ];
 }

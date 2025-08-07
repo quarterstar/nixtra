@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    calcurse
-  ];
+  home.packages = with pkgs; [ calcurse ];
 }

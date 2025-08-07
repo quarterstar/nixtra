@@ -33,6 +33,8 @@ createCommand {
     log "Cleaning up temporary files..."
     find /tmp -type f -atime +7 -delete
     find /var/tmp -type f -atime +7 -delete
+    find /tmp -type d -empty -atime +3 -delete
+    find /var/tmp -type d -empty -atime +3 -delete
     log "Temporary files cleanup completed."
 
     log "Removing old system generations..."
@@ -62,6 +64,16 @@ createCommand {
     rm -rf /nix/var/log/nix/drvs/*
     log "Nix build logs cleaned up."
 
+    log "Clearing local Nix build cache..."
+    rm -rf ~/.cache/nix/drvs
+    rm -rf ~/.cache/nix/tarball-cache
+    log "Local Nix build cache cleared."
+
+    log "Cleaning up flake caches..."
+    rm -rf ~/.cache/nix/eval-cache-v*
+    rm -rf ~/.cache/nix/flake-registry.json
+    log "Flake caches cleaned up."
+
     log "Cleaning up old profiles..."
     nix-store --gc --print-roots | egrep -v "^(/nix/var|/run/\w+-system|\{memory|/proc)"
     log "Old profiles cleaned up."
@@ -69,6 +81,21 @@ createCommand {
     log "Cleaning up Home Manager backup files..."
     find /home/${profile.user.username} -type f -name "*.hm.backup.*" -exec rm -f {} \;
     log "Home Manager backup files cleaned up."
+
+    log "Removing unused development environments..."
+    find /tmp -maxdepth 1 -type d -name "nix-shell-*" -exec rm -rf {} +
+    find /tmp -maxdepth 1 -type d -name "nix-develop-*" -exec rm -rf {} +
+    log "Unused development environments cleaned up."
+
+    log "Checking for Nix store corruptions..."
+    sudo nix-store --verify --check-contents
+    if [ $? -eq 0 ]; then
+      log "Nix store integrity check completed successfully. No corruptions found."
+    else
+      log "Nix store integrity check found issues. Please investigate."
+      # Do not exit here, allow other cleanups to continue.
+    fi
+    log "Finished checking for Nix store corruptions."
 
     log "NixOS cleanup completed successfully!"
   '';

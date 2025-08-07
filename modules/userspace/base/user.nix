@@ -5,7 +5,10 @@
     ./common.nix
     ../../../profiles/${settings.config.profile}/homes/user.nix
 
-    ../sources/flatpak.nix
+    # Out of order
+    #../sources/flatpak.nix
+
+    (../pkgs/notif + ("/" + profile.env.wm.notifDaemon) + ".nix")
   ];
 
   home.username = profile.user.username;

@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    drawio # Infrastructure diagrams
-  ];
+  home.packages = with pkgs;
+    [
+      drawio # Infrastructure diagrams
+    ];
 }

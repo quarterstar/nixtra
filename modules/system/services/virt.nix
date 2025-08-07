@@ -1,12 +1,14 @@
 { profile, pkgs, ... }:
 
-{
-  environment.systemPackages = with pkgs; [
-    virtiofsd
-  ];
+if profile.security.virtualization then {
+  environment.systemPackages = with pkgs; [ virtiofsd ];
 
   # Enable virtualization
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.vhostUserPackages = with pkgs;
+      [ virtiofsd ]; # Allow shared filesystems between host and guest
+  };
   programs.virt-manager.enable = true;
 
   # For shared directories on Windows guests
@@ -21,4 +23,5 @@
 
   # Clipboard sharing
   services.spice-vdagentd.enable = true;
-}
+} else
+  { }

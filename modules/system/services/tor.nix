@@ -1,42 +1,40 @@
 { profile, lib, pkgs, ... }:
 
-if profile.tor.enable then
-{
-  services = {
-    # Stub service
-    # This is done so that the tor user is created and managed by NixOS
-    tor = {
-      enable = true;
-      settings = {
-        SOCKSPort = 9000;
+if profile.tor.enable then {
+  # Stub service
+  # This is done so that the tor user is created and managed by NixOS
+  services.tor = {
+    enable = true;
+    settings.SOCKSPort = 9000;
+  };
+
+  systemd.services = builtins.listToAttrs ((map (service: {
+    name = "tor-${service.tag}";
+    value = {
+      description = "Tor Service";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.tor}/bin/tor -f ${
+            pkgs.writeText "torrc1" ''
+              SocksPort ${builtins.toString service.port}
+              DataDirectory /home/tor/tor-${service.tag}
+            ''
+          }";
+        Type = "simple";
+        User = "tor";
+        Group = "tor";
+        Restart = "on-failure";
+        RestartSec = "30s";
       };
     };
-  };
-  systemd.services = builtins.listToAttrs ((map (service:
-    {
-      name = "tor-${service.tag}";
-      value = {
-        description = "Tor Service";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${pkgs.tor}/bin/tor -f ${pkgs.writeText "torrc1" ''
-            SocksPort ${builtins.toString service.port}
-            DataDirectory /home/tor/tor-${service.tag}
-          ''}";
-          Type = "simple";
-          User = "tor";
-          Group = "tor";
-          Restart = "on-failure";
-          RestartSec = "30s";
-        };
-      };
-    }
-  ) profile.tor.services));
+  }) profile.tor.services));
 
   # Ensure the data directories exist and have the correct permissions
-  system.activationScripts.torSetup = lib.concatStringsSep "\n" (map (service: ''
-    mkdir -p /home/tor-${service.tag}
-    chown -R tor:tor /home/tor-${service.tag}
-  '') profile.tor.services);
-} else {}
+  system.activationScripts.torSetup = lib.concatStringsSep "\n" (map
+    (service: ''
+      mkdir -p /home/tor-${service.tag}
+      chown -R tor:tor /home/tor-${service.tag}
+    '') profile.tor.services);
+} else
+  { }

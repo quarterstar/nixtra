@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    dolphin
-  ];
+  home.packages = with pkgs; [ kdePackages.dolphin ];
 }

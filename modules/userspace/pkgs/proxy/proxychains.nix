@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    proxychains
-  ];
+  home.packages = with pkgs; [ proxychains ];
 }

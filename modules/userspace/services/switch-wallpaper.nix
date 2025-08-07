@@ -1,47 +1,44 @@
-{ profile, pkgs, ... }:
+{ profile, pkgs, lib, ... }:
 
 {
   systemd.user.services."switch-wallpaper" = {
     enable = true;
-    script = "${pkgs.writeShellScript "switch-wallpaper.sh" ''
+    script = let
+      wallpaperPaths = (lib.concatStringsSep " "
+        (map (extension: "${profile.env.wallpaper.directory}/*.${extension}")
+          profile.env.wallpaper.extensions));
+    in "${pkgs.writeShellScript "switch-wallpaper.sh" ''
       #!/usr/bin/env bash
 
-      # Configuration
-      WALLPAPER_DIR="$HOME/Pictures/wallpapers"  # Change this to your wallpaper directory
+      WALLPAPER_DIR="${profile.env.wallpaper.directory}"
 
-      # Check if the wallpaper directory exists
       if [ ! -d "$WALLPAPER_DIR" ]; then
         echo "Error: Wallpaper directory $WALLPAPER_DIR does not exist."
         exit 1
       fi
 
-      # Find all .gif files in the directory
-      gif_files=("$WALLPAPER_DIR"/*.gif)
+      files=(${wallpaperPaths})
 
-      # Check if any .gif files were found
-      if [ ''${#gif_files[@]} -eq 0 ]; then
-        echo "Error: No .gif files found in $WALLPAPER_DIR"
+      if [ ''${#files[@]} -eq 0 ]; then
+        echo "Error: No files found in $WALLPAPER_DIR"
         exit 1
       fi
 
-      # Select a random .gif file
-      random_gif="''${gif_files[RANDOM % ''${#gif_files[@]}]}"
+      while true; do
+        random_wallpaper="''${files[RANDOM % ''${#files[@]}]}"
 
-      # Kill any existing swayimg processes to avoid multiple instances
-      pkill -x swayimg
+        pkill -x swww || true
 
-      # Set the new wallpaper
-      echo "Setting wallpaper: $random_gif"
-      swww img "$random_gif"
+        echo "Setting wallpaper: $random_wallpaper"
+        swww img "$random_wallpaper"
 
-      echo "Wallpaper set successfully!"
+        echo "Wallpaper set successfully!"
+
+        sleep ${builtins.toString profile.env.wallpaper.switchInterval}
+      done
     ''}";
     wantedBy = [ "default.target" ];
-    path = with pkgs; [
-      uutils-coreutils-noprefix
-      swww
-      procps
-    ];
+    path = with pkgs; [ uutils-coreutils-noprefix swww procps ];
     serviceConfig = {
       Type = "simple";
       WorkingDirectory = "/home"; # Required to access home directory files

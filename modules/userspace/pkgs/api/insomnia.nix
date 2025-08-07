@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    insomnia
-  ];
+  home.packages = with pkgs; [ insomnia ];
 }

@@ -2,7 +2,7 @@
 
 createCommand {
   name = "regen-hardware";
-  buildInputs = [];
+  buildInputs = [ ];
 
   command = ''
     nixos-generate-config --show-hardware-config > /etc/nixos/modules/system/hardware-configuration.nix

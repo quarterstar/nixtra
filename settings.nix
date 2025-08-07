@@ -21,10 +21,13 @@
   system = {
     arch = "x86_64-linux";
     hostname = "nixtra";
-    timezone = "America/New_York";
+    timezone = { 
+      auto = true; # If set to true, will ignore timezone.default
+      default = "America/New_York";
+    };
     locale = "en_US.UTF-8";
-    version = "24.11";
-    initialVersion = "24.11";
+    version = "25.05";
+    initialVersion = "25.05";
 
     filesystem = "btrfs";
     supportedFilesystems = [ "btrfs" "ext4" "ntfs" ];

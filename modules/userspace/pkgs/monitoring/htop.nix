@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    htop-vim
-  ];
+  home.packages = with pkgs; [ htop-vim ];
 }

@@ -23,18 +23,16 @@ let
       lockPref("browser.startup.homepage", "file:///etc/nixos/web/pages/tor-browser-proxy-warning.html")
     '';
   };
-  
-  tor-browser = pkgs.tor-browser-bundle-bin.override {
-    extraPrefs = ''
-    '';
-  };
+
+  tor-browser = pkgs.tor-browser-bundle-bin.override { extraPrefs = ""; };
 
   # Create wrapper scripts
-  tor-browser-clearnet-wrapper = pkgs.writeShellScriptBin "tor-browser-clearnet" ''
-    #export TOR_BROWSER_PROFILE_DIR="$HOME/.tor-browser-clearnet"
-    #exec ${tor-browser-clearnet}/bin/tor-browser --profile "$TOR_BROWSER_PROFILE_DIR" "$@"
-    exec ${tor-browser-clearnet}/bin/tor-browser "$@"
-  '';
+  tor-browser-clearnet-wrapper =
+    pkgs.writeShellScriptBin "tor-browser-clearnet" ''
+      #export TOR_BROWSER_PROFILE_DIR="$HOME/.tor-browser-clearnet"
+      #exec ${tor-browser-clearnet}/bin/tor-browser --profile "$TOR_BROWSER_PROFILE_DIR" "$@"
+      exec ${tor-browser-clearnet}/bin/tor-browser "$@"
+    '';
 
   tor-browser-proxy-wrapper = pkgs.writeShellScriptBin "tor-browser-proxy" ''
     #export TOR_BROWSER_PROFILE_DIR="$HOME/.tor-browser-proxy"

@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    texliveFull
-  ];
+  home.packages = with pkgs;
+    [ (texliveFull.withPackages (ps: [ ps.bytefield ])) ];
 }

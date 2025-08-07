@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    alsa-utils
-  ];
+  home.packages = with pkgs; [ alsa-utils ];
 }

@@ -1,7 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    termusic
-  ];
+  home.packages = with pkgs; [ termusic ];
 }

@@ -1,8 +1,13 @@
 { settings, profile, pkgs, ... }:
 
-{
+if profile.security.overwriteSudoWithDoas then {
   security.sudo.enable = false;
-  security.doas.enable = true;
+  security.doas = {
+    enable = true;
+    extraConfig = ''
+      permit persist :wheel
+    '';
+  };
 
   security.doas.extraRules = [
     {
@@ -17,7 +22,8 @@
     }
   ];
 
-  environment.systemPackages = [
-    (pkgs.writeScriptBin "sudo" ''exec doas "$@"'')
-  ];
+  environment.systemPackages =
+    [ (pkgs.writeScriptBin "sudo" ''exec doas "$@"'') ];
+} else {
+  security.sudo.enable = true;
 }

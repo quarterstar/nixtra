@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p bash coreutils coreutils-full git e2fsprogs util-linux parted gnused btrfs-progs zfs cryptsetup
+#! nix-shell -i bash -p bash systemd coreutils coreutils-full git e2fsprogs util-linux parted gnused btrfs-progs zfs cryptsetup
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
@@ -339,4 +339,8 @@ read -p "Edit settings.nix? [y/N] " edit_settings
 read -p "Edit selected profile configuration? [y/N] " edit_profile
 [[ $edit_profile =~ [Yy] ]] && $EDITOR "/mnt/etc/nixos/profiles/$profile/profile-settings.nix"
 
-echo "Installation complete! Reboot when ready."
+read -p "Download additional static and animated wallpapers curated by Nixtra project? (This operation may take a long time.) [y/N]" download_wallpapers
+[[ $download_wallpapers =~ [Yy] ]] git clone https://github.com/quarterstar/nixtra-wallpapers
+
+read -p "Installation complete! Reboot? [Y/n]" reboot_system
+[[ $reboot_system =~ [Nn] ]] reboot

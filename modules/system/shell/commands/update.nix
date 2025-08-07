@@ -2,7 +2,7 @@
 
 createCommand {
   name = "update";
-  buildInputs = [];
+  buildInputs = [ ];
 
   command = ''
     nix-channel --update
