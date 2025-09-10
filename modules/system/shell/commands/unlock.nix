@@ -1,4 +1,4 @@
-{ profile, createCommand, ... }:
+{ config, createCommand, ... }:
 
 createCommand {
   name = "unlock";
@@ -16,7 +16,7 @@ createCommand {
 
     rm -f $1
     cp "$TARGET_FILE_PATH" $1
-    chown ${profile.user.username}:users $1
+    chown ${config.nixtra.user.username}:users $1
     chmod +w $1
   '';
 }

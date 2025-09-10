@@ -1,5 +1,5 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ freetube ];
+  programs.freetube.enable = true;
 }

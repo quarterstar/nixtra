@@ -1,0 +1,70 @@
+#TabsToolbar {
+  visibility: collapse !important;
+}
+
+#PersonalToolbar {
+  display: none !important;
+}
+
+#unified-extensions-button {
+  display: none !important;
+}
+
+/* disable the toolbar context menu (prevent customizing toolbar via right-click): */
+#toolbar-context-menu {
+  display: none !important;
+}
+.viewCustomizeToolbar,
+#appmenu-moreTools-button[label="Customize toolbar…"] {
+  display: none !important;
+}
+
+#identity-box {
+  display: none !important;
+}
+
+#unified-extensions-button, 
+#unified-extensions-button > .toolbarbutton-icon {
+    width: 0px !important;
+    padding: 0px !important;
+}
+
+/* Hide the extension name unless hovered */
+#identity-box #identity-icon #identity-box.extensionPage #identity-icon-labels #identity-icon-box {
+  display: none !important;
+}
+
+#unified-extensions-button{
+    width: 0.1px;
+    padding-inline: 0 !important;
+}
+
+#unified-extensions-button > .toolbarbutton-icon {
+    width: 0 !important;
+}
+
+
+/* Hide extensio nicons completely */
+#nav-bar .webextension-browser-action {
+  display: none !important;
+  width: 0px;
+  height: 0px;
+}
+
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar>.toolbar-items {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+    visibility: collapse !important;
+}
+
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+    display: none;
+}
+
+.tab {
+    margin-left: 1px;
+    margin-right: 1px;
+}

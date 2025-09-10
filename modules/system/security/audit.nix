@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
@@ -6,4 +6,7 @@
     lynis
     clamav
   ];
+
+  services.clamav.daemon.enable = true;
+  services.clamav.updater.enable = true;
 }

@@ -1,6 +1,6 @@
-{ profile, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-if profile.flatpak.enable then {
+if config.nixtra.flatpak.enable then {
   home.packages = with pkgs; [
     flatpak
     bubblewrap # Dependency of flatpak
@@ -10,7 +10,7 @@ if profile.flatpak.enable then {
     installFlathub = lib.hm.dag.entryAfter [ "writeBoundary" ]
       (lib.concatStringsSep "\n" (map (source: ''
         ${pkgs.flatpak}/bin/flatpak remote-add --user --if-not-exists ${source.name} ${source.source}
-      '') profile.flatpak.sources));
+      '') config.nixtra.flatpak.sources));
 
     installFlatpakPackages = lib.hm.dag.entryAfter [ "writeBoundary" ]
       (lib.concatStringsSep "\n" (map (app:
@@ -30,7 +30,7 @@ if profile.flatpak.enable then {
           if ! ${pkgs.flatpak}/bin/flatpak list --app --${installType} | grep -q ${app.app}; then
             ${installCommand}
           fi
-        '') profile.flatpak.apps));
+        '') config.nixtra.flatpak.apps));
   };
 } else
   { }

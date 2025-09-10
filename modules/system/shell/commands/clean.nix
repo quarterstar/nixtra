@@ -1,16 +1,32 @@
-{ profile, pkgs, createCommand, ... }:
+{ config, createCommand, ... }:
 
 createCommand {
   name = "clean";
-  buildInputs = with pkgs; [ bash ];
+  buildInputs = [ ];
 
   command = ''
-    #!${pkgs.bash}/bin/bash
-
     # Function to display a message with a timestamp
     log() {
       echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1"
     }
+
+    log "Removing old system generations..."
+    nix-env --delete-generations old
+    if [ $? -eq 0 ]; then
+      log "Old system generations removed successfully."
+    else
+      log "Failed to remove old system generations. Please check for errors."
+      exit 1
+    fi
+
+    log "Cleaning up user profile generations..."
+    nix-env --delete-generations old --profile /nix/var/nix/profiles/per-user/$USER/profile
+    if [ $? -eq 0 ]; then
+      log "User profile generations cleaned up successfully."
+    else
+      log "Failed to clean up user profile generations. Please check for errors."
+      exit 1
+    fi
 
     log "Running garbage collection to remove unused packages..."
     nix-collect-garbage --delete-old
@@ -37,24 +53,6 @@ createCommand {
     find /var/tmp -type d -empty -atime +3 -delete
     log "Temporary files cleanup completed."
 
-    log "Removing old system generations..."
-    nix-env --delete-generations old
-    if [ $? -eq 0 ]; then
-      log "Old system generations removed successfully."
-    else
-      log "Failed to remove old system generations. Please check for errors."
-      exit 1
-    fi
-
-    log "Cleaning up user profile generations..."
-    nix-env --delete-generations old --profile /nix/var/nix/profiles/per-user/$USER/profile
-    if [ $? -eq 0 ]; then
-      log "User profile generations cleaned up successfully."
-    else
-      log "Failed to clean up user profile generations. Please check for errors."
-      exit 1
-    fi
-
     log "Cleaning up flake caches..."
     rm -rf ~/.cache/nix/eval-cache-v*
     rm -rf ~/.cache/nix/flake-registry.json
@@ -79,7 +77,7 @@ createCommand {
     log "Old profiles cleaned up."
 
     log "Cleaning up Home Manager backup files..."
-    find /home/${profile.user.username} -type f -name "*.hm.backup.*" -exec rm -f {} \;
+    find /home/${config.nixtra.user.username} -type f -name "*.hm.backup.*" -exec rm -f {} \;
     log "Home Manager backup files cleaned up."
 
     log "Removing unused development environments..."
@@ -87,15 +85,9 @@ createCommand {
     find /tmp -maxdepth 1 -type d -name "nix-develop-*" -exec rm -rf {} +
     log "Unused development environments cleaned up."
 
-    log "Checking for Nix store corruptions..."
-    sudo nix-store --verify --check-contents
-    if [ $? -eq 0 ]; then
-      log "Nix store integrity check completed successfully. No corruptions found."
-    else
-      log "Nix store integrity check found issues. Please investigate."
-      # Do not exit here, allow other cleanups to continue.
-    fi
-    log "Finished checking for Nix store corruptions."
+    log "Checking and fixing Nix store corruptions..."
+    sudo nix-store --verify --check-contents --repair
+    log "Finished checking and fixing Nix store corruptions."
 
     log "NixOS cleanup completed successfully!"
   '';

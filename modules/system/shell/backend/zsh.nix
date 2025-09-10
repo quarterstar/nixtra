@@ -1,16 +1,18 @@
-{ profile, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    syntaxHighlighting.enable = true;
-    autosuggestions.enable = true;
-
-    ohMyZsh = {
+  config = lib.mkIf (config.nixtra.user.shell == "zsh") {
+    programs.zsh = {
       enable = true;
-      plugins = [ "git" "copyfile" "copybuffer" "dirhistory" "history" ];
-      theme = "robbyrussell";
+      enableCompletion = true;
+      syntaxHighlighting.enable = true;
+      autosuggestions.enable = true;
+
+      ohMyZsh = {
+        enable = true;
+        plugins = [ "git" "copyfile" "copybuffer" "dirhistory" "history" ];
+        theme = "robbyrussell";
+      };
     };
   };
 }

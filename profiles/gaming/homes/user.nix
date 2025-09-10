@@ -8,7 +8,8 @@
     ../../../modules/userspace/pkgs/emu/ryujinx.nix
     ../../../modules/userspace/pkgs/emu/wine.nix
     ../../../modules/userspace/pkgs/emu/bottles.nix
-    ../../../modules/userspace/pkgs/browser/librewolf.nix
+    ../../../modules/userspace/pkgs/browser/librewolf/default.nix
+    ../../../modules/userspace/pkgs/browser/chatgpt-container.nix
     ../../../modules/userspace/pkgs/notes/zettlr.nix
     ../../../modules/userspace/pkgs/audio/alsa.nix
     ../../../modules/userspace/pkgs/virt/virtualbox.nix
@@ -18,11 +19,11 @@
   ];
 
   home.packages = [
-    (pkgs.wrapFirejail {
-      #executable = (pkgs.torify "${pkgs.prismlauncher}/bin/prismlauncher");
-      executable = "${pkgs.prismlauncher}/bin/prismlauncher";
-      profile = "prismlauncher";
-    })
+    #(pkgs.wrapFirejail {
+    #  #executable = (pkgs.torify "${pkgs.prismlauncher}/bin/prismlauncher");
+    #  executable = "${pkgs.prismlauncher}/bin/prismlauncher";
+    #  profile = "prismlauncher";
+    #})
   ];
 
   programs.home-manager.enable = true;

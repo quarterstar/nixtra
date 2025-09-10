@@ -3,8 +3,9 @@
 {
   imports = [
     # Modules
-    ../../../modules/userspace/pkgs/browser/librewolf.nix
-    ../../../modules/userspace/pkgs/browser/tor.nix
+    ../../../modules/userspace/pkgs/browser/librewolf/default.nix
+    ../../../modules/userspace/pkgs/browser/chatgpt-container.nix
+    ../../../modules/userspace/pkgs/browser/tor/tor.nix
     ../../../modules/userspace/pkgs/notes/zettlr.nix
     ../../../modules/userspace/pkgs/notes/planify.nix
     ../../../modules/userspace/pkgs/text/office.nix
@@ -49,6 +50,7 @@
     ../../../modules/userspace/pkgs/file/dolphin.nix
     ../../../modules/userspace/pkgs/file/pcmanfm.nix
     ../../../modules/userspace/pkgs/compression/p7zip.nix
+    ../../../modules/userspace/pkgs/compression/unzip.nix
     ../../../modules/userspace/pkgs/proxy/proxychains.nix
     ../../../modules/userspace/pkgs/aesthetic/lxappearance.nix
     ../../../modules/userspace/pkgs/electronics/logisim-evolution.nix

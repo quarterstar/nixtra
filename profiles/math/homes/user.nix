@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ../../../modules/userspace/pkgs/browser/librewolf.nix
+    ../../../modules/userspace/pkgs/browser/librewolf/default.nix
+    ../../../modules/userspace/pkgs/browser/chatgpt-container.nix
     ../../../modules/userspace/pkgs/notes/zettlr.nix
     ../../../modules/userspace/pkgs/reading/okular.nix
     ../../../modules/userspace/pkgs/reading/kiwix.nix

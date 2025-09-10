@@ -1,4 +1,4 @@
-{ profile, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   systemd.user.services = builtins.listToAttrs ((map (proxy:
@@ -39,5 +39,5 @@
           RestartSec = "5s";
         };
       };
-    }) profile.microsocks.services));
+    }) config.nixtra.microsocks.services));
 }

@@ -1,4 +1,4 @@
-{ profile, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   post-commit-hook = pkgs.writeScript "pre-commit" ''
@@ -87,19 +87,19 @@ in {
 
   programs.git.enable = true;
   programs.git.config = {
-    commit = { gpgsign = profile.git.signCommits; };
+    commit = { gpgsign = config.nixtra.git.signCommits; };
 
-    http = if profile.git.proxy.enable then {
-      proxy = profile.git.proxy.address;
+    http = if config.nixtra.git.proxy.enable then {
+      proxy = config.nixtra.git.proxy.address;
     } else
       { };
 
-    https = if profile.git.proxy.enable then {
-      proxy = profile.git.proxy.address;
+    https = if config.nixtra.git.proxy.enable then {
+      proxy = config.nixtra.git.proxy.address;
     } else
       { };
 
-    init = if profile.git.randomizeCommitDate then {
+    init = if config.nixtra.git.randomizeCommitDate then {
       templateDir = "/etc/git-templates";
     } else
       { };

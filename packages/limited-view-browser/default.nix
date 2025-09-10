@@ -1,0 +1,9 @@
+{
+  stdenv,
+  firefox,
+  ...
+}:
+
+stdenv.mkDerivationNoCC {
+
+}

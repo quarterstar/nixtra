@@ -2,10 +2,11 @@
 
 {
   imports = [
-    # Dependencies
-    ../gaming/configuration.nix
-    ../program/configuration.nix
-    ../untrusted/configuration.nix
-    #../../modules/userspace/services/fix-permissions.sh
+    ../../modules/system/bundles/gaming.nix
+    ../../modules/system/bundles/program.nix
+    #../untrusted/configuration.nix
+
+    # Services
+    ../../modules/system/services/opensnitch.nix
   ];
 }

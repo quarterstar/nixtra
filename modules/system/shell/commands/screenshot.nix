@@ -1,12 +1,10 @@
-{ pkgs, createCommand, ... }:
+{ config, pkgs, createCommand, ... }:
 
 createCommand {
   name = "screenshot";
   buildInputs = with pkgs; [ grim slurp ];
 
   command = ''
-    #!${pkgs.bash}/bin/bash
-
     arg=$1
 
     if [ "$arg" = "region" ]; then

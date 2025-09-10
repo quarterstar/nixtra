@@ -1,5 +1,5 @@
-{ lib, profile, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  programs.firejail.enable = profile.security.firejail;
+  programs.firejail.enable = config.nixtra.security.firejail;
 }

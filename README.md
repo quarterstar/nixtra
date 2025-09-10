@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./assets/icons/nixtra.png">
+<img src="./shared-assets/icons/logo.png">
 
 <br>
 
@@ -9,11 +9,21 @@
 
 <br>
 
-<h2>⚡ Your Supercharged NixOS Config</h2>
+<h2>❄️Nixtra❄️</h2>
 
-<img style="border-radius: 15px;" src="./assets/nixtra/sample.jpg">
+<p align="center">
+    <b>⚡ Your Supercharged NixOS Distro</b>
+</p>
 
----
+<p align="center">
+    <img style="border-radius: 15px;" src="./assets/demos/sample.jpg">
+</p>
+
+<p float="left">
+  <img src="./assets/demos/sample.jpg" width="200" />
+  <img src="./assets/demos/sample.jpg" width="200" />
+  <img src="./assets/demos/sample.jpg" width="200" />
+</p>
 
 **[<kbd> <br> Install <br> </kbd>][Install]** 
 **[<kbd> <br> Usage <br> </kbd>][Usage]** 
@@ -22,11 +32,24 @@
 
 ---
 
+<p align="center">
+    <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/palette/macchiato.png" width="400">
+</p>
+
+<p align="center">
+    <a href="https://github.com/ryan4yin/nix-config/stargazers">
+        <img alt="Stargazers" src="https://img.shields.io/github/stars/serpentian/AlfheimOS?style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41">
+    </a>
+    <a href="https://nixos.org/">
+        <img src="https://img.shields.io/badge/NixOS-25.05-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
+    </a>
+</p>
+
 </div>
 
 ## ❓ About Project
 
-Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, privacy and security. It is designed to:
+Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, privacy and security *while still being eye candy*. It is designed to:
 
 - Provide an ideal environment for: gaming; programming; the use of multimedia applications; security analysis and virtualization.
 - Give the ability to switch between different profiles in within a single user, each designated a different role, to prevent distractions and straighten my workflow.
@@ -35,10 +58,11 @@ Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, p
 - Patch out the weird quirks that come with using NixOS on personal computers.
 - Make NixOS easier to use and customize.
 
+Why NixOS? Because impure system state should be volatile and the rest should be declarative and immutable. Or because of my security paranoia :p
+
 ## 📚 Table of Contents
 
 - [Features](##features)
-- [Security Considerations](##security_considerations)
 - [Security Features](##security_practices)
 - [User Accounts](##user)
 - [Profiles Accounts](##profiles)
@@ -50,7 +74,9 @@ Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, p
 
 ## ⭐ Features
 
-- Pre-installed, beautifully-riced window managers and desktop environments. (Currently Hyprland; more in the future.)
+- Pre-installed, beautifully-riced Hyprland environment.
+- Utilities for day-to-day use, including screenshotting, recording, etc.
+- A lot of documentation.
 - Different flavors of profiles pre-configured with a variety of packages to fullfill your needs.
 - A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues and annoyances. (For example, you do not need to `git add` a file when rebuilding with Flakes so that it registers it.)
 - High-level configuration system.
@@ -59,10 +85,14 @@ Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, p
 
 Some example security features (which can be toggled on or off) Nixtra employs are:
 
-- [Tor browsing uses a unique flavor-based system with separate Tor browsers.](./docs/01-usage.md##)
+**Subtleties**
+
+- [Tor browser uses a unique flavor-based system with separate Tor browsers.](./docs/01-usage.md##)
+- Incorporated into the kernel are strict configurations for kernel parameters, with a combination of various NixOS resources, including `nix-mineral`, the `hardening` nixpkgs profile, and other standard setups.
+- Most core systemd services are sandboxed.
 - All permitted insecure packages may only be used under a profile with no networking enabled.
 - `rm` is replaced with an alias of `trash` to prevent accidental permanent file deletion and many other aliases are included.
-- Untrusted applications are encapsulated by a firejail wrapper to restrict their scope and permissions.
+- Critical and untrusted application-level programs are encapsulated by a firejail wrapper to sandbox them and restrict their scope and permissions.
 - Clipboard's buffer is cleared 10 seconds after being written, regardless of the application modifying it or the data being pasted.
 - A set of sensitive applications like Tor Browser is pre-configured to automatically close upon the PC receiving a suspend signal.
 - Sound access is disabled for Tor Browser and other sensitive applications.
@@ -71,15 +101,22 @@ Some example security features (which can be toggled on or off) Nixtra employs a
 - Features like commits in Git use a randomized date to make it harder to pinpoint someone's timezone.
 - ...and more
 
+**Industry Standards**
+
+- Network Intrusion Detection System (IDS) with Suricata
+- Host-level outbound connection control with OpenSnitch
+- Host intrusion detection with Wazuh (fork of OSSEC)
+- Brute force attack prevention with Fail2ban
+- Detailed network protocol analysis with Zeek
+- System auditing with Auditd
+- Nix Firewall
+- Log aggregation & alerting with Graylog (SIEM system)
+
 For a complete list and elaboration for the above, view [SECURITY.md](SECURITY.md).
-
-## 🖊️ Security Considerations
-
-- Do NOT set your password or secrets in NixOS modules! Nix generates `.drv` files after building which may contain the password, allowing anyone to view it worldwide. Instead, either use SOPS or provide secrets to programs imperatively.
 
 ## 🖥️ Installed Software
 
-Nixtra is bundled with software for:
+Nixtra comes with software bundles for:
 
 - Programming
 - Web Development
@@ -102,7 +139,7 @@ Also, additional users may be defined in the `security.extraUsers` attribute pro
 
 ## ♦️ Profiles
 
-Nixtra is a single-user NixOS configuration, but the user may have multiple profiles. Profiles dictate what software shall be installed on your system, as well as how they shall be configured. For instance, you can have a personal profile, a work profile and a gaming profile each equipped with different or shared pieces of software.
+Nixtra is a single-user NixOS configuration, but the user may have multiple profiles. It follows the philosophy of "one system, many configurations." Profiles dictate what software shall be installed on your system, as well as how they shall be configured. For instance, you can have a personal profile, a work profile and a gaming profile each equipped with different or shared pieces of software.
 
 Nixtra provides the following default profiles:
 
@@ -123,6 +160,9 @@ Nixtra configuration comes in two flavors:
 
 For more information, refer to the [configuration page](./docs/02-configuration.md).
 
+> [!NOTE]
+> Including a `settings.nix` file in the root of the selected profile will cause Nixtra to use that one, instead of the global one located in `/etc/nixos/settings.nix`.
+
 ## 🚧 Project Structure
 
 - `profiles`: configuration for the [profiles mechanism](./docs/02-configuration.md).
@@ -138,14 +178,27 @@ For more information, refer to the [configuration page](./docs/02-configuration.
 
 ## 🔗 Credits
 
-All of the works below have been altered, modified or kept in their original state respectively for their successful and seamless integration into Nixtra's environment:
+Nixtra wouldn't have been possible without help from royalty-free assets and open source projects 🙌
+
+**Assets**
 
 - [Wallpaper](https://steamcommunity.com/sharedfiles/filedetails/?id=3323190978)
 - [Startup Sound Effect](https://pixabay.com/sound-effects/soft-startup-sound-269291)
 - [Chat Notification Sound Effect](https://pixabay.com/sound-effects/new-notification-07-210334)
-- [Firejail Overlay](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix)
-- [Waybar Record Module](https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1)
-- [SDDM Theme Base](https://github.com/siddrs/tokyo-night-sddm)
+
+**Code**
+
+- [github:stelcodes/nixos-config](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix) - Overlay for firejail
+- [gist.github:raffaem](https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1) - Record module for waybar
+- [github:siddrs/tokyo-night-sddm](https://github.com/siddrs/tokyo-night-sddm) - Base config for SDDM theme
+- [github:Sly-Harvey/NixOS](https://github.com/Sly-Harvey/NixOS) - Various scripts for Hyprland
+- [gitlab:Zaney/zaneyos](https://gitlab.com/Zaney/zaneyos) - Base config for [fastfetch](https://gitlab.com/Zaney/zaneyos/-/blob/main/modules/home/fastfetch/default.nix), [cava](https://gitlab.com/Zaney/zaneyos/-/blob/main/modules/home/cava.nix)
+- [gitlab:usmcamp0811/dotfiles](https://gitlab.com/usmcamp0811/dotfiles) - Examples for templates, building NixOS ISOs
+- [gist.github:theprojectsomething](https://gist.github.com/theprojectsomething/6813b2c27611be03e67c78d936b0f760) & [github:AmadeusWM/dotfiles-hyprland](https://github.com/AmadeusWM/dotfiles-hyprland) - Rice for Firefox (modified in Nixtra)
+
+Some small utilities and scripts might have credits directly embedded into their respective files in Nixtra's codebase.
+
+PSA: If you are a contributor to Nixtra, giving credits isn't only important to uphold values and maintain legitimacy, but also to trace back the origin of the code if any subsequent issues arise!
 
 ## 📜 License
 
@@ -158,6 +211,17 @@ All Nixtra code included in this repository is licensed under the terms of the [
 are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en), unless otherwise stated explicitly by the respective author of the software and text.
 
 All third-party open source projects that are subject to copyleft obligations have their license included in the [licenses](licenses) directory.
+
+## ⚠️ Liability Disclaimer
+
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
 [Install]: ./docs/00-installation.md
 [Usage]: ./docs/01-usage.md

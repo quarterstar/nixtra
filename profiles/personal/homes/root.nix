@@ -2,8 +2,7 @@
 
 {
   imports = [
-    # Dependencies
-    ../../program/homes/root.nix
+    ../../../modules/userspace/pkgs/editor/neovim.nix
   ];
 
   programs.home-manager.enable = true;

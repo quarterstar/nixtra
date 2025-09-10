@@ -1,10 +1,11 @@
-{ profile, ... }:
+{ lib, config, ... }:
 
-if profile.security.firewall.enable then {
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = profile.security.firewall.allowedTCPPorts;
-    allowedUDPPorts = profile.security.firewall.allowedTCPPorts;
+{
+  config = lib.mkIf config.nixtra.security.firewall.enable {
+    networking.firewall = {
+      enable = true;
+      allowedTCPPorts = config.nixtra.security.firewall.allowedTCPPorts;
+      allowedUDPPorts = config.nixtra.security.firewall.allowedTCPPorts;
+    };
   };
-} else
-  { }
+}

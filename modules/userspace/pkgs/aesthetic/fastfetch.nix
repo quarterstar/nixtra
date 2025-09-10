@@ -1,62 +1,147 @@
-{ pkgs, ... }:
-
 let
   newline = {
     type = "custom";
     format = "";
   };
+
+  totalLocWithNewlines =
+    "find /etc/nixos -name '*.nix' -type f -exec cat {} + | wc -l";
+  totalLocWithoutNewlines =
+    "find /etc/nixos -name '*.nix' -type f -exec cat {} + | grep -cve '^\\s*$'";
+  totalNewlinesLoc =
+    "find /etc/nixos -name '*.nix' -type f -exec cat {} + | grep -c '^\\s*$'";
 in {
-  programs.fastfetch.enable = true;
-  programs.fastfetch.settings = {
-    logo = {
-      width = 32;
-      height = 20;
-      source = "/etc/nixos/assets/logo.png";
-      padding = {
-        bottom = 1;
-        right = 1;
+  programs.fastfetch = {
+    enable = true;
+
+    settings = {
+      display = {
+        color = {
+          keys = "37";
+          output = "37";
+        };
+        separator = " ➜  ";
       };
+
+      logo = {
+        source = ../../../../shared-assets/icons/logo.png;
+        type = "kitty-direct";
+        height = 10;
+        width = 20;
+        padding = {
+          top = 2;
+          left = 2;
+        };
+      };
+
+      modules = [
+        "break"
+        {
+          type = "os";
+          key = "OS — Nixtra";
+          keyColor = "31";
+        }
+        {
+          type = "kernel";
+          key = " ├  ";
+          keyColor = "31";
+        }
+        {
+          type = "packages";
+          key = " ├ 󰏖 ";
+          keyColor = "31";
+        }
+        {
+          type = "shell";
+          key = " └  ";
+          keyColor = "31";
+        }
+        "break"
+        {
+          type = "wm";
+          key = "WM   ";
+          keyColor = "32";
+        }
+        {
+          type = "wmtheme";
+          key = " ├ 󰉼 ";
+          keyColor = "32";
+        }
+        {
+          type = "icons";
+          key = " ├ 󰀻 ";
+          keyColor = "32";
+        }
+        {
+          type = "cursor";
+          key = " ├  ";
+          keyColor = "32";
+        }
+        {
+          type = "terminal";
+          key = " ├  ";
+          keyColor = "32";
+        }
+        {
+          type = "terminalfont";
+          key = " └  ";
+          keyColor = "32";
+        }
+        "break"
+        {
+          type = "host";
+          format = "{5} {1} Type {2}";
+          key = "PC   ";
+          keyColor = "33";
+        }
+        {
+          type = "cpu";
+          format = "{1} ({3}) @ {7} GHz";
+          key = " ├  ";
+          keyColor = "33";
+        }
+        {
+          type = "gpu";
+          format = "{1} {2} @ {12} GHz";
+          key = " ├ 󰢮 ";
+          keyColor = "33";
+        }
+        {
+          type = "memory";
+          key = " ├  ";
+          keyColor = "33";
+        }
+        {
+          type = "disk";
+          key = " ├ 󰋊 ";
+          keyColor = "33";
+        }
+        {
+          type = "monitor";
+          key = " ├  ";
+          keyColor = "33";
+        }
+        "break"
+        {
+          type = "uptime";
+          key = "   Uptime   ";
+        }
+        {
+          type = "custom";
+          key = "   Lines of Code";
+          exec = ''
+            totalLines=$(${totalLocWithoutNewlines})
+            blankLines=$(${totalNewlinesLoc})
+            echo "$totalLines ($blankLines blank lines)"
+          '';
+          postProcess = "trim";
+        }
+        "break"
+        {
+          type = "custom";
+          format = " https://github.com/quarterstar/nixtra";
+        }
+      ];
     };
-    display = {
-      size = { binaryPrefix = "si"; };
-      color = "blue";
-      separator = "  ";
-    };
-    modules = [
-      newline
-      newline
-
-      {
-        type = "os";
-        key = " OS";
-      }
-      {
-        type = "kernel";
-        key = " Kernel";
-      }
-      {
-        type = "de";
-        key = " DE";
-      }
-      {
-        type = "shell";
-        key = " Shell";
-      }
-      {
-        type = "cpu";
-        key = " CPU";
-      }
-      {
-        type = "gpu";
-        key = " GPU";
-      }
-
-      newline
-
-      {
-        type = "custom";
-        format = " https://github.com/quarterstar/nixtra";
-      }
-    ];
   };
 }

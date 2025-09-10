@@ -1,0 +1,319 @@
+:root {
+  /* This value should be updated here and in the userChrome.css */
+  --tst-sidepanel-hide-delay: 1s;
+}
+
+/* Hide border on tab bar, force its state to 'scroll', adjust margin-left for width of scrollbar. */
+#tabbar {
+  border: 0;
+  scrollbar-width: none;
+  overflow: scroll !important;
+  margin-top:  0 !important;
+}
+
+/* resolve extra space for scrollbar (scrollbar is hidden by this script) */
+.on-scrollbar-area #tabbar {
+  --shift-tabs-for-scrollbar-distance: 0px;
+}
+
+/* Include 'reveal' animation ... stagers by level */
+#tabbar .tab {
+  transition: 0.1s margin-top, 0.2s 0.1s visibility;
+}
+#tabbar tab-item-substance {
+  transition: 0.2s 0.1s margin-left;
+}
+
+
+/* delay transitions on open */
+#tabbar:not(:hover) tab-item-substance {
+  transition-delay: var(--tst-sidepanel-hide-delay);
+  margin-left: 0;
+}
+
+/* animate twisty reveal */
+#tabbar .tab .twisty {
+  transition: 0.2s margin;
+}
+
+/* general tabs */
+.tab {
+  background-color: transparent;
+}
+.tab,
+.tab.pinned {
+  height: 2.8em;
+}
+
+/* Push tab labels slightly to the right so they're completely hidden in collapsed state, but still look fine while expanded. */
+.tab .label {
+  margin-left: 1em;
+}
+
+/* fix closebox */
+.tab .closebox {
+  margin-left:  0;
+}
+
+.tab .counter {
+  margin-left:  auto;
+  display: inline-block !important;
+}
+
+/* Hide .twisty and adjust margins so favicons have 7px on left. */
+#tabbar:not(:hover) .tab .twisty {
+  visibility: hidden;
+  margin-left: -12px;
+  transition-delay: var(--tst-sidepanel-hide-delay);
+}
+
+
+/* hide closebox unless needed */
+.tab:not(:hover) .closebox {
+  visibility: hidden;
+}
+
+/* Hide sound playing/muted button. */
+.sound-button {
+  margin-left: 0;
+  display: inline-block;
+  visibility: collapse;
+}
+
+.tab.audible .sound-button {
+  visibility: visible;
+  margin-left: 0.25em;
+}
+
+.tab:not([data-child-ids]) .counter {
+  /* visibility: hidden; */
+}
+
+tab-item:not(.subtree-collapsed) .counter {
+  visibility: hidden;
+} 
+
+/* Hide 'new tab' button. */
+.newtab-button {
+  display: none;
+}
+
+/* active tab */
+.tab.active {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+tab-item.active .highlighter::before {
+  background-color: #fffd !important;
+}
+
+.tab:hover,
+.tab.active:hover {
+  background-color: inherit;
+}
+.tab.active .label {
+  font-weight: bold;
+  color: #f4f4f4 !important;
+}
+.tab .label,
+.tab.active .label {
+  border-bottom:  1px solid transparent;
+}
+.tab:hover .label,
+.tab.active:hover .label {
+  border-bottom:  1px dotted;
+  min-width:  0 !important;
+  flex-shrink:  1 !important;
+  flex-grow:  unset !important;
+}
+
+/* pending / unloaded tabs */
+.tab.discarded {
+  background-color: #1d1d1d;
+}
+.tab.discarded .label {
+  color: #efefefCC !important;
+}
+.tab.discarded:hover .label {
+  color: #efefef !important;
+}
+
+/* Adjust style for tab that has sound playing. */
+.tab.sound-playing .favicon::after,
+.tab.muted .favicon::after {
+  content: '🔊';
+  z-index: var(--favicon-base-z-index);
+  position: absolute;
+  font-size: 0.5em;
+  bottom: -0.35em;
+  right: -0.7em;
+}
+
+/* Adjust style for tab that is muted. */
+.tab.muted .favicon::after {
+  content: '🔇';
+}
+
+/* Pinned tabs: */
+/* Hide all non-active pinned tabs (these are included in top-bar instead) */
+.tab.pinned {
+  position: relative;
+  max-width: none;
+  width: auto;
+  top: 0 !important;
+  left: 0 !important;
+}
+.tab.pinned:not(.active) {
+  display: none;
+}
+.tab.pinned .label,
+.tab.pinned .label-content {
+  opacity: 1;
+  position: unset;
+  padding-bottom: 0;
+}
+.tab.pinned .sound-button {
+  position: relative;
+  transform: none;
+}
+.tab.pinned .twisty {
+  display: block;
+  min-width: none;
+  width: auto;
+}
+
+/* --- new tab button --- */
+
+.newtab-button-box {
+  border: none !important;
+  margin: 0 50px;
+}
+
+.newtab-button {
+  border: none !important;
+  border-radius: 8px;
+  padding: 8px 0 !important;
+  margin: 0 5px;
+}
+
+.newtab-button::before {
+  background: var(--light-3) !important;
+}
+
+.newtab-action-selector-anchor {
+  border: none !important;
+  margin-right: 10px;
+  margin-top: 3px;
+}
+
+.newtab-button:hover {
+  background: var(--dark-1);
+}
+
+/* --- dark mode --- */
+
+:root {
+    --ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --transition-time: 0.4s !important;
+    --ease-basic: linear;
+
+    --button-size: 32px; /* is this used? */
+    --icon-size: 24px; /* is this used? */
+
+    --downloads-item-height: 48px !important;
+
+    --toolbar-non-lwt-bgcolor: var(--toolbar-bgcolor) !important;
+    --toolbar-non-lwt-textcolor: var(--toolbar-color) !important;
+    --toolbar-field-focus-border-color: var(--lwt-toolbar-field-color) !important;
+
+    --toolbar-field-background-color: var(--dark-1) !important;
+    --toolbar-field-focus-background-color: var(--dark-1) !important;
+}
+
+:root{
+    /* accentcolor */
+    --lwt-accent-color: var(--dark-base) !important;
+
+    /* textcolor */
+    --lwt-text-color: var(--light-base) !important;
+
+    /* toolbar */
+    --toolbar-bgcolor: var(--dark-base) !important;
+
+    /* toolbar_text */
+    --toolbar-color: var(--light-1) !important;
+
+    --urlbarView-popup-title: var(--light-1) !important;
+
+    --urlbarView-popup-url: var(--light-4) !important;
+
+    /* toolbar_bottom_separator */
+    --toolbox-border-bottom-color: var(--dark-base) !important; /* legacy */
+    --chrome-content-separator-color: var(--dark-base) !important;
+
+    /* icons */
+    --lwt-toolbarbutton-icon-fill: var(--light-1) !important;
+
+    /* icons_attention */
+    --lwt-toolbarbutton-icon-fill-attention: var(--accent) !important;
+
+    /* button_background_hover */
+    --lwt-toolbarbutton-hover-background: var(--dark-2) !important;
+
+    /* button_background_active */
+    --lwt-toolbarbutton-active-background: var(--dark-4) !important;
+
+    --lwt-toolbar-field-color: var(--light-2) !important;
+
+    /* popup */
+    --arrowpanel-background: var(--dark-1) !important;
+    --arrowpanel-dimmed: var(--dark-2) !important; /* hover color */
+    --arrowpanel-dimmed-further: var(--dark-3) !important; /* hover color */
+
+    /* popup_text */
+    --arrowpanel-color: var(--light-1) !important;
+    --autocomplete-popup-color: var(--light-1) !important;
+    --panel-disabled-color: hsla(0, 0%, 100%, 0.5) !important;
+
+    /* popup_border */
+    --arrowpanel-border-color: var(--dark-1) !important;
+    --autocomplete-popup-border-color: var(--dark-1) !important;
+
+    /* popup_highlight */
+    --autocomplete-popup-highlight-background: var(--dark-2) !important;
+
+    /* popup_highlight_text */
+    --autocomplete-popup-highlight-color: var(--light-2) !important;
+
+    /* urlbar icon */
+    --toolbarbutton-hover-background: var(--dark-4) !important;
+    --toolbarbutton-active-background: var(--dark-base) !important;
+
+    --sidebar-shadow-color: var(--dark-0);
+
+    /* background color when starting firefox, or when loading pages... */
+    --tabpanel-background-color: var(--dark-0) !important;/* /#2B2A33; */
+
+    /* history popup bar left */
+    /* sidebar */
+    --lwt-sidebar-background-color: var(--dark-base) !important;
+
+    /* sidebar_text */
+    --lwt-sidebar-text-color: var(--light-base) !important;
+}
+
+
+:root:-moz-lwtheme-darktext,
+:root toolbar:not([brighttext]),
+.tabbrowser-tab[visuallyselected] {
+    --toolbarbutton-hover-background: var(--lwt-toolbarbutton-hover-background, hsla(0, 0%, 0%, 0.07)) !important;
+    --toolbarbutton-active-background: var(--lwt-toolbarbutton-active-background, hsla(0, 0%, 0%, 0.11)) !important;
+}
+
+:root.sidebar #background {
+  background-color: #181A1B;
+  border: none;
+  box-shadow: none;
+}

@@ -1,1 +1,16 @@
 rescue/hardware-configuration.nix
+dist
+
+# Nix store paths
+**/*.drv
+**/*.nar
+**/*.narinfo
+
+# Nix build output
+result/
+
+# File backups
+**/*.bak
+
+# Zsh residue
+**/core

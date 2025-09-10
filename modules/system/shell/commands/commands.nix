@@ -1,25 +1,37 @@
-{ profile, stdenv, pkgs, ... }:
+{ nixtraLib, config, stdenv, lib, pkgs, ... }:
 
-if profile.shell.commands.enable then {
-  environment.systemPackages = [
-    (pkgs.callPackage ./screenshot.nix { })
-    (pkgs.callPackage ./rebuild.nix { inherit profile; })
-    (pkgs.callPackage ./check.nix { inherit profile; })
-    (pkgs.callPackage ./record.nix { })
-    (pkgs.callPackage ./unlock.nix { inherit profile; })
-    (pkgs.callPackage ./update.nix { inherit profile; })
-    (pkgs.callPackage ./upgrade.nix { inherit profile; })
-    (pkgs.callPackage ./regen-hardware.nix { })
-    (pkgs.callPackage ./regen-bootloader.nix { })
-    (pkgs.callPackage ./fix-bootloader.nix { inherit profile; })
-    (pkgs.callPackage ./enter-temp-fhs.nix { })
-    (pkgs.callPackage ./create-iso.nix { })
-    (pkgs.callPackage ./hide-git-dir.nix { })
-    (pkgs.callPackage ./unhide-git-dir.nix { })
-    (pkgs.callPackage ./clean.nix { inherit profile; })
-    (pkgs.callPackage ./check-cliphist-store.nix { inherit profile; })
-    (pkgs.callPackage ./hyprland/play-startup-sound.nix { inherit profile; })
-    (pkgs.callPackage ./theme/reset-cursor.nix { })
-  ];
-} else
-  { }
+let inherit (nixtraLib.command) createCommand;
+in {
+  config = lib.mkIf config.nixtra.shell.commands.enable {
+    environment.systemPackages = [
+      (pkgs.callPackage ./screenshot.nix { inherit config createCommand; })
+      (pkgs.callPackage ./rebuild.nix { inherit config createCommand; })
+      (pkgs.callPackage ./restore-backup.nix { inherit config createCommand; })
+      (pkgs.callPackage ./build-iso.nix { inherit config createCommand; })
+      (pkgs.callPackage ./check.nix { inherit config createCommand; })
+      (pkgs.callPackage ./record.nix { inherit config createCommand; })
+      (pkgs.callPackage ./unlock.nix { inherit config createCommand; })
+      (pkgs.callPackage ./update.nix { inherit config createCommand; })
+      (pkgs.callPackage ./upgrade.nix { inherit config createCommand; })
+      (pkgs.callPackage ./regen-hardware.nix { inherit config createCommand; })
+      (pkgs.callPackage ./regen-bootloader.nix {
+        inherit config createCommand;
+      })
+      (pkgs.callPackage ./fix-bootloader.nix { inherit config createCommand; })
+      (pkgs.callPackage ./enter-temp-fhs.nix { inherit config createCommand; })
+      (pkgs.callPackage ./create-iso.nix { inherit config createCommand; })
+      (pkgs.callPackage ./hide-git-dir.nix { inherit config createCommand; })
+      (pkgs.callPackage ./unhide-git-dir.nix { inherit config createCommand; })
+      (pkgs.callPackage ./clean.nix { inherit config createCommand; })
+      (pkgs.callPackage ./check-cliphist-store.nix {
+        inherit config createCommand;
+      })
+      (pkgs.callPackage ./check-security-status.nix {
+        inherit config createCommand;
+      })
+      (pkgs.callPackage ./theme/reset-cursor.nix {
+        inherit config createCommand;
+      })
+    ];
+  };
+}

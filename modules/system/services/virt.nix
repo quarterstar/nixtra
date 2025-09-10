@@ -1,27 +1,28 @@
-{ profile, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-if profile.security.virtualization then {
-  environment.systemPackages = with pkgs; [ virtiofsd ];
+{
+  config = lib.mkIf config.nixtra.security.virtualization {
+    environment.systemPackages = with pkgs; [ virtiofsd ];
 
-  # Enable virtualization
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu.vhostUserPackages = with pkgs;
-      [ virtiofsd ]; # Allow shared filesystems between host and guest
-  };
-  programs.virt-manager.enable = true;
-
-  # For shared directories on Windows guests
-  services.samba.enable = true;
-  services.samba.settings = {
-    shared = {
-      path = "/home/${profile.user.username}/Volumes/win11-re";
-      browseable = "yes";
-      "read only" = "no";
+    # Enable virtualization
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu.vhostUserPackages = with pkgs;
+        [ virtiofsd ]; # Allow shared filesystems between host and guest
     };
-  };
+    programs.virt-manager.enable = true;
 
-  # Clipboard sharing
-  services.spice-vdagentd.enable = true;
-} else
-  { }
+    # For shared directories on Windows guests
+    services.samba.enable = true;
+    services.samba.settings = {
+      shared = {
+        path = "/home/${config.nixtra.user.username}/Volumes/win11-re";
+        browseable = "yes";
+        "read only" = "no";
+      };
+    };
+
+    # Clipboard sharing
+    services.spice-vdagentd.enable = true;
+  };
+}

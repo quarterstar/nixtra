@@ -1,4 +1,4 @@
-{ createCommand, ... }:
+{ config, createCommand, ... }:
 
 createCommand {
   name = "create-iso";

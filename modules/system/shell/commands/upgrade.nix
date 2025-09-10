@@ -1,4 +1,4 @@
-{ profile, createCommand, ... }:
+{ config, createCommand, ... }:
 
 createCommand {
   name = "upgrade";
@@ -7,6 +7,6 @@ createCommand {
   command = ''
     nix-channel --update
     nix flake update --flake /etc/nixos
-    ${profile.shell.commands.prefix}-rebuild --upgrade
+    ${config.nixtra.shell.commands.prefix}-rebuild --upgrade
   '';
 }

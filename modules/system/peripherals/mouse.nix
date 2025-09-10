@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   # mouse accel go brrrrrrrrrrrrr

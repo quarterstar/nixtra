@@ -299,18 +299,18 @@ echo -n "Writing configuration..."
 boot_disk_uuid=$(get_disk_uuid "$boot_device")
 storage_disk_uuid=$(get_disk_uuid "$storage_device")
 
-write_property "/mnt/etc/nixos/settings.nix" "partitions.boot" "/dev/disk/by-uuid/$boot_disk_uuid"
-write_property "/mnt/etc/nixos/settings.nix" "partitions.storage" "/dev/disk/by-uuid/$storage_disk_uuid"
+write_property "/mnt/etc/nixos/settings.nix" "disk.partitions.boot" "/dev/disk/by-uuid/$boot_disk_uuid"
+write_property "/mnt/etc/nixos/settings.nix" "disk.partitions.storage" "/dev/disk/by-uuid/$storage_disk_uuid"
 
 if [ "$encrypt_drive" = "yes" ]; then
   decrypted_root_uuid=$(get_disk_uuid "$decrypted_partition_device")
-  write_property "/mnt/etc/nixos/settings.nix" "encryption.enable" "true"
-  write_property "/mnt/etc/nixos/settings.nix" "encryption.decryptedRootDevice" "/dev/disk/by-uuid/$decrypted_disk_uuid"
+  write_property "/mnt/etc/nixos/settings.nix" "disk.encryption.enable" "true"
+  write_property "/mnt/etc/nixos/settings.nix" "disk.encryption.decryptedRootDevice" "/dev/disk/by-uuid/$decrypted_disk_uuid"
 fi
 
 if [ "$use_swap" = "yes" ]; then
-  write_property "/mnt/etc/nixos/settings.nix" "swap.size" $(parse_size_in_mb "$swap")
-  write_property "/mnt/etc/nixos/settings.nix" "swap.enable" "true"
+  write_property "/mnt/etc/nixos/settings.nix" "disk.swap.size" $(parse_size_in_mb "$swap")
+  write_property "/mnt/etc/nixos/settings.nix" "disk.swap.enable" "true"
 fi
 
 write_property "/mnt/etc/nixos/settings.nix" "system.timezone" "$timezone"

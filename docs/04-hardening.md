@@ -9,6 +9,8 @@ While Nixtra is hardened by default, there are some additional things you can do
 - [Sandboxing](##sandboxing)
 - [Disable IPv6](##disable)
 - [Spoof the Tor Exit Node IP address in Tor Browser](##spoofing)
+- [Enable Secure Boot for NixOS with Lanzaboote](##enable_secure)
+- [Day-to-Day Operation Tips](##Day-to-Day)
 
 ## Sandboxing
 
@@ -159,3 +161,35 @@ If you want to permanently stop using the proxy, you need to revert the changes 
 
 > [!IMPORTANT]
 > After you confirm that the proxy setup works, check that "Proxy IP Address" in deviceinfo.me says "None detected". If it is, websites may still block your connection.
+
+## Enable Secure Boot for NixOS with Lanzaboote
+
+Secure boot is a security feature built into the hardware of modern computers with UEFI that checks the integrity and authenticity of boot software, like the OS loader and firmware drivers, by only allowing software that is signed with trusted cryptographic keys to run during the boot process. This can help prevent rootkits, especially those that infect the bootloader (bootkits) or another critical system component.
+
+To set it up for Nixtra, first generate secure boot keys:
+
+```
+sbctl create-keys
+```
+
+Then, rebuild your system:
+
+```
+nixtra-rebuild
+```
+
+And lastly from the software side, verify that the installation of the keys was successful:
+
+```
+sbctl verify
+```
+
+It is expected that the files ending with `bzImage.efi` are *not* signed.
+
+After that, enable Secure Boot in your firmware, and it should work.
+
+For further documentation regarding Lanzaboote, check out its official [page](https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md).
+
+## Day-to-Day Operation Tips
+
+- If you need to share a document, image, or other multimedia over the network, make sure that it is clean of metadata by using the `mat2` utility; it will generate a cleaned copy of that file.

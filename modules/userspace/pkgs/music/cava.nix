@@ -1,5 +1,6 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ cava ];
+  programs.cava.enable = true;
+  #home.packages = with pkgs; [ cava ];
 }

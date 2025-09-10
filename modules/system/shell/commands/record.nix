@@ -1,4 +1,4 @@
-{ pkgs, createCommand, ... }:
+{ config, pkgs, createCommand, ... }:
 
 createCommand {
   name = "record";
@@ -6,8 +6,6 @@ createCommand {
 
   # https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1
   command = ''
-    #!/usr/bin/env bash
-
     pidf="$HOME/Videos/Screencasts/process.pid"
     WF_RECORDER_OPTS=""
     VIDEOEXT="mkv"

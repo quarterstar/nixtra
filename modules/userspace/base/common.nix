@@ -1,37 +1,54 @@
-{ pkgs, profile, ... }:
+{ osConfig, settings, nixtraLib, lib, config, pkgs, ... }:
 
 {
   imports = [
-    (../pkgs/terminal + ("/" + profile.user.terminal) + ".nix")
-    (../pkgs/shell + ("/" + profile.user.shell) + ".nix")
+    #../../options.nix
+    #../../system/desktop/flagship-hyprland/options.nix
 
-    ../theme/type.nix
-    ../theme/applications.nix
+    # Terminals
+    (nixtraLib.loader.conditionalImport (config.nixtra.user.terminal == "kitty")
+      ../pkgs/terminal/kitty.nix)
 
-    ../config/global/prelude.nix
-    (../config + ("/" + profile.user.config) + "/prelude.nix")
+    # Shells
+    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "bash")
+      ../pkgs/shell/bash.nix)
+    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "starship")
+      ../pkgs/shell/starship.nix)
+    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "zsh")
+      ../pkgs/shell/zsh.nix)
+    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "fish")
+      ../pkgs/shell/fish.nix)
+
+    ../config/prelude.nix
   ];
 
-  home.sessionVariables = {
-    EDITOR = profile.user.editor;
-    BROWSER = profile.user.browser;
-    DEFAULT_BROWSER = profile.user.browser;
-    TERMINAL = profile.user.terminal;
-  };
+  config = {
+    home.sessionVariables = {
+      EDITOR = config.nixtra.user.editor;
+      TERMINAL = config.nixtra.user.terminal;
+    };
 
-  # Enable automatic management of directories specified in the XDG specification
-  # https://xdgbasedirectoryspecification.com/
-  xdg = {
-    enable = true;
-    portal = {
+    # Enable automatic management of directories specified in the XDG specification
+    # https://xdgbasedirectoryspecification.com/
+    xdg = { enable = true; };
+
+    # Fix https://github.com/nix-community/home-manager/issues/1213
+    #xdg.configFile."mimeapps.list".force = true;
+
+    xdg.portal = {
       enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      extraPortals = with pkgs;
+        [
+          kdePackages.xdg-desktop-portal-kde
+          #xdg-desktop-portal-gtk
+        ];
+
+      config = {
+        # Fix Portal v1.17+ incompatibility
+        common.default = "*";
+
+        #"org.freedesktop.impl.portal.FileChooser" = { default = "kde"; };
+      };
     };
   };
-
-  # Fix Portal v1.17+ incompatibility
-  xdg.portal.config.common.default = "*";
-
-  # Fix https://github.com/nix-community/home-manager/issues/1213
-  xdg.configFile."mimeapps.list".force = true;
 }

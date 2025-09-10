@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs;
@@ -7,6 +7,6 @@
       #python312Packages.pip
 
       (pkgs.python312.withPackages
-        (ppkgs: [ ppkgs.openai ppkgs.python-dotenv ]))
+        (ppkgs: with ppkgs; [ openai python-dotenv psutil ]))
     ];
 }

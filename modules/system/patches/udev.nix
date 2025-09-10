@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # udev hidraw rules to make motion controls and other things work with controllers in games

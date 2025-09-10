@@ -1,0 +1,5 @@
+@-moz-document domain(chat.openai.com) {
+	div[class*="Sidebar"] {
+		display: none !important;
+	}
+}
