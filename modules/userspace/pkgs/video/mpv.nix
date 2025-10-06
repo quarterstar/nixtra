@@ -1,5 +1,12 @@
-{ config, pkgs, ... }:
+{ config, nixtraLib, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ mpv ];
+  programs.mpv.enable = true;
+
+  home.packages = [
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = "${pkgs.mpv}/bin/mpv";
+      profile = "mpv";
+    })
+  ];
 }

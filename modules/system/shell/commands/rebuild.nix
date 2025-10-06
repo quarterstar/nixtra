@@ -1,20 +1,16 @@
-{ pkgs, config, createCommand, ... }:
+{ nixtraLib, pkgs, config, createCommand, ... }:
 
 createCommand {
   name = "rebuild";
-
   buildInputs = with pkgs; [ openssl ];
-
-  strictFailure = true;
-  requiresRoot = true;
-
+  requireRoot = true;
   command = ''
     ORIGINAL_DIR="$(pwd)"
     trap 'cd "$ORIGINAL_DIR"' EXIT
 
     # Backup configuration after successful rebuild
     BACKUP_DIR="/var/backups/nixos-backups"
-    BACKUP_PW="stub-password-change-me" # <-- change this to a secure secret or integrate your key management
+    BACKUP_PW="nixtra" # stub for now
     MAX_KEEP=25
 
     # Ensure backup dir exists and is secure
@@ -25,7 +21,10 @@ createCommand {
     cd /etc/nixos
     git add --intent-to-add .
     if command -v "nixfmt" &> /dev/null; then
-      nixfmt modules
+      nixfmt ${
+        nixtraLib.shell.nixListToBashBraceExpansion
+        config.nixtra.system.nixDirectories
+      }
     fi
     cd - > /dev/null
     rm -rf /home/${config.nixtra.user.username}/.cache/nix/tarball-cache # Workaround fix for root ownership permission issue

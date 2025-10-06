@@ -7,11 +7,18 @@
 - Ask user in the installer for VPN / Proxy configuration
 - Reduce the number of pre-installed packages in profiles (to make the distro more lightweight)
 - Use impermanence
-- Separate `options` and `config` instead of defining `profile`
 - Wipe clipboard history on shutdown
 - Implement automatic config backup for each generation with encryption
 - Add game to play during primary installation step
 - Notify user when a shell alias is used for the first time
+- Fix NVIDIA module Nix error
+- Automatically play soothing music when learning or using a learning-related program (e.g., Anki, Okular)
+- Mitigate prefix hijacks targetting guard nodes with vulnerable BGP by verifying RPKI presence
+- eDNS
+- Add IMA support
+- Add GUI widgets for the control functions with AGS or some other toolkit
+- Implement Numpad compatibility
+- Implement pywal
 
 # Bugfixes
 

@@ -2,9 +2,6 @@
 
 createCommand {
   name = "restore-backup";
-
-  strictFailure = true;
-
   command = ''
     ORIGINAL_DIR="$(pwd)"
     trap 'cd "$ORIGINAL_DIR"' EXIT

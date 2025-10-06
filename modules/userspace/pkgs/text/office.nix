@@ -1,5 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixtraLib, ... }:
 
 {
-  home.packages = with pkgs; [ libreoffice ];
+  home.packages = with pkgs; [
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = "${pkgs.libreoffice}/bin/libreoffice";
+      profile = "libreoffice";
+    })
+    pkgs.libreoffice
+  ];
 }

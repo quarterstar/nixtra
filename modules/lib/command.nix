@@ -1,10 +1,8 @@
-{ lib, pkgs, config, settings, ... }:
+{ lib, pkgs, config, ... }:
 
 {
-  # TODO: update scripts to change strictFailure to true
   createCommand = { name, prefix ? "${config.nixtra.shell.commands.prefix}"
-    , command, buildInputs ? [ ], strictFailure ? false, requireRoot ? false
-    , ... }:
+    , command, buildInputs ? [ ], strictFailure ? true, requireRoot ? false }:
     let
       pname = if prefix != "" then "${prefix}-${name}" else "${name}";
       script = pkgs.writeScript "${pname}" ''

@@ -1,5 +1,7 @@
-{ config, ... }:
+{ lib, config, ... }:
 
 {
-  hardware.cpu.intel.updateMicrocode = true;
+  config = lib.mkIf (config.nixtra.hardware.cpu == "intel") {
+    hardware.cpu.intel.updateMicrocode = true;
+  };
 }

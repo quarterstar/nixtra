@@ -10,11 +10,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    rust-flake = {
-      url = "github:cpu/rust-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,21 +45,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    betterfox = {
-      url = "github:heitoraugustoln/betterfox-nix";
+    zeek-nix = {
+      url = "github:hardenedlinux/zeek-nix/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs @ { self, nixpkgs, nur, nixpkgs-unstable, flake-parts, home-manager, rust-flake, sops-nix, lanzaboote, disko, nixos-generators, betterfox, ... }:
+  outputs = inputs @ { self, nixpkgs, nur, nixpkgs-unstable, flake-parts, home-manager, sops-nix, lanzaboote, disko, nixos-generators, zeek-nix, ... }:
     let
       settings = import ./settings.nix;
+      profileSettings = import (./profiles + ("/" + settings.profile) + "/settings.nix");
       unstableNixpkgsConfig = import ./modules/system/unstable-configuration.nix;
       hostname =
-        if settings.system.hostnameProfilePrefix then
-          "${settings.system.hostname}-${settings.config.profile}"
+        if profileSettings.useHostnameProfilePrefix then
+          "${profileSettings.hostname}-${settings.profile}"
         else
-          settings.system.hostname;
+          profileSettings.hostname;
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
@@ -72,17 +68,31 @@
 
       systems = [ ];
 
-      perSystem = { config, pkgs, system, ... }: {
+      perSystem = { config, pkgs, system, ... }: let
+  pkgsWithZeek = import inputs.nixpkgs {
+    inherit system;
+    overlays = (inputs.zeek-nix.overlays or [ inputs.zeek-nix.overlay ]);
+  };
+      in {
+        packages = {
+          #zeek = inputs.zeek-nix.packages.${system}.zeek-latest;
+
+          # optional: expose helper that builds zeek with plugins using zeek-nix's lib
+          # zeek-with-plugins = inputs.zeek-nix.lib.zeekWithPlugins {
+          #   package = inputs.zeek-nix.packages.${system}.zeek-latest;
+          #   plugins = [
+          #     # example: inputs.zeek-nix.lib.nixpkgs.zeek-sources.<plugin>
+          #   ];
+          # };
+        };
       };
 
       flake.nixosModules = {
-        #myFormats = { config, modulePath, ... }: {
-        #};
       };
 
       flake.nixosConfigurations = {
         ${hostname} = nixpkgs.lib.nixosSystem {
-          system = settings.system.arch;
+          system = profileSettings.arch;
           modules = [
             ./modules/system/configuration.nix
             home-manager.nixosModules.default
@@ -93,10 +103,15 @@
           ];
           specialArgs = {
             inherit settings;
+            inherit profileSettings;
             inherit inputs;
-            unstable-pkgs = nixpkgs-unstable.legacyPackages.${settings.system.arch};
+            #pkgs = import nixpkgs {
+            #  system = profileSettings.arch;
+            #  overlays = [ zeek-nix.overlays.default ];
+            #};
+            unstable-pkgs = nixpkgs-unstable.legacyPackages.${profileSettings.arch};
             #unstable-pkgs = import nixpkgs-unstable {
-            #  system = settings.system.arch;
+            #  system = profileSettings.arch;
             #  config = unstableNixpkgsConfig {
             #    lib = inputs.nixpkgs-unstable.lib;
             #  };
@@ -105,7 +120,7 @@
         };
         # nix build .#nixosConfigurations.iso.config.system.build.images.iso
         iso = nixpkgs.lib.nixosSystem {
-          system = settings.system.arch;
+          system = profileSettings.arch;
           modules = [
             #(nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
             ({ pkgs, modulesPath, ... }: {

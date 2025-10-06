@@ -1,12 +1,12 @@
-{ username, settings, ... }:
+{ username, ... }:
 
 {
   imports = [
     ./common.nix
-    ../../../profiles/${settings.config.profile}/homes/${username}.nix
+    ../../../profiles/${config.nixtra.config.profile}/homes/${username}.nix
   ];
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
-  home.stateVersion = settings.system.version;
+  home.stateVersion = config.nixtra.system.version;
 }

@@ -1,4 +1,4 @@
-{ config, settings, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [ sops ];
@@ -7,6 +7,6 @@
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "/root/.config/sops/age/keys.txt";
 
-  sops.secrets = settings.security.sops.keys;
-  sops.templates = settings.security.sops.templates config.sops;
+  sops.secrets = config.nixtra.security.sops.keys;
+  #sops.templates = config.nixtra.security.sops.templates config.sops;
 }

@@ -1,11 +1,11 @@
-{ settings, unstable-pkgs, ... }:
+{ config, unstable-pkgs, ... }:
 
 {
   services.ollama = {
     enable = true;
-    acceleration = if settings.hardware.gpu == "amd" then
+    acceleration = if config.nixtra.hardware.gpu == "amd" then
       "rocm"
-    else if settings.hardware.gpu == "nvidia" then
+    else if config.nixtra.hardware.gpu == "nvidia" then
       "cuda"
     else
       false;

@@ -1,5 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixtraLib, ... }:
 
 {
-  home.packages = with pkgs; [ keepassxc ];
+  programs.keepassxc.enable = true;
+
+  home.packages = with pkgs;
+    [
+      (nixtraLib.sandbox.wrapFirejail {
+        executable = "${pkgs.keepassxc}/bin/keepassxc";
+        profile = "keepassxc";
+      })
+    ];
 }

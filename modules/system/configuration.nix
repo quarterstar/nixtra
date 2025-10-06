@@ -1,4 +1,5 @@
-{ config, settings, timestamp, lib, pkgs, unstable-pkgs, inputs, nur, ... }:
+{ config, settings, profilePreset, profileSettings, timestamp, lib, pkgs
+, unstable-pkgs, inputs, nur, ... }:
 
 let
   # Note for beginners:
@@ -11,7 +12,7 @@ let
 
   modulesPath = "${inputs.nixpkgs}/nixos/modules";
 
-  nixtraLib = import ../lib/lib.nix { inherit config lib pkgs settings; };
+  nixtraLib = import ../lib/lib.nix { inherit config lib pkgs; };
 in {
   imports = [
     inputs.home-manager.nixosModules.default
@@ -23,30 +24,21 @@ in {
     ../options.nix
 
     # Profile-based configuration
-    (../../profiles + ("/" + settings.config.profile) + "/configuration.nix")
+    (../../profiles + ("/" + settings.profile) + "/configuration.nix")
+    (../../presets + ("/" + profileSettings.preset) + "/configuration.nix")
 
     # Parts
-    # See the module evaluation section in docs/05-cheatsheet.md
-    # to understand why conditional importing is used here.
-    (./cpu + ("/" + settings.hardware.cpu) + ".nix")
-    (./gpu + ("/" + settings.hardware.gpu) + ".nix")
+    ./cpu/cpu.nix
+    ./gpu/gpu.nix
     ./audio/pipewire.nix
     ./audio/pulseaudio.nix
     ./server/wayland.nix
-    #./server/x11.nix
-    ./wm/hyprland.nix
-    ./theme/nordic.nix
-    ./shell/backend/zsh.nix
-    ./shell/backend/common.nix
-    (./fs + ("/" + settings.system.filesystem) + ".nix")
-
-    # Desktop configurations
-    (nixtraLib.loader.conditionalImport (config.nixtra.display.enable
-      && config.nixtra.user.desktop.type == "flagship-hyprland")
-      (./desktop/flagship-hyprland/prelude.nix))
-    ./desktop/flagship-hyprland/options.nix
-
+    ./shell/backend/backend.nix
+    ./fs/fs.nix
+    ./memory/memory.nix
+    ./desktop/desktop.nix
     ./peripherals/peripherals.nix
+    ./patches/patches.nix
 
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -57,12 +49,13 @@ in {
     #"${modulesPath}/profiles/hardened.nix" # NixOS security hardening
     "${inputs.nix-mineral}/nix-mineral.nix" # Complementary defaults for hardening for ones missed by security.nix and hardened.nix
 
+    # Performance
+    ./performance/performance.nix
+
     # Networks
     ./networks/tornet.nix
 
     # Settings-based imports
-    ./fs/swap.nix
-    ./patches/udev.nix
 
     # Shell
     ./shell/commands/commands.nix
@@ -71,16 +64,7 @@ in {
     # Other
     ./fonts.nix
 
-    # Proxy
-    ./services/tor.nix
-    ./services/microsocks.nix
-    ./services/i2p.nix
-
-    # Scheduling
-    ./services/tasks.nix
-
-    # Virtualization
-    ./services/virt.nix
+    ./services/services.nix
 
     ./extra/extra.nix
   ];
@@ -89,11 +73,11 @@ in {
     _module.args = { inherit nixtraLib; };
 
     # Set the options provided by the user's profile
-    #inherit nixtra;
-    nixtra =
-      import ../../profiles/${settings.config.profile}/profile-settings.nix {
-        inherit pkgs config;
-      };
+    nixtra = (import ../../presets/${profileSettings.preset}/profile.nix {
+      inherit pkgs config;
+    }) // (import ../../profiles/${settings.profile}/profile.nix {
+      inherit pkgs config;
+    });
 
     nix = {
       settings = {
@@ -113,10 +97,10 @@ in {
 
     # Enable NUR
     # NUR for unstable channel(s) is considered a security risk in Nixtra, so it remains disabled.
-    nixpkgs.overlays =
-      if settings.system.nur then [ inputs.nur.overlays.default ] else [ ];
+    nixpkgs.overlays = # [ inputs.zeek-nix.overlays.default ] ++
+      lib.optionals config.nixtra.system.nur [ inputs.nur.overlays.default ];
     #nixpkgs.config.packageOverrides = pkgs:
-    #  if settings.system.nur then {
+    #  if config.nixtra.system.nur then {
     #    nur = import (builtins.fetchTarball
     #      "https://github.com/nix-community/NUR/archive/master.tar.gz") {
     #        inherit pkgs;
@@ -171,18 +155,20 @@ in {
     environment.enableDebugInfo = true;
 
     # Set system's name
-    networking.hostName = if settings.system.hostnameProfilePrefix then
-      "${settings.system.hostname}-${settings.config.profile}"
+    networking.hostName = if profileSettings.useHostnameProfilePrefix then
+      "${profileSettings.hostname}-${settings.profile}"
     else
-      settings.system.hostname;
+      profileSettings.hostname;
 
     # Set timezone
-    time.timeZone =
-      if !settings.system.timezone.auto then settings.system.timezone else null;
-    services.automatic-timezoned.enable = settings.system.timezone.auto;
+    time.timeZone = if !config.nixtra.system.timezone.auto then
+      config.nixtra.system.timezone
+    else
+      null;
+    services.automatic-timezoned.enable = config.nixtra.system.timezone.auto;
 
     # Select internationalisation properties.
-    i18n.defaultLocale = settings.system.locale;
+    i18n.defaultLocale = config.nixtra.system.locale;
 
     # Make users immutable (declarative)
     users.mutableUsers = !config.nixtra.user.declarativeUsers.enable;
@@ -216,6 +202,7 @@ in {
       extraSpecialArgs = {
         inherit nixtraLib;
         inherit settings;
+        inherit profileSettings;
         inherit inputs;
         inherit unstable-pkgs;
       };
@@ -229,7 +216,7 @@ in {
       #    inherit username;
       #    inherit settings;
       #  };
-      #}) settings.security.extraUsers));
+      #}) config.nixtra.security.extraUsers));
 
       # Automatically fix collisions
       backupFileExtension = "hm.backup.${currentTimestamp}";
@@ -237,7 +224,6 @@ in {
       sharedModules = [
         (import ../options.nix)
         (import ./desktop/flagship-hyprland/options.nix)
-        #{ config = { nixtra = config.nixtra; }; }
       ];
     };
 
@@ -256,12 +242,12 @@ in {
     } // (builtins.listToAttrs (map (username: {
       name = username;
       value = { isNormalUser = true; };
-    }) settings.security.extraUsers));
+    }) config.nixtra.security.extraUsers));
 
     # This option defines the first version of NixOS you have installed on this particular machine,
     # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
     # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
     system.stateVersion =
-      settings.system.initialVersion; # Did you read the comment?
+      config.nixtra.system.initialVersion; # Did you read the comment?
   };
 }

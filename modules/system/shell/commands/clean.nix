@@ -80,6 +80,13 @@ createCommand {
     find /home/${config.nixtra.user.username} -type f -name "*.hm.backup.*" -exec rm -f {} \;
     log "Home Manager backup files cleaned up."
 
+    log "Cleaning up 'core' dump files..."
+    find {/etc/nixos,/root,$HOME} -type f -name 'core*' -print0 | while IFS= read -r -d "" file; do
+      if file "$file" | grep -qiE 'core (file|dump)'; then
+        rm -f -- "$file"
+      fi
+    done
+
     log "Removing unused development environments..."
     find /tmp -maxdepth 1 -type d -name "nix-shell-*" -exec rm -rf {} +
     find /tmp -maxdepth 1 -type d -name "nix-develop-*" -exec rm -rf {} +

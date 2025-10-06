@@ -1,6 +1,7 @@
 { config, pkgs, createCommand, ... }:
 
 createCommand {
+  prefix = "desktop";
   name = "schedule-reminder";
   buildInputs = with pkgs; [ libnotify ];
 

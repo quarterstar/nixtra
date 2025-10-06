@@ -33,10 +33,15 @@
         "hrsh7th/nvim-cmp",                -- Autocompletion engine
         "nvim-lua/plenary.nvim",           -- Utility functions required by many plugins
         "hrsh7th/cmp-nvim-lsp",            -- The bridge between nvim-cmp and LSP capabilities
+        "folke/snacks.nvim",                     -- QoL plugins
 
         -- Productivity Boosters
         "tpope/vim-commentary",         -- Easy commenting/uncommenting code
-        "windwp/nvim-autopairs",        -- Auto-close brackets, quotes, etc.
+        {
+          "windwp/nvim-autopairs",        -- Auto-close brackets, quotes, etc.
+          event = "InsertEnter",
+          config = true,
+        },
         "akinsho/bufferline.nvim",      -- Buffer/tab line with tabs and close buttons
         "kyazdani42/nvim-tree.lua",     -- File explorer sidebar
         "iamcco/markdown-preview.nvim", -- Markdown previewer
@@ -51,6 +56,11 @@
         "nvim-lualine/lualine.nvim",     -- Statusline
         "Galicarnax/vim-regex-syntax",   -- PCRE syntax highlighting
         "nvim-telescope/telescope.nvim", -- Fancy interactive diagnostics windows
+        {
+          "catgoose/nvim-colorizer.lua",  -- Color highlighter
+          event = "BufReadPre",
+        },
+        "goolord/alpha-nvim",            -- Greeter
 
         -- Debugging
         "mfussenegger/nvim-dap", -- Debug Adapter Protocol client
@@ -118,6 +128,8 @@
       --- LSP SETUP ---
       -----------------
 
+      local util = require('lspconfig.util')
+
       -- After plugins loaded
       vim.defer_fn(function()
         local mason = require("mason")
@@ -163,6 +175,7 @@
         lspconfig.nixd.setup {
           on_attach = on_attach,
           capabilities = capabilities,
+          root_dir = util.root_pattern('flake.nix', 'default.nix', '.git'),
         }
 
         -- Setup C/C++ LSP
@@ -242,6 +255,19 @@
       vim.opt.wrap = true      -- Enable line wrapping
       vim.opt.linebreak = true -- Break lines at word boundaries
       vim.opt.scrolloff = 8    -- Keep 8 lines visible above and below the cursor
+
+      -- Remember the last position of the cursor in a file
+      vim.api.nvim_create_augroup("remember_cursor_position", { clear = true })
+      vim.api.nvim_create_autocmd("BufReadPost", {
+        group = "remember_cursor_position",
+        pattern = "*",
+        callback = function()
+          local line = vim.fn.line("'\"")
+          if line > 0 and line <= vim.fn.line("$") then
+            vim.api.nvim_command("normal! g'\"")
+          end
+        end
+      })
 
       ----------------
       --- KEYBINDS ---

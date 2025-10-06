@@ -1,4 +1,4 @@
-{ settings, config, lib, pkgs, modulesPath, ... }:
+{ profileSettings, config, lib, pkgs, modulesPath, ... }:
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
@@ -10,19 +10,23 @@
   boot.initrd.availableKernelModules =
     [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelPackages = lib.mkIf settings.security.useHardenedKernelPackage
-    pkgs.linuxKernel.packages.linux_hardened;
+  boot.kernelPackages = lib.mkMerge [
+    (lib.mkIf (config.nixtra.system.kernel == "security")
+      pkgs.linuxKernel.packages.linux_hardened)
+    (lib.mkIf (config.nixtra.system.kernel == "gaming")
+      pkgs.linuxKernel.packages.linux_zen)
+  ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.initrd.supportedFilesystems = settings.system.supportedFilesystems;
+  boot.initrd.supportedFilesystems = config.nixtra.system.supportedFilesystems;
 
   # Fix bwrap exec error on Flatpak
   boot.kernel.sysctl = { "kernel.unprivileged_userns_clone" = 1; };
 
   # Full Disk Encryption
-  boot.initrd.luks = if settings.disk.encryption.enable then {
+  boot.initrd.luks = if config.nixtra.disk.encryption.enable then {
     devices.cryptroot = {
-      device = settings.disk.partitions.storage;
+      device = config.nixtra.disk.partitions.storage;
       allowDiscards = true;
       preLVM = true;
     };
@@ -30,16 +34,16 @@
     { };
 
   fileSystems."/" = {
-    device = if settings.disk.encryption.enable then
-      settings.disk.encryption.decryptedRootDevice
+    device = if config.nixtra.disk.encryption.enable then
+      config.nixtra.disk.encryption.decryptedRootDevice
     else
-      settings.disk.partitions.storage;
+      config.nixtra.disk.partitions.storage;
 
-    fsType = settings.system.filesystem;
+    fsType = config.nixtra.system.filesystem;
   };
 
   fileSystems."/boot" = {
-    device = settings.disk.partitions.boot;
+    device = config.nixtra.disk.partitions.boot;
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
   };
@@ -56,5 +60,5 @@
   # networking.interfaces.virbr1.useDHCP = lib.mkDefault true;
   # networking.interfaces.virbr2.useDHCP = lib.mkDefault true;
 
-  nixpkgs.hostPlatform = settings.system.arch;
+  nixpkgs.hostPlatform = profileSettings.arch;
 }

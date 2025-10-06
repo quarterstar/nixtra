@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ../global/prelude.nix
+
     ./programs/terminal/kitty.nix
     ./programs/wm/hyprland/hypr.nix
     ./programs/wm/rofi.nix
@@ -11,10 +13,12 @@
 
     ./services/rainbow-border.nix
     ./services/switch-wallpaper.nix
+    ./services/idle-killer/idle-killer.nix
 
     ./commands/commands.nix
 
     ../../../pkgs/notif/mako.nix
+    ../../../pkgs/wayland/waypaper.nix
   ];
 
   config.nixtra = {

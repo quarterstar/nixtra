@@ -7,31 +7,29 @@
 
 ### Security Programs, Features & Services
 
-- Secure Boot
-- Full Disk Encryption
-- Encrypted Swap
-- Filesystem Impermanence
-- Hardened Linux Kernel
-- Strict Kernel Parameters
-- Hardened Kernel Packages
-- Restricted and Reduced Modules
-- Sandboxed Core Systemd Services
-- Restricted USB Access with USBGuard
-- DNS Leak Prevention
-- OpenSnitch
-- Hardened Nix Firewall
-- Fail2ban
+- Secure Boot: prevent bootkits, firmware rootkits, and evil maid attacks
+- Full Disk Encryption: mitigate physical data theft
+- zram: encrypt the system memory 
+- zswap: encrypt the swap file on the disk (disk memory); prevent cold boot attacks
+- Impermanence: make configs, data, cache, etc on the filesystem ephemeral; reset on boot unless whitelisted
+- Hardened Linux Kernel: specially packaged kernel with security flags
+- Strict Kernel Parameters: boot flags and sysctl flags for attack mitigation, network optimization, and attack surface reduction
+- Sandboxed Core Systemd Services: mitigate attacks from critical systemd services that have root with systemd sandboxing
+- Restricted USB Access with USBGuard: prevent usbkillers and unauthorized system tempering with usb-based attacks; filter connected devices
+- DNS Leak Prevention: disable network access if dns leak with vpn or custom dns server is detected; block router dns fetching on dhcp level
+- OpenSnitch: cherrypick allowed network connections from individuals applications; prevent telemetry, tracking, and data theft
+- Nix firewall: filter incoming/outgoing tcp/udp connections, allowed and disallowed ports, and more
+- fail2ban: detect login bruteforce attacks and block origin ips
 - Automatic Security Audits
 - Automatic, Unattended Security Upgrades
-- SOPS-Nix
-- Immutable users
-- Sandboxed Userspace Apps with Firejail
-- AppArmor (TODO)
-- SELinux (TODO)
-- Auditd
-- Wazuh
-- Zeek
-- Graylog
+- SOPS-Nix: encrypt systems to prevent leakage to `/nix/store` during build time
+- Immutable users: disallow modifying user permissions imperatively (declarative user configuration only)
+- Firejail: userspace-level app sandboxing for pre-installed applications (lutris, librewolf, etc)
+- AppArmor: kernel-level sandboxing for many applications (wip)
+- Auditd: 
+- Wazuh (TODO)
+- Zeek + Suricata (TODO)
+- Graylog or Elastic Stack (TODO)
 
 ### Imperativity
 

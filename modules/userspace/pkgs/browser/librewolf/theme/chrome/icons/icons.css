@@ -161,7 +161,7 @@ richlistitem[originaltype="loginsFooter"] .ac-site-icon {
 }
 
 :root[fxastatus="signedin"]:not([style*="--avatar-image-url"]) #fxa-avatar-image {
-    list-style-image: url(config.nixtra.svg) !important;
+    list-style-image: url(settings.svg) !important;
 }
 
 :root[privatebrowsingmode] #fxa-avatar-image {

@@ -2,26 +2,51 @@
 
 {
   imports = [
+    # Kernel
     ./boot.nix
     ./kernel.nix
-    ./systemd.nix
-    ./permissions.nix
-    #./impermanence.nix
-    ./usb.nix
-    #./services.nix
-    #./suricata.nix
-    #./dns.nix
-    ./fail2ban.nix
-    ./virtualisation.nix
+
+    # NixOS
     ./update.nix
     ./gc.nix
-    ./doas.nix
     ./firewall.nix
+    #./impermanence.nix
+
+    # Core
+    ./systemd.nix
+    ./pam.nix
+    ./permissions.nix
+    #./services.nix
+    ./dbus.nix
     ./audit.nix
-    ./firejail.nix
     ./close-on-suspend.nix
+
+    # Applications
+    ./doas.nix
     ./uutils.nix
+
+    # Physical Protection
+    ./usb.nix
+
+    # Authentication
+    ./fail2ban.nix
     ./sops.nix
+
+    # Networking
+    ./dns.nix
     ./vpn.nix
+
+    # Cryptography
+    #./entropy.nix
+
+    # Sandboxing
+    ./firejail/firejail.nix
+    ./apparmor/apparmor.nix
+
+    # SIEM
+    #./zeek.nix
+    #./wazuh.nix
+    #./graylog.nix
+    #./suricata.nix
   ];
 }

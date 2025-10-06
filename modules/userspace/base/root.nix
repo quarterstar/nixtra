@@ -1,22 +1,18 @@
-{ osConfig, settings, ... }:
+{ settings, profileSettings, config, ... }:
 
 {
   imports = [
-    #../../options.nix
+    # Profile-based configuration
+    ../../../profiles/${settings.profile}/homes/root.nix
+    ../../../presets/${profileSettings.preset}/homes/root.nix
 
     ./common.nix
-    ../../../profiles/${settings.config.profile}/homes/root.nix
-
-    #../desktop/flagship-hyprland/root/prelude.nix
-    ../desktop/flagship-hyprland/global/prelude.nix
+    ../desktop/root/prelude.nix
   ];
 
   config = {
-    nixtra = osConfig.nixtra;
     home.username = "root";
     home.homeDirectory = "/root";
-    home.stateVersion = settings.system.version;
+    home.stateVersion = config.nixtra.system.version;
   };
-
-  options = { };
 }

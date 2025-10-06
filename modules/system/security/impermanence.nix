@@ -1,6 +1,6 @@
-{ settings, ... }:
+{ ... }:
 
-if settings.security.impermanence && settings.system.filesystem
+if config.nixtra.security.impermanence && config.nixtra.system.filesystem
 == "btrfs" then {
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     echo "Rollback running" > /mnt/rollback.log

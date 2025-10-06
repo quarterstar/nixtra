@@ -46,18 +46,33 @@ You can find more of them by checking for commands with the following prefixes:
 
 ## Keybindings
 
-> [!IMPORTANT]
-> All window managers and desktop environments are configured to adhere to the standard shortcuts used by Nixtra, listed below respectively. If you are using a modified version of Nixtra, these may not apply.
+> [!NOTE]
+> `SUPER` is the Windows key on most keyboards.
 
 ### Window Manager
+
+> [!IMPORTANT]
+> All window managers in Nixtra must adhere to the standard shortcuts which are listed below, whenever possible.
 
 **Primary**
 
 - <kbd>SUPER</kbd> + <kbd>WHEEL</kbd>: Switch to next or previous workspace.
+
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>M</kbd>: Log out of active user.
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> +  <kbd>V</kbd>: Cycle through clipboard history.
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> <kbd>S</kbd>: Take a screenshot of a specific region of the window. (Stored in `~/Pictures/Screenshots`)
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> R</kbd>: Start/stop recording a specific region of the window. (Stored in `~/Videos/Screencasts`)
+
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>L</kbd>: Move the hovered window left.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>H</kbd>: Move the hovered window right.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>K</kbd>: Move the hovered window up.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>J</kbd>: Move the hovered window down.
+
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>L</kbd>: Scale the hovered window left.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>H</kbd>: Scale the hovered window right.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>K</kbd>: Scale the hovered window up.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>J</kbd>: Scale the hovered window down.
+
 - <kbd>SUPER</kbd> + <kbd>S</kbd>: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
 - <kbd>SUPER</kbd> + <kbd>R</kbd>: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
 - <kbd>SUPER</kbd> + <kbd>C</kbd>: Pick a color from the screen.
@@ -74,15 +89,19 @@ You can find more of them by checking for commands with the following prefixes:
 - <kbd>SUPER</kbd> + <kbd>,</kbd>: Switch to left workspace.
 - <kbd>SUPER</kbd> + <kbd>.</kbd>: Switch to right workspace.
 
-**Numpad** (Special Workspaces)
+**Overlays**
+
+> [!IMPORTANT]
+> If your keyboard does not have a Numpad, you can enable the Numpad compatibility setting in the profile config; this will allow you to use each respective number key with <kbd>SHIFT</kbd> instead of <kbd>KP</kbd>. For example, <kbd>SUPER</kbd> + <kbd>KP_1</kbd> will be replaced with <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>1</kbd>.
+
+> [!NOTE]
+> For convenience, these keys are written in Num Lock format, but you can use them with Num Lock disabled.
 
 - <kbd>SUPER</kbd> + <kbd>KP_1</kbd>: Open ChatGPT container.
+- <kbd>SUPER</kbd> + <kbd>KP_2</kbd>: Change the desktop wallpaper. (Picked from `~/Wallpapers`)
 - <kbd>SUPER</kbd> + <kbd>KP_4</kbd>: Open or close screen-drawing with `gromit-mpx`.
 - <kbd>SUPER</kbd> + <kbd>KP_5</kbd>: Clear `gromit-mpx` drawing buffer.
     - Undo last action with <kbd>Control_L</kbd> + <kbd>Z</kbd>; only works if drawing mode is open.
-
-> [!NOTE]
-> `SUPER` is the Windows key on most keyboards.
 
 ### Desktop Environment
 

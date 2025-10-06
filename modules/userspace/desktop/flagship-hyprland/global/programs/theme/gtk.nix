@@ -1,57 +1,68 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  home.packages = [
-    (pkgs.catppuccin-kvantum.override {
-      accent = "blue";
-      variant = "macchiato";
-    })
-  ];
+  config = lib.mkIf (config.nixtra.user.desktop == "flagship-hyprland") {
+    gtk = {
+      enable = true;
 
-  xdg.configFile = {
-    "Kvantum/Catppuccin-Macchiato-Blue/Catppuccin-Macchiato-Blue/Catppuccin-Macchiato-Blue.kvconfig".source =
-      "${pkgs.catppuccin-kvantum}/share/Kvantum/Catppuccin-Macchiato-Blue/Cattpuccin-Macchiato-Blue.kvconfig";
-    "Kvantum/Catppuccin-Macchiato-Blue/Catppuccin-Macchiato-Blue/Catppuccin-Macchiato-Blue.svg".source =
-      "${pkgs.catppuccin-kvantum}/share/Kvantum/Catppuccin-Macchiato-Blue/Cattpuccin-Macchiato-Blue.svg";
-  };
+      # TODO: fix removed package from repo
+      #iconTheme = {
+      #  name = "TokyoNight-SE";
+      #  package = pkgs.tokyo-night-icons;
+      #};
+      iconTheme = {
+        name = "Papirus-Dark";
+        package = pkgs.papirus-icon-theme;
+        #name = "Tokyonight-Dark";
+      };
 
-  gtk = {
-    enable = true;
+      theme = {
+        name = "Tokyonight-Dark";
+        #name = "Tokyonight-Dark-BL";
+        package = pkgs.tokyo-night-gtk;
+      };
 
-    # TODO: fix removed package from repo
-    #iconTheme = {
-    #  name = "TokyoNight-SE";
-    #  package = pkgs.tokyo-night-icons;
+      cursorTheme = {
+        name = "BreezeX-RosePine-Linux";
+        package = pkgs.rose-pine-cursor;
+        size = 24;
+      };
+    };
+
+    home.pointerCursor = {
+      name = "BreezeX-RosePine-Linux";
+      package = pkgs.rose-pine-cursor;
+      size = 24;
+      gtk.enable = true;
+      x11.enable = true;
+    };
+
+    dconf.settings = {
+      "org/gnome/desktop/interface" = {
+        cursor-theme = "BreezeX-RosePine-Linux";
+        cursor-size = 24;
+      };
+    };
+
+    # https://discourse.nixos.org/t/setting-nautiilus-gtk-theme/38958/7
+    xdg.configFile = {
+      "gtk-3.0" = {
+        source =
+          "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-3.0";
+        recursive = true;
+      };
+      "gtk-4.0" = {
+        source =
+          "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0";
+        recursive = true;
+      };
+    };
+
+    # if above doesnt work, try this
+    # NOTE: GTK_THEME is a debugging variable
+    #home.sessionVariables = {
+    #  GTK_THEME = config.gtk.theme.name;
+    #  XCURSOR_THEME
     #};
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-
-    theme = {
-      name = "Tokyonight-Dark-BL";
-      package = pkgs.tokyo-night-gtk;
-    };
-  };
-
-  gtk.cursorTheme = {
-    name = "BreezeX-RosePine-Linux";
-    package = pkgs.rose-pine-cursor;
-    size = 24;
-  };
-
-  home.pointerCursor = {
-    name = "BreezeX-RosePine-Linux";
-    package = pkgs.rose-pine-cursor;
-    size = 24;
-    gtk.enable = true;
-    x11.enable = true;
-  };
-
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      cursor-theme = "BreezeX-RosePine-Linux";
-      cursor-size = 24;
-    };
   };
 }

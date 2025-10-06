@@ -5,8 +5,10 @@
     && config.nixtra.display.server == "wayland") {
       # Enable display manager
       services.xserver.enable = true;
-      services.displayManager.sddm.enable = true;
-      services.displayManager.sddm.wayland.enable = true;
+      services.displayManager = {
+        enable = true;
+        sddm.wayland.enable = true;
+      };
 
       environment.systemPackages = with pkgs; [
         wayland

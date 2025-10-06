@@ -2,10 +2,11 @@
 
 {
   imports = [
-    ../../../modules/userspace/bundles/program.nix
-    ../../../modules/userspace/bundles/math.nix
+    ../../../modules/userspace/bundles/programming.nix
+    ../../../modules/userspace/bundles/mathematics.nix
     ../../../modules/userspace/bundles/gaming.nix
 
+    ../../../modules/userspace/pkgs/games/minecraft/prismlauncher.nix
     ../../../modules/userspace/pkgs/torrent/qbittorrent.nix
     ../../../modules/userspace/pkgs/video/vlc.nix
     ../../../modules/userspace/pkgs/video/mpv.nix
@@ -21,11 +22,6 @@
     ../../../modules/userspace/pkgs/image/swayimg.nix
     ../../../modules/userspace/pkgs/security/opensnitch.nix
   ];
-
-  #home.packages = [
-    #(pkgs.callPackage ../../../packages/davinci-resolve/default.nix { studioVariant = true; })
-    #(pkgs.callPackage ../../../packages/cake_wallet/default.nix {})
-  #];
 
   programs.home-manager.enable = true;
 }

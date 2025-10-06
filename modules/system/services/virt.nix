@@ -24,5 +24,7 @@
 
     # Clipboard sharing
     services.spice-vdagentd.enable = true;
+
+    security.virtualisation.flushL1DataCache = "always";
   };
 }

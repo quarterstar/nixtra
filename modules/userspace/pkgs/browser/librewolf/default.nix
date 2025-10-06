@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, nixtraLib, inputs, ... }:
 
 # TODO: add violentmonkey scripts
 # https://codeberg.org/Amm0ni4/bypass-all-shortlinks-debloated
@@ -29,7 +29,7 @@ let
 
   userChrome = import ./theme2/userChrome.nix { inherit config lib; };
 in {
-  imports = [ inputs.betterfox.homeModules.betterfox ];
+  imports = [ ];
 
   programs.librewolf = {
     enable = true;
@@ -521,6 +521,8 @@ in {
 
                 # encoded version of https://gist.github.com/theprojectsomething/6813b2c27611be03e67c78d936b0f760
                 #chunkedUserStyleRules0 = builtins.readFile ./tst-theme-chunk.bin;
+                chunkedUserStyleRules0 =
+                  builtins.readFile ./theme2/chunks/1.bin;
 
                 #chunkedUserStyleRules0 = builtins.readFile ./chunks/1.bin;
                 #chunkedUserStyleRules1 = builtins.readFile ./chunks/2.bin;
@@ -578,12 +580,6 @@ in {
         inherit userChrome;
       };
     };
-
-    betterfox = {
-      enable = config.nixtra.browser.useBetterfox;
-      settings.enableAllSections =
-        config.nixtra.browser.useBetterfox; # Set this to enable all sections by default
-    };
   };
 
   # `extension-settings.json` is needed to modify the shortcuts of
@@ -596,13 +592,15 @@ in {
     TARGET_DIR="$HOME/.librewolf/${profileName}"
     TARGET_FILE="$TARGET_DIR/extension-settings.json"
 
+    mkdir -p $TARGET_DIR
+
     if [ ! -f "$TARGET_FILE" ]; then
       echo "{}" > "$TARGET_FILE"
     fi
 
     cp "$TARGET_FILE" "$TARGET_FILE.bak"
 
-    jq '.commands *= ${
+    jq '.commands |= (. // {} ) + ${
       builtins.toJSON extensionSettingsCommands
     }' $TARGET_FILE > $TARGET_FILE.tmp && mv $TARGET_FILE.tmp $TARGET_FILE
   '';
@@ -621,12 +619,10 @@ in {
     force = true;
   };
 
-  # Override core keybinds at runtime
-  #home.activation.injectLibrewolfConfigOverride = ''
-  #  cat << 'EOF' >> $HOME/.librewolf/librewolf.overrides.cfg
-  #
-  #  ${builtins.readFile ./librewolf.overrides.cfg}
-  #
-  #  EOF
-  #'';
+  home.packages = [
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = "${pkgs.librewolf-bin}/bin/librewolf";
+      profile = "librewolf";
+    })
+  ];
 }

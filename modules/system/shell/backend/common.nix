@@ -1,4 +1,4 @@
-{ nixtraLib, config, pkgs, ... }:
+{ nixtraLib, lib, config, pkgs, ... }:
 
 let
   greeting = nixtraLib.command.createCommand {
@@ -12,11 +12,13 @@ let
       echo ""
 
       HOUR=$(date +%H)
-      if (( HOUR >= 6 && HOUR < 12 )); then
+      HOUR_INT=$(printf "%d" "$HOUR")
+
+      if (( HOUR_INT >= 6 && HOUR_INT < 12 )); then
         COW="tux"
-      elif (( HOUR >= 12 && HOUR < 18 )); then
+      elif (( HOUR_INT >= 12 && HOUR_INT < 18 )); then
         COW="moose"
-      elif (( HOUR >= 18 && HOUR < 22 )); then
+      elif (( HOUR_INT >= 18 && HOUR_INT < 22 )); then
         COW="dragon"
       else
         COW="ghostbusters"
@@ -28,9 +30,14 @@ let
     '';
   };
 in {
-  # want some fun?? :D
-  programs.zsh.shellInit = if config.nixtra.fun.mysteriousFortuneCookie then
-    "${greeting}/bin/greeting"
-  else
-    "";
+  environment.interactiveShellInit =
+    lib.optionalString config.nixtra.fun.mysteriousFortuneCookie ''
+      # want some fun?? :D
+      "${greeting}/bin/greeting"
+    '' + ''
+      # prevent core dump file generation
+      ulimit -c 0
+    '';
+
+  environment.systemPackages = with pkgs; [ nix-your-shell ];
 }

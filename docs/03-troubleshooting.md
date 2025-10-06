@@ -38,3 +38,36 @@ export PATH=/run/wrappers/bin:$PATH
 ```
 
 If that resolves the issue, you can make it persist by modifying your NixOS configuration according to your environment's requirements.
+
+**`display-manager` service not starting, login managers not working, or window manager crashing**
+
+In a new NixOS update, OpenGL issues have been noticed with Mesa. First, check if `/run/opengl-driver` exists on your system and is valid:
+
+```
+> ls -l /run/opengl-driver
+```
+
+If it does not exist, symptoms include, but are not limited to, `MESA-LOADER` errors, dri or GBM missing, etc.
+
+TL;DR: A temporary fix for this is to add the following to your configuration:
+
+```nix
+system.activationScripts.tempFixMissingMesaSymlink = ''
+  is_valid_symlink() {
+    local p="$1"
+    if [ -L "$p" ] && [ -e "$p" ]; then
+      return 0
+    else
+      return 1
+    fi
+  }
+
+  export OPENGL_PATH="/run/opengl-driver"
+
+  if ! is_valid_symlink "$OPENGL_PATH"; then
+    ln -s ${pkgs.mesa} /run/opengl-driver
+  fi
+'';
+```
+
+Normally, this should be done by `display-manager` or any other service if you have set `hardware.graphics.enable` to `true` and added `mesa` to `hardware.graphics.extraPackages`.

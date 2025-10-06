@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixtraLib, ... }:
 
 let
   post-commit-hook = pkgs.writeScript "pre-commit" ''
@@ -79,7 +79,10 @@ let
   '';
 in {
   environment.systemPackages = with pkgs; [
-    git
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = "${pkgs.git}/bin/git";
+      profile = "git";
+    })
     git-filter-repo # Rewrite Git repositories;
     gh
     git-redact-repository

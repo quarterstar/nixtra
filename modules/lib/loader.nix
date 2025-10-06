@@ -1,3 +1,8 @@
+# WARNING: The functions here are experimental
+# and NOT ready to be used; the conditional
+# import function works for NixOS module,
+# but does not work for Home Manager modules.
+
 { config, pkgs, lib, ... }:
 
 let
@@ -45,63 +50,42 @@ in rec {
   # the `config` namespace expicitly.
   #
   # TODO: Make this system more flexible.
-  conditionalImport = condition: path:
-    let raw = import path;
-    in (args:
-      let
-        standardArgs = { inherit config lib pkgs; };
-        #requiredArgs = args // extraModuleArgs;
-        requiredArgs = args;
-        allArgs = requiredArgs // standardArgs;
-      in {
-        config = lib.mkIf condition
-          (if (builtins.isAttrs (evalModule allArgs raw)
-            && builtins.hasAttr "config" (evalModule allArgs raw)) then
-            (evalModule allArgs raw).config
-          else
-            { } // (if (builtins.isAttrs (evalModule allArgs raw)) then
-              (builtins.removeAttrs (evalModule allArgs raw) [
-                "imports"
-                "options"
-              ]) # Get all the implicit config declarations
-            else
-              { }) // (if (builtins.isAttrs (evalModule allArgs raw)
-                && builtins.hasAttr "imports" (evalModule allArgs raw)
-                && (evalModule allArgs raw).imports != [ ]) then
-                (lib.mkMerge (map (innerModule:
-                  ((conditionalImport condition innerModule) allArgs).config)
-                  (evalModule allArgs raw).imports))
-              else
-                { }));
-      });
+  #conditionalImport = condition: path:
+  #  let raw = import path;
+  #  in (args:
+  #    let
+  #      standardArgs = { inherit config lib pkgs; };
+  #      requiredArgs = args;
+  #      allArgs = requiredArgs // standardArgs;
+  #    in {
+  #      options = if (builtins.isAttrs (evalModule allArgs raw)
+  #        && builtins.hasAttr "options" (evalModule allArgs raw)) then
+  #        (evalModule allArgs raw).options
+  #      else
+  #        { };
 
-  # This is similar to the one above, and can be useful if you need something like:
-  #
-  # ```nix
-  # imports = [
-  #   (nixtraLib.loader.deepImport (../pkgs/terminal + ("/" + config.nixtra.user.terminal) + ".nix"))
-  # ];
-  # ```
-  deepImport = path:
-    let raw = import path;
-    in (args:
-      let
-        standardArgs = { inherit config lib pkgs; };
-        #requiredArgs = args // extraModuleArgs;
-        requiredArgs = args;
-        allArgs = requiredArgs // standardArgs;
-      in {
-        config = if (builtins.isAttrs (evalModule allArgs raw)
-          && builtins.hasAttr "config" (evalModule allArgs raw)) then
-          (evalModule allArgs raw).config
-        else
-          { } // (if (builtins.isAttrs (evalModule allArgs raw)
-            && builtins.hasAttr "imports" (evalModule allArgs raw)
-            && (evalModule allArgs raw).imports != [ ]) then
-            (lib.mkMerge
-              (map (innerModule: ((deepImport innerModule) allArgs).config)
-                (evalModule allArgs raw).imports))
-          else
-            { });
-      });
+  #      config = lib.mkIf condition
+  #        (if (builtins.isAttrs (evalModule allArgs raw)
+  #          && builtins.hasAttr "config" (evalModule allArgs raw)) then
+  #          (evalModule allArgs raw).config
+  #        else
+  #          { } // (if (builtins.isAttrs (evalModule allArgs raw)) then
+  #            (builtins.removeAttrs (evalModule allArgs raw) [
+  #              "imports"
+  #              "options"
+  #            ]) # Get all the implicit config declarations
+  #          else
+  #            { }) // (if (builtins.isAttrs (evalModule allArgs raw)
+  #              && builtins.hasAttr "imports" (evalModule allArgs raw)
+  #              && (evalModule allArgs raw).imports != [ ]) then
+  #              (lib.mkMerge (map (innerModule:
+  #                ((conditionalImport condition innerModule) allArgs).config)
+  #                (evalModule allArgs raw).imports))
+  #            else
+  #              { }));
+  #    });
+
+  ## Same as above, but with multiple resolved paths.
+  #conditionalImports = condition: paths:
+  #  lib.mkMerge (map (path: conditionalImport condition path) paths);
 }

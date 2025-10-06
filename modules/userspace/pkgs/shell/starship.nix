@@ -1,8 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ starship ];
+  config = lib.mkIf (config.nixtra.user.shell == "bash") {
+    home.packages = with pkgs; [ starship ];
 
-  programs.starship.enable = true;
-  programs.starship.settings = { format = "  $all"; };
+    programs.starship.enable = true;
+    programs.starship.settings = { format = "  $all"; };
+  };
 }

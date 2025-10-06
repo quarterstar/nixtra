@@ -6,8 +6,13 @@
     ./programs/theme/qt.nix
     ./programs/theme/gtk.nix
 
+    ./services/polkit.nix
+    ./services/portal.nix
+
     ../../../pkgs/aesthetic/nwg-look.nix
   ];
 
-  config.nixtra = { user = { shell = lib.mkDefault "zsh"; }; };
+  config = lib.mkIf (config.nixtra.user.desktop == "flagship-hyprland") {
+    nixtra = { user = { shell = lib.mkDefault "zsh"; }; };
+  };
 }

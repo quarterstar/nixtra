@@ -1,10 +1,7 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
-  programs.bash.enable = true;
-
-  programs.bash.initExtra = if config.nixtra.shell.fastfetchOnStartup then ''
-    fastfetch
-  '' else
-    "";
+  config = lib.mkIf (config.nixtra.user.shell == "bash") {
+    #programs.bash.enable = true;
+  };
 }

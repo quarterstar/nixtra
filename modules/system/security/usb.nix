@@ -1,8 +1,8 @@
-{ settings, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
-if settings.security.protectUsbStorage then {
+{
   # https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-using-usbguard
-  config = {
+  config = lib.mkIf config.nixtra.security.protectUsbStorage {
     services.usbguard = {
       enable = true;
       IPCAllowedUsers = [ "root" "your-user" ];
@@ -24,5 +24,4 @@ if settings.security.protectUsbStorage then {
 
     environment.systemPackages = [ pkgs.usbguard ];
   };
-} else
-  { }
+}

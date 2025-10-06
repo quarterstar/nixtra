@@ -26,7 +26,7 @@ let
     '';
   };
 
-  tor-browser = pkgs.tor-browser-bundle-bin.override { extraPrefs = ""; };
+  #tor-browser = pkgs.tor-browser-bundle-bin.override { extraPrefs = ""; };
 
   # Create wrapper scripts
   tor-browser-clearnet-wrapper =
@@ -42,13 +42,19 @@ let
     exec ${tor-browser-proxy}/bin/tor-browser "$@"
   '';
 in {
-  home.packages = [
-    tor-browser-clearnet-wrapper
-    tor-browser-proxy-wrapper
-
+  home.packages = with pkgs; [
     (nixtraLib.sandbox.wrapFirejail {
-      executable = "${tor-browser}/bin/tor-browser";
-      profile = "tor-browser";
+      executable = tor-browser-clearnet-wrapper;
+      profile = "tor-browser-other";
     })
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = tor-browser-proxy-wrapper;
+      profile = "tor-browser-other";
+    })
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = "${pkgs.tor-browser}/bin/tor-browser";
+      profile = "tor-browser-main";
+    })
+    tor-browser
   ];
 }

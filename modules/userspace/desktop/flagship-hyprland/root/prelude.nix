@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  imports = [ ../global/prelude.nix ];
+}

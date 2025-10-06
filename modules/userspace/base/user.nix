@@ -1,20 +1,13 @@
-{ osConfig, nixtraLib, config, settings, ... }:
+{ settings, profileSettings, lib, pkgs, nixtraLib, config, ... }:
 
 {
   imports = [
-    #../../options.nix
-    #../../system/desktop/flagship-hyprland/options.nix
+    # Profile-based configuration
+    ../../../profiles/${settings.profile}/homes/user.nix
+    ../../../presets/${profileSettings.preset}/homes/user.nix
 
     ./common.nix
-    ../../../profiles/${settings.config.profile}/homes/user.nix
-
-    # Desktops
-    #(nixtraLib.loader.conditionalImport (config.nixtra.display.enable
-    #  && config.nixtra.user.desktop.type == "flagship-hyprland")
-    #  ../desktop/flagship-hyprland/prelude.nix)
-    ../desktop/flagship-hyprland/user/prelude.nix
-    ../desktop/flagship-hyprland/global/prelude.nix
-
+    ../desktop/user/prelude.nix
     ../theme/type.nix
     ../theme/applications.nix
 
@@ -23,8 +16,6 @@
   ];
 
   config = {
-    #nixtra = osConfig.nixtra;
-
     xdg.configFile."mimeapps.list".force = true;
 
     home.sessionVariables = {
@@ -34,6 +25,6 @@
 
     home.username = config.nixtra.user.username;
     home.homeDirectory = "/home/${config.nixtra.user.username}";
-    home.stateVersion = settings.system.version;
+    home.stateVersion = config.nixtra.system.version;
   };
 }

@@ -2,10 +2,14 @@
 
 let inherit (nixtraLib.command) createCommand;
 in {
+  imports = [ ./sandman/sandman.nix ];
+
   config = lib.mkIf config.nixtra.shell.commands.enable {
     environment.systemPackages = [
       (pkgs.callPackage ./screenshot.nix { inherit config createCommand; })
-      (pkgs.callPackage ./rebuild.nix { inherit config createCommand; })
+      (pkgs.callPackage ./rebuild.nix {
+        inherit config createCommand nixtraLib;
+      })
       (pkgs.callPackage ./restore-backup.nix { inherit config createCommand; })
       (pkgs.callPackage ./build-iso.nix { inherit config createCommand; })
       (pkgs.callPackage ./check.nix { inherit config createCommand; })

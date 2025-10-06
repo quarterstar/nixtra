@@ -1,24 +1,9 @@
-{ osConfig, settings, nixtraLib, lib, config, pkgs, ... }:
+{ osConfig, nixtraLib, lib, config, pkgs, ... }:
 
 {
   imports = [
-    #../../options.nix
-    #../../system/desktop/flagship-hyprland/options.nix
-
-    # Terminals
-    (nixtraLib.loader.conditionalImport (config.nixtra.user.terminal == "kitty")
-      ../pkgs/terminal/kitty.nix)
-
-    # Shells
-    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "bash")
-      ../pkgs/shell/bash.nix)
-    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "starship")
-      ../pkgs/shell/starship.nix)
-    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "zsh")
-      ../pkgs/shell/zsh.nix)
-    (nixtraLib.loader.conditionalImport (config.nixtra.user.shell == "fish")
-      ../pkgs/shell/fish.nix)
-
+    ../pkgs/terminal/terminal.nix
+    ../pkgs/shell/shell.nix
     ../config/prelude.nix
   ];
 
@@ -37,11 +22,11 @@
 
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs;
-        [
-          kdePackages.xdg-desktop-portal-kde
-          #xdg-desktop-portal-gtk
-        ];
+      #extraPortals = with pkgs;
+      #[
+      #kdePackages.xdg-desktop-portal-kde
+      #xdg-desktop-portal-gtk
+      #];
 
       config = {
         # Fix Portal v1.17+ incompatibility

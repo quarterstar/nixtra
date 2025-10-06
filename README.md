@@ -1,13 +1,11 @@
 <div align="center">
-<img src="./shared-assets/icons/logo.png">
-
+<img width="64" height="64" src="./shared-assets/icons/logo.png">
 <br>
 
-<img src="https://badgen.net/github/stars/quarterstar/nixtra">
-<img src="https://badgen.net/github/watchers/quarterstar/nixtra">
-<img src="https://badgen.net/github/license/quarterstar/nixtra">
-
-<br>
+<!--<img src="https://badgen.net/github/stars/quarterstar/nixtra">-->
+<!--<img src="https://badgen.net/github/watchers/quarterstar/nixtra">-->
+<!--<img src="https://badgen.net/github/license/quarterstar/nixtra">-->
+<!--<br>-->
 
 <h2>❄️Nixtra❄️</h2>
 
@@ -49,13 +47,15 @@
 
 ## ❓ About Project
 
+Nixtra is **your** Linux distribution that is fully declarative, immutable, reproducible, modular, ephemeral, mostly stable, tailored to your specific needs but without heavy bloat, extremely extensive with security measures, equipped with sane defaults, and packaged with a pleasing environment with a myriad of utilities. This is what I wanted when I started learning NixOS, and I hope that if you try this, you too will realize that it is truly something great.
+
 Nixtra is a fully-featured, hardened and extensible that focuses on anonymity, privacy and security *while still being eye candy*. It is designed to:
 
-- Provide an ideal environment for: gaming; programming; the use of multimedia applications; security analysis and virtualization.
+- Provide an ideal environment for gaming, programming, research, security analysis, virtualization, and more.
 - Give the ability to switch between different profiles in within a single user, each designated a different role, to prevent distractions and straighten my workflow.
-- Harden the security of any system and implement sane defaults for opsec.
+- Harden the security of any system with minimal compromises and implement sane defaults for opsec.
 - Be easily understandable, customizable and extensible by other NixOS users interested in the use and/or further development of the configuration.
-- Patch out the weird quirks that come with using NixOS on personal computers.
+- Patch out the weird quirks that come with using NixOS.
 - Make NixOS easier to use and customize.
 
 Why NixOS? Because impure system state should be volatile and the rest should be declarative and immutable. Or because of my security paranoia :p
@@ -76,9 +76,11 @@ Why NixOS? Because impure system state should be volatile and the rest should be
 
 - Pre-installed, beautifully-riced Hyprland environment.
 - Utilities for day-to-day use, including screenshotting, recording, etc.
-- A lot of documentation.
-- Different flavors of profiles pre-configured with a variety of packages to fullfill your needs.
-- A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues and annoyances. (For example, you do not need to `git add` a file when rebuilding with Flakes so that it registers it.)
+- Extensive and thorough security measures, covering many threat models.
+- Aggressive performance and memory optimizations.
+- Helpful documentation.
+- Different flavors of profiles and presets configured with a variety of packages to fulfill your needs.
+- A, lot, and I mean a **LOT** of pre-baked fixes for common NixOS issues and annoyances.
 - High-level configuration system.
 
 ## 🔒 Security Features
@@ -111,6 +113,7 @@ Some example security features (which can be toggled on or off) Nixtra employs a
 - System auditing with Auditd
 - Nix Firewall
 - Log aggregation & alerting with Graylog (SIEM system)
+- ...and more
 
 For a complete list and elaboration for the above, view [SECURITY.md](SECURITY.md).
 
@@ -195,6 +198,7 @@ Nixtra wouldn't have been possible without help from royalty-free assets and ope
 - [gitlab:Zaney/zaneyos](https://gitlab.com/Zaney/zaneyos) - Base config for [fastfetch](https://gitlab.com/Zaney/zaneyos/-/blob/main/modules/home/fastfetch/default.nix), [cava](https://gitlab.com/Zaney/zaneyos/-/blob/main/modules/home/cava.nix)
 - [gitlab:usmcamp0811/dotfiles](https://gitlab.com/usmcamp0811/dotfiles) - Examples for templates, building NixOS ISOs
 - [gist.github:theprojectsomething](https://gist.github.com/theprojectsomething/6813b2c27611be03e67c78d936b0f760) & [github:AmadeusWM/dotfiles-hyprland](https://github.com/AmadeusWM/dotfiles-hyprland) - Rice for Firefox (modified in Nixtra)
+- [github:chiraag-nataraj/firejail-profiles](https://github.com/chiraag-nataraj/firejail-profiles): A curated set of Firejail profiles for common applications
 
 Some small utilities and scripts might have credits directly embedded into their respective files in Nixtra's codebase.
 

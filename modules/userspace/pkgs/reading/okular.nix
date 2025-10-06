@@ -1,5 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixtraLib, ... }:
 
 {
-  home.packages = with pkgs; [ kdePackages.okular ];
+  home.packages = [
+    (nixtraLib.sandbox.wrapFirejail {
+      executable = "${pkgs.kdePackages.okular}/bin/okular";
+      profile = "okular";
+    })
+    pkgs.kdePackages.okular
+  ];
 }

@@ -1,6 +1,7 @@
+{ pkgs, ... }:
+
 {
-  imports = [
-    ./prismlauncher.nix
-    #./davinci.nix
-  ];
+  imports = [ ];
+
+  nixpkgs.config.packageOverrides = pkgs: { };
 }

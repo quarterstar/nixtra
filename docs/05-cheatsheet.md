@@ -6,12 +6,23 @@ I found that reading [this blog post](https://nixos-and-flakes-ja.hayao0819.com/
 
 ## Learning NixOS
 
+**Documentation**
+
 - [nix-book](https://saylesss88.github.io)
 - [Zero to Nix](https://zero-to-nix.com)
 - [NixOS Modules Lessons](https://nixos-modules.nix.xn--q9jyb4c/)
 - [nix.dev](https://nix.dev/)
 - [Nix Pills](https://nixos.org/guides/nix-pills/)
 - [The Nix lectures](https://ayats.org/blog/nix-tuto-1#the-nix-lectures-part-1-introduction-and-language-basics)
+
+**Videos**
+
+- [The Nix Hour](https://youtube.com/playlist?list=PLyzwHTVJlRc8yjlx4VR4LU5A5O44og9in): Comprehensive deep-dive into the Nix language and NixOS systems.
+
+**Reference**
+
+- [MyNixOS](https://mynixos.com)
+- [searchix](https://searchix.ovh)
 
 ## Package Reference Websites
 

@@ -1,7 +1,9 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ kitty ];
+  config = lib.mkIf (config.nixtra.user.terminal == "kitty") {
+    home.packages = with pkgs; [ kitty ];
 
-  programs.kitty.enable = true;
+    programs.kitty.enable = true;
+  };
 }

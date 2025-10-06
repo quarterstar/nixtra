@@ -1,4 +1,4 @@
-{ config, lib, settings, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   graphicalSessionVariables =

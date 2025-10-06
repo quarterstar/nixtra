@@ -12,7 +12,7 @@
 #   of Sep. 6th 2025.                                    #
 ##########################################################
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, settings, ... }:
 
 let
   # Shorthand for the main configuration set
@@ -244,6 +244,34 @@ let
     };
   };
 
+  # Type for sops.keys elements
+  sopsKeyType = lib.types.submodule {
+    options = {
+      neededForUsers = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether this SOPS key is needed for user decryption (e.g., for
+          passwords).
+        '';
+      };
+      # Add other potential key-specific options here if needed in the future
+    };
+  };
+
+  # Type for sops.templates elements
+  sopsTemplateType = lib.types.submodule {
+    options = {
+      content = lib.mkOption {
+        type = lib.types.lines;
+        description = lib.mdDoc ''
+          The content of the template. Use `''${sops.placeholder."your/key/path"}`
+          to insert the decrypted SOPS secret.
+        '';
+      };
+      # Add other potential template-specific options here if needed in the future
+    };
+  };
 in {
   options.nixtra = {
     user = {
@@ -258,15 +286,11 @@ in {
           "SOPS secret name for the user's password.";
       };
 
-      desktop = {
-        enable = mkNixtraOption lib.types.bool true
-          "Whether to enable desktop environment configuration.";
-        type = mkNixtraOption (lib.types.enum [ "flagship-hyprland" "empty" ])
-          "flagship-hyprland" (lib.mdDoc ''
-            Available options: `flagship-hyprland`, `empty`.
-            Use `empty` if you want to cherry-pick individual desktop configs in home.nix.
-          '');
-      };
+      desktop = mkNixtraOption (lib.types.enum [ "flagship-hyprland" "empty" ])
+        "flagship-hyprland" (lib.mdDoc ''
+          Available options: `flagship-hyprland`, `empty`.
+          Use `empty` if you want to cherry-pick individual desktop configs in home.nix.
+        '');
 
       shell = mkNixtraOption (lib.types.enum [ "zsh" "fish" "bash" ]) "zsh"
         (lib.mdDoc "Available options: `zsh` (recommended), `fish`, `bash`.");
@@ -276,10 +300,13 @@ in {
         default = "lynx";
         description = "The preferred browser for applications to use.";
       };
+
       terminal = mkNixtraOption lib.types.str "kitty"
         "The preferred terminal for applications to use.";
+
       editor = mkNixtraOption lib.types.str "nvim"
         "The preferred editor for applications to use.";
+
       groups = mkNixtraOption (lib.types.listOf lib.types.str) [
         "wheel" # sudo/doas
         "docker" # For using docker on userspace
@@ -312,6 +339,109 @@ in {
       ] "List of public keys for Nix binary caches.";
     };
 
+    hardware = {
+      laptop = mkNixtraOption lib.types.bool true "Whether the PC is a laptop.";
+
+      cpu = lib.mkOption {
+        type = lib.types.str;
+        description = lib.mdDoc ''
+          The CPU manufacturer used by the PC.
+          Available options: `amd`, `intel`
+        '';
+      };
+
+      gpu = lib.mkOption {
+        type = lib.types.str;
+        description = lib.mdDoc ''
+          The GPU manufacturer used by the PC.
+          Available options: `amd`, `nvidia`
+        '';
+      };
+    };
+
+    disk = {
+      ssd = mkNixtraOption lib.types.bool true
+        "Whether the disk being used is an SSD.";
+
+      partitions = {
+        boot = lib.mkOption {
+          type = lib.types.str;
+          description = "The path to the boot partition.";
+          example = "/dev/disk/by-uuid/12CE-A600";
+        };
+        storage = lib.mkOption {
+          type = lib.types.str;
+          description = "The path to the storage partition.";
+          example = "/dev/disk/by-uuid/75f7fad7-0065-49a1-950c-ba5913eeae83";
+        };
+      };
+
+      encryption = {
+        enable = mkNixtraOption lib.types.bool true
+          "Whether to use Full Disk Encryption.";
+        decryptedRootDevice = lib.mkOption {
+          type = lib.types.str;
+          description = "The path to the decrypted root device.";
+          example = "/dev/disk/by-uuid/ce341f6f-8daf-43d0-a034-901c93654118";
+        };
+      };
+    };
+
+    memory = {
+      swap = {
+        enable =
+          mkNixtraOption lib.types.bool true "Whether to use swap memory.";
+        zswap = mkNixtraOption lib.types.bool true
+          "Whether to compress swap with zswap.";
+        size = mkNixtraOption lib.types.int (8 * 1024)
+          "The size of the swap partition.";
+      };
+
+      zram = {
+        enable = mkNixtraOption lib.types.bool true
+          "Whether to compress memory with zram.";
+      };
+    };
+
+    system = {
+      kernel =
+        mkNixtraOption (lib.types.enum [ "standard" "security" "gaming" ])
+        "security" (lib.mdDoc
+          "The Linux kernel variant to use. Choose `standard` for the normal kernel, `security` for enhanced hardening measures, and `gaming` for performance optimizations.");
+
+      timezone = {
+        auto = mkNixtraOption lib.types.bool true
+          "Whether to set the timezone by default. If set to true, `config.nixtra.timezone.default` will be ignored.";
+        default = mkNixtraOption lib.types.str "America/New_York"
+          "The geographical location that the timezone should be configured for.";
+      };
+      locale = mkNixtraOption lib.types.str "en_US.UTF-8"
+        "The languages localization to use.";
+      version =
+        mkNixtraOption lib.types.str "25.05" "The version of the NixOS system.";
+      initialVersion = mkNixtraOption lib.types.str "25.05"
+        "The initial version the NixOS system was installed on.";
+
+      filesystem =
+        mkNixtraOption lib.types.str "btrfs" "The filesystem to use.";
+      supportedFilesystems = mkNixtraOption (lib.types.listOf lib.types.str) [
+        "btrfs"
+        "ext4"
+        "ntfs"
+      ]
+        "The filesystems the system should support. The necessary kernel modules for them are automatically installed.";
+
+      nur = mkNixtraOption lib.types.bool true
+        "Whether to use the NixOS User Repository, a community repository for Nix packages.";
+
+      nixDirectories = mkNixtraOption (lib.types.listOf lib.types.str) [
+        "modules"
+        "presets"
+        "profiles/${settings.profile}"
+      ] (lib.mdDoc
+        "Directories with `.nix` files that should be parsed, validated, and formatted automatically by Nixtra rebuild system.");
+    };
+
     screen = {
       width = mkNixtraOption lib.types.int 1920 "Screen width in pixels.";
       height = mkNixtraOption lib.types.int 1080 "Screen height in pixels.";
@@ -324,23 +454,14 @@ in {
       server = mkNixtraOption (lib.types.enum [ "wayland" "none" ]) "wayland"
         (lib.mdDoc "Available options: `wayland`, `none`.");
 
-      # TODO: remove
-      type = mkNixtraOption (lib.types.enum [ "hyprland" "none" ]) "hyprland"
-        (lib.mdDoc "Available options: `hyprland`, `none`.");
-
-      theme = mkNixtraOption (lib.types.enum [ "nordic" "none" ]) "nordic"
-        (lib.mdDoc ''
-          Available options: `nordic`, `none`.
-          If a theme is not provided out-of-the-box, it may not look good with
-          the pre-configured window managers and/or desktop environments
-          provided by Nixtra.
-        '');
-
       themeType = mkNixtraOption (lib.types.enum [ "dark" "light" "" ]) "dark"
         (lib.mdDoc "Available options: `dark`, `light`, `''`.");
     };
 
     desktop = {
+      enable = mkNixtraOption lib.types.bool true
+        "Whether to enable desktop environment configuration.";
+
       startupPrograms = mkNixtraOption (lib.types.listOf lib.types.str) [ ]
         "List of programs to launch on startup.";
 
@@ -356,6 +477,11 @@ in {
           "Seconds after which wallpaper should be switched. Default: 2 hours (120 minutes).";
       };
 
+      keybind = {
+        numpadCompatibility = mkNixtraOption lib.types.bool false
+          "Whether to replace Numpad keybinds with keys compatible with most keyboards.";
+      };
+
       topbar = {
         enable =
           mkNixtraOption lib.types.bool true "Whether to enable the top bar.";
@@ -365,7 +491,9 @@ in {
         enable = mkNixtraOption lib.types.bool true
           "Whether to enable the bottom taskbar.";
         apps = lib.mkOption {
-          type = lib.types.listOf taskbarAppType;
+          type = (lib.types.listOf taskbarAppType);
+          #default = [ ];
+          description = "List of applications to add to the bottom taskbar.";
           example = [
             {
               program = "${pkgs.kitty}/bin/kitty";
@@ -420,7 +548,6 @@ in {
               icon = "keepassxc.png";
             }
           ];
-          description = "List of applications to add to the bottom taskbar.";
         };
         iconSize = mkNixtraOption lib.types.int 38
           "Size of icons in the bottom taskbar (e.g., 50 for 50x50).";
@@ -478,6 +605,21 @@ in {
       overwriteSudoWithDoas = mkNixtraOption lib.types.bool true
         "Whether to replace `sudo` command with a more lightweight alternative (`doas`).";
 
+      kernel = {
+        aggressivePanic = mkNixtraOption lib.types.bool true
+          "Whether to panic immediately on any detected failure or potential vulnerabiltiy exploitation.";
+        veryAggressivePanic = mkNixtraOption lib.types.bool true
+          "Whether to panic immediately on any potential failures, including subtle warnings.";
+        mitigateCommonVulnerabilities = mkNixtraOption lib.types.bool true
+          "Whether to mitigate common CPU vulnerabilities across various architectures.";
+        enforceDmaProtection = mkNixtraOption lib.types.bool true
+          "Whether to enforce runtime DMA protection. (May interfere with common devices.)";
+        requireSignatures = mkNixtraOption lib.types.bool true
+          "Whether to allow only signed kernel modules. (May break Nvidia or VBox drivers.)";
+        encryptMemory = mkNixtraOption lib.types.bool true
+          "Whether to encrypt physical memory using architecture-specific solutions.";
+      };
+
       nmConnectionRouterDnsExceptions =
         mkNixtraOption (lib.types.listOf lib.types.str) ([ "lo" "docker0" ]
           ++ (if cfg.security.vpn.enable && cfg.security.vpn.type
@@ -486,7 +628,7 @@ in {
           else
             [ ])) (lib.mdDoc ''
               NetworkManager connections for which DNS configuration from the router
-              SHOULD be used, bypassing custom DNS settings.
+              SHOULD be used, bypassing custom DNS config.nixtra.
             '');
 
       firewall = {
@@ -505,7 +647,7 @@ in {
           "List of UDP ports to allow through the firewall.";
       };
 
-      virtualization = mkNixtraOption lib.types.bool true
+      virtualization = mkNixtraOption lib.types.bool false
         "Whether to enable virtualization (e.g., KVM, QEMU).";
       scanning = mkNixtraOption lib.types.bool true
         "Whether to enable Intrusion Detection System with Suricata.";
@@ -515,6 +657,43 @@ in {
         "Whether to enable running programs packed into the AppImage file format.";
       unpatchedBinaries = mkNixtraOption lib.types.bool true
         "Whether to allow running unpatched dynamic binaries.";
+      secureboot =
+        mkNixtraOption lib.types.bool true "Whether to enable secure boot.";
+      disableUsbStorage =
+        mkNixtraOption lib.types.bool false "Whether to disable USB storage";
+      protectUsbStorage = mkNixtraOption lib.types.bool true
+        "Whether to apply special security measures for connected USB devices.";
+      protectBoot = mkNixtraOption lib.types.bool true
+        "Whether to protect the kernel with boot related parameters.";
+      protectKernel =
+        mkNixtraOption lib.types.bool true "Whether to protect the kernel.";
+      impermanence = mkNixtraOption lib.types.bool false (lib.mdDoc ''
+        Whether to use the NixOS Impermanence mechanism.
+        Will only work if `config.nixtra.system.filesystem` is set to `btrfs`.
+      '');
+
+      apparmor = {
+        enable =
+          mkNixtraOption lib.types.bool true "Whether to enable AppArmor.";
+        rescueBootEntry = mkNixtraOption lib.types.bool true
+          "Whether to add an auxiliary boot entry in case you get locked out of your system because of AppArmor. Strongly recommended.";
+      };
+
+      siem = {
+        zeek = {
+          enable = mkNixtraOption lib.types.bool true
+            "Whether to enable the Zeek service.";
+          interface = lib.mkOption {
+            type = lib.types.str;
+            description = "The interface Zeek should listen on.";
+          };
+        };
+
+        wazuh = {
+          enable = mkNixtraOption lib.types.bool true
+            "Whether to enable the Wazuh service.";
+        };
+      };
 
       vpn = {
         enable = mkNixtraOption lib.types.bool false
@@ -522,6 +701,19 @@ in {
         type =
           mkNixtraOption (lib.types.enum [ "mullvad" "wireguard" ]) "mullvad"
           "The type of VPN to configure.";
+
+        dnsLeakPrevention = {
+          dnsLeakTest = mkNixtraOption lib.types.bool true
+            "Whether to do a DNS leak test upon successful VPN connection.";
+          nmConnectionRouterDnsExceptions = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = ''
+              List of NetworkManager connection names for which router-provided
+              DNS settings should NOT be ignored.
+            '';
+          };
+        };
 
         wireguard = {
           addresses = mkNixtraOption (lib.types.listOf lib.types.str) [ ]
@@ -541,8 +733,14 @@ in {
         };
       };
 
-      firejail = mkNixtraOption lib.types.bool true
-        "Whether to enable Firejail for application sandboxing.";
+      firejail = {
+        enable = mkNixtraOption lib.types.bool true
+          "Whether to enable Firejail for application sandboxing.";
+
+        disabledProfiles = mkNixtraOption (lib.types.listOf lib.types.str) [ ]
+          "Profiles for programs that should not be used by default.";
+      };
+
       excludedClipboardPrograms =
         mkNixtraOption (lib.types.listOf lib.types.str)
         [ "x-kde-passwordManagerHint" ] (lib.mdDoc ''
@@ -580,6 +778,37 @@ in {
         ] (lib.mdDoc ''
           List of explicitly permitted unfree packages.
         '');
+
+      extraUsers = mkNixtraOption (lib.types.listOf lib.types.str) [ ]
+        "Extra users to define. Very limited functionality. Primarily used to store critical data safely.";
+
+      sops = {
+        keys = lib.mkOption {
+          description =
+            "The paths of the SOPS keys defined in your SOPS config.";
+
+          default = { "password" = { neededForUsers = true; }; };
+
+          example = {
+            "vpn/wireguard/private_key" = { neededForUsers = true; };
+          };
+        };
+        templates = lib.mkOption {
+          description = "SOPS templates to use.";
+          default = { };
+
+          #example = {
+          #"vpn/wireguard/private_key".content = "''${sops.placeholder."vpn/wireguard/private_key"}''";
+          #};
+        };
+      };
+    };
+
+    performance = {
+      preventOutOfMemoryPanic = mkNixtraOption lib.types.bool true
+        (lib.mdDoc "Whether to prevent OOM kernel panic with earlyoom.");
+      useHugePages = mkNixtraOption lib.types.bool false
+        "Whether to use larger memory pages than the default 4 KB page size; reduce TLB misses, improve memory throughput. Disabled by default because it may disable physical KASLR for certain machines.";
     };
 
     anonymity = {
@@ -646,6 +875,11 @@ in {
           }
         ] "List of repositories to automatically clone.";
       };
+    };
+
+    i2p = {
+      enable =
+        mkNixtraOption lib.types.bool false "Whether to enable I2P (i2pd)";
     };
 
     tor = {
@@ -800,6 +1034,9 @@ in {
     debug = {
       persistJournalLogs = mkNixtraOption lib.types.bool false
         "Whether to persist journal logs across reboots.";
+
+      doVerboseKernelLogs = mkNixtraOption lib.types.bool false
+        "Whether to allow the kernel to make extraneous logs.";
     };
 
     fun = {

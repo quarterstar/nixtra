@@ -8,6 +8,8 @@ dist
 
 # Nix build output
 result/
+result-*/
+.direnv/
 
 # File backups
 **/*.bak

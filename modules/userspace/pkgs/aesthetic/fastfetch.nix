@@ -1,3 +1,5 @@
+{ config, pkgs, ... }:
+
 let
   newline = {
     type = "custom";
@@ -5,11 +7,11 @@ let
   };
 
   totalLocWithNewlines =
-    "find /etc/nixos -name '*.nix' -type f -exec cat {} + | wc -l";
+    "${pkgs.findutils}/bin/find /etc/nixos -name '*.nix' -type f -exec cat {} + | wc -l";
   totalLocWithoutNewlines =
-    "find /etc/nixos -name '*.nix' -type f -exec cat {} + | grep -cve '^\\s*$'";
+    "${pkgs.findutils}/bin/find /etc/nixos -name '*.nix' -type f -exec cat {} + | grep -cve '^\\s*$'";
   totalNewlinesLoc =
-    "find /etc/nixos -name '*.nix' -type f -exec cat {} + | grep -c '^\\s*$'";
+    "${pkgs.findutils}/bin/find /etc/nixos -name '*.nix' -type f -exec cat {} + | grep -c '^\\s*$'";
 in {
   programs.fastfetch = {
     enable = true;
@@ -130,11 +132,13 @@ in {
           type = "custom";
           key = "   Lines of Code";
           exec = ''
-            totalLines=$(${totalLocWithoutNewlines})
-            blankLines=$(${totalNewlinesLoc})
-            echo "$totalLines ($blankLines blank lines)"
+            bash -c '
+              totalLines=$(${totalLocWithoutNewlines})
+              blankLines=$(${totalNewlinesLoc})
+              echo "$totalLines ($blankLines blank lines)"
+            '
           '';
-          postProcess = "trim";
+          #postProcess = "trim";
         }
         "break"
         {
