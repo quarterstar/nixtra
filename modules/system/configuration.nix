@@ -1,5 +1,5 @@
 { config, settings, profilePreset, profileSettings, timestamp, lib, pkgs
-, unstable-pkgs, inputs, nur, ... }:
+, unstable-pkgs, inputs, ... }:
 
 let
   # Note for beginners:
@@ -90,6 +90,7 @@ in {
         warn-dirty = false;
         keep-outputs = true;
         keep-derivations = true;
+        #restrict-eval = true;
       };
       optimise.automatic = true;
       package = pkgs.nixVersions.latest;
@@ -97,16 +98,8 @@ in {
 
     # Enable NUR
     # NUR for unstable channel(s) is considered a security risk in Nixtra, so it remains disabled.
-    nixpkgs.overlays = # [ inputs.zeek-nix.overlays.default ] ++
-      lib.optionals config.nixtra.system.nur [ inputs.nur.overlays.default ];
-    #nixpkgs.config.packageOverrides = pkgs:
-    #  if config.nixtra.system.nur then {
-    #    nur = import (builtins.fetchTarball
-    #      "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-    #        inherit pkgs;
-    #      };
-    #  } else
-    #    { };
+    #nixpkgs.overlays = # [ inputs.zeek-nix.overlays.default ] ++
+    #  lib.optionals config.nixtra.system.nur [ inputs.nur.overlays.default ];
 
     # Save configurations from old generations
     # Not currently supported by Flakes

@@ -1,4 +1,10 @@
-# Features
+# TODO
+
+A list of things that need to be done for Nixtra. When an entry is completed, it shall be scratched off the list and erased in the next release.
+
+## Features
+
+**Configuration**
 
 - Implement `rkhunter` scans to `nixtra-check-security-status`
 - Secure core systemd services with sandboxing
@@ -20,7 +26,12 @@
 - Implement Numpad compatibility
 - Implement pywal
 
-# Bugfixes
+**Core**
+
+- RISC-V security modules
+  - QEMU & Spike patch for memory tagging
+
+## Bugfixes
 
 - Fix zsh taking too long to load Oh My Zsh
-- Update documentation for new profile system
+- Investigate https://github.com/NixOS/nixpkgs/issues/82851

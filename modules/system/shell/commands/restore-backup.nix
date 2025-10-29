@@ -6,7 +6,7 @@ createCommand {
     ORIGINAL_DIR="$(pwd)"
     trap 'cd "$ORIGINAL_DIR"' EXIT
 
-    BACKUP_DIR="/var/backups/nixos-backups"
+    BACKUP_DIR="/var/backups/nixos-backups/localhost"
 
     # Ensure backup dir exists
     if [ ! -d "$BACKUP_DIR" ]; then

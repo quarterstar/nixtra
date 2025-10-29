@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nixtraLib, inputs, ... }:
+{ config, profileSettings, pkgs, lib, nixtraLib, inputs, ... }:
 
 # TODO: add violentmonkey scripts
 # https://codeberg.org/Amm0ni4/bypass-all-shortlinks-debloated
@@ -199,7 +199,8 @@ in {
         extensions = {
           force = true;
 
-          packages = with pkgs.nur.repos.rycee.firefox-addons;
+          packages =
+            with inputs.firefox-addons.packages.${profileSettings.arch};
             [
               ublock-origin
               decentraleyes
@@ -220,7 +221,9 @@ in {
               nighttab
               #chameleon
             ] ++ (if config.nixtra.display.themeType == "dark" then
-              [ pkgs.nur.repos.rycee.firefox-addons.darkreader ]
+              [
+                inputs.firefox-addons.packages.${profileSettings.arch}.darkreader
+              ]
             else
               [ ]);
 

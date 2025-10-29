@@ -15,7 +15,10 @@
 
     # Enable automatic management of directories specified in the XDG specification
     # https://xdgbasedirectoryspecification.com/
-    xdg = { enable = true; };
+    xdg = {
+      enable = true;
+      userDirs.enable = true;
+    };
 
     # Fix https://github.com/nix-community/home-manager/issues/1213
     #xdg.configFile."mimeapps.list".force = true;

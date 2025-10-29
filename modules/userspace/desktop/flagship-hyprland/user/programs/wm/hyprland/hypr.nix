@@ -105,6 +105,8 @@ let
   });
 in {
   config = lib.mkIf (config.nixtra.user.desktop == "flagship-hyprland") {
+    home.packages = with pkgs; [ brightnessctl ];
+
     systemd.user.services.hyprshade = {
       Unit = {
         Description = "Hyprshade Service";
@@ -467,6 +469,10 @@ in {
         bind = $mainMod, right, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
         bind = $mainMod, down, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 
+        # Control brightness
+        bind = $mainMod SHIFT, left, exec, brightnessctl set 10%-
+        bind = $mainMod SHIFT, right, exec, brightnessctl set +10%
+
         # Move focus with mainMod + arrow keys
         bind = $mainMod, H, movefocus, l
         bind = $mainMod, L, movefocus, r
@@ -546,18 +552,15 @@ in {
         bind = $mainMod, F12, exec, hyprlock
 
         # Bind personal applications to workspaces
-        ${builtins.concatStringsSep "\n" (lib.lists.imap1 (i: workspace:
+        ${builtins.concatStringsSep "\n" (lib.imap1 (i: workspace:
           let
-            programs =
-              config.nixtra.desktop.flagship-hyprland.workspaces.programs.${workspace};
-            # some apps have .desktop duplicate entry
-            programsExtra = (map (program: "${program}.desktop") programs)
-              ++ programs;
+            programs = (map (program: "${program}.desktop") workspace.programs)
+              ++ workspace.programs;
           in builtins.concatStringsSep "\n" (map (program:
             "windowrule = workspace ${
               builtins.toString i
-            },class:${program} # ${workspace}") programsExtra))
-          config.nixtra.desktop.flagship-hyprland.workspaces.names)}
+            },class:${program} # ${workspace.name}") programs))
+          config.nixtra.desktop.flagship-hyprland.workspaces)}
 
         # Close windows
         bind = $mainMod,Z,killactive

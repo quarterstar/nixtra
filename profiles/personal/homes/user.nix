@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../../modules/userspace/bundles/basic.nix
     ../../../modules/userspace/bundles/programming.nix
     ../../../modules/userspace/bundles/mathematics.nix
     ../../../modules/userspace/bundles/gaming.nix
@@ -16,6 +17,7 @@
     ../../../modules/userspace/pkgs/password/keepassxc.nix
     ../../../modules/userspace/pkgs/drawing/krita.nix
     ../../../modules/userspace/pkgs/drawing/gromit.nix
+    ../../../modules/userspace/pkgs/drawing/drawio.nix
     ../../../modules/userspace/pkgs/aesthetic/fastfetch.nix
     ../../../modules/userspace/pkgs/aesthetic/hollywood.nix
     ../../../modules/userspace/pkgs/social/simplex-chat.nix

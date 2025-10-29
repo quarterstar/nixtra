@@ -36,6 +36,8 @@ in {
       (pkgs.callPackage ./theme/reset-cursor.nix {
         inherit config createCommand;
       })
-    ];
+    ] ++ (import ./rebuild-other.nix {
+      inherit pkgs config createCommand nixtraLib lib;
+    });
   };
 }

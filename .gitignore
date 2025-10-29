@@ -1,6 +1,9 @@
 rescue/hardware-configuration.nix
 dist
 
+# Nixtra builds
+builds
+
 # Nix store paths
 **/*.drv
 **/*.nar

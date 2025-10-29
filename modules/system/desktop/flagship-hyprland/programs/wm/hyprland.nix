@@ -12,7 +12,6 @@
     programs.dconf.enable = true;
 
     environment.systemPackages = with pkgs; [
-      hyprland # Compositor
       hyprland-qtutils # Dependency for some Hyprland dialogs
       waybar # Wayland bar
       mako # Notif manager

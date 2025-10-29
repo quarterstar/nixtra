@@ -47,6 +47,24 @@
       enable = true;
       type = "mullvad";
     };
+
+    sops = {
+      keys = {
+        "password" = { neededForUsers = true; };
+        "ssh/hosts/laptop/publicKey" = { neededForUsers = true; };
+      };
+    };
+  };
+
+  ssh = {
+    enable = true;
+    hosts = {
+      "laptop" = {
+        hostNames = [ "192.168.1.203" ];
+        publicKeySecret = "ssh/laptop/publicKey";
+        profile = "laptop";
+      };
+    };
   };
 
   scheduledTasks = [{

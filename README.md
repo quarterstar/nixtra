@@ -64,6 +64,7 @@ Why NixOS? Because impure system state should be volatile and the rest should be
 
 - [Features](##features)
 - [Security Features](##security_practices)
+- [Donate](##donate)
 - [User Accounts](##user)
 - [Profiles Accounts](##profiles)
 - [Configuration](##configuration)
@@ -117,7 +118,11 @@ Some example security features (which can be toggled on or off) Nixtra employs a
 
 For a complete list and elaboration for the above, view [SECURITY.md](SECURITY.md).
 
-## 🖥️ Installed Software
+## 💲 Donate
+
+I have put months of research into the development of this project (and most of my sanity). If you wish to support me financially and have the means to do so, feel free to check out the donation methods listed [here](https://www.quarterstar.tech/donate.html).
+
+## 🖥️ Software
 
 Nixtra comes with software bundles for:
 
@@ -132,39 +137,15 @@ Nixtra comes with software bundles for:
 - Social Media Applications
 - ...and more
 
-All software provided by the mainstream Nixtra repository must strictly be free and open source software. Popular software packages and configurations for proprietary applications can exist but are to be commented out.
-
 ## 👤 User Accounts
 
-The Nixtra environment is intended to be used as a single-user system. A default `user` account configuration is provided. However, the user may pick a profile based on their software needs.
-
-Also, additional users may be defined in the `security.extraUsers` attribute provided in `settings.nix`. These users only exist for the sole purpose of storing secret documents and files that should not be accessible to programs that are run under the main `user`.
-
-## ♦️ Profiles
-
-Nixtra is a single-user NixOS configuration, but the user may have multiple profiles. It follows the philosophy of "one system, many configurations." Profiles dictate what software shall be installed on your system, as well as how they shall be configured. For instance, you can have a personal profile, a work profile and a gaming profile each equipped with different or shared pieces of software.
-
-Nixtra provides the following default profiles:
-
-| Profile     | Dependencies | Purpose
-| ----------- | ------------ | -------
-| `personal`  | `*`          | superset of all software available to profiles.
-| `program`   | `math`       | subset of software needed to program + all math profile software.
-| `exploit`   | -            | subset of software needed for vulnerability exploitation and analysis.
-| `math`      | -            | subset of all software needed to study math.
-| `untrusted` | -            | minimal profile that provides only absolutely necessary cli tools.
+The Nixtra environment is intended to be used as a single-user system. A default `user` account configuration is provided. However, the user may pick a profile based on their software and hardware needs.
 
 ## ⚙️ Configuration
 
-Nixtra configuration comes in two flavors:
-
-- `settings.nix`: Root system-level configuration dictating your hardware specifications and such. Shared amongst all profiles. Located at `settings.nix`.
-- `profile-settings.nix`: Profile-specific user-level configuration. Located at `profiles/$PROFILE/profile-settings.nix`.
+Nixtra is a single-user NixOS configuration, but the user may have multiple profiles. It follows the philosophy of "one system, many configurations." You could have a profile for each machine you own, or maybe compose different ones for a single running system. It is entirely up to you how you will make use of Nixtra's modular profile system.
 
 For more information, refer to the [configuration page](./docs/02-configuration.md).
-
-> [!NOTE]
-> Including a `settings.nix` file in the root of the selected profile will cause Nixtra to use that one, instead of the global one located in `/etc/nixos/settings.nix`.
 
 ## 🚧 Project Structure
 
@@ -176,12 +157,11 @@ For more information, refer to the [configuration page](./docs/02-configuration.
 
 ## ⚓ See Also
 
-- [My easy-to-use framework for building hardened, customizable and extensible NixOS routers](https://github.com/quarterstar/nixter)
-- [My notes for NixOS and computer science -related topics](https://github.com/quarterstar/notes)
+- [My Nix-related Articles]()
 
 ## 🔗 Credits
 
-Nixtra wouldn't have been possible without help from royalty-free assets and open source projects 🙌
+Nixtra wouldn't have been possible without publicly-available royalty-free assets and open source projects 🙌
 
 **Assets**
 
@@ -191,16 +171,18 @@ Nixtra wouldn't have been possible without help from royalty-free assets and ope
 
 **Code**
 
+All of the works below have been heavily modified to accommodate the needs of this operating system and add new functionality.
+
 - [github:stelcodes/nixos-config](https://github.com/stelcodes/nixos-config/blob/main/packages/overlay.nix) - Overlay for firejail
 - [gist.github:raffaem](https://gist.github.com/raffaem/bb9c35c6aab663efd7a0400c33d248a1) - Record module for waybar
 - [github:siddrs/tokyo-night-sddm](https://github.com/siddrs/tokyo-night-sddm) - Base config for SDDM theme
 - [github:Sly-Harvey/NixOS](https://github.com/Sly-Harvey/NixOS) - Various scripts for Hyprland
 - [gitlab:Zaney/zaneyos](https://gitlab.com/Zaney/zaneyos) - Base config for [fastfetch](https://gitlab.com/Zaney/zaneyos/-/blob/main/modules/home/fastfetch/default.nix), [cava](https://gitlab.com/Zaney/zaneyos/-/blob/main/modules/home/cava.nix)
 - [gitlab:usmcamp0811/dotfiles](https://gitlab.com/usmcamp0811/dotfiles) - Examples for templates, building NixOS ISOs
-- [gist.github:theprojectsomething](https://gist.github.com/theprojectsomething/6813b2c27611be03e67c78d936b0f760) & [github:AmadeusWM/dotfiles-hyprland](https://github.com/AmadeusWM/dotfiles-hyprland) - Rice for Firefox (modified in Nixtra)
+- [gist.github:theprojectsomething](https://gist.github.com/theprojectsomething/6813b2c27611be03e67c78d936b0f760) & [github:AmadeusWM/dotfiles-hyprland](https://github.com/AmadeusWM/dotfiles-hyprland) - Rice for Firefox
 - [github:chiraag-nataraj/firejail-profiles](https://github.com/chiraag-nataraj/firejail-profiles): A curated set of Firejail profiles for common applications
 
-Some small utilities and scripts might have credits directly embedded into their respective files in Nixtra's codebase.
+Some small utilities and scripts may have credits directly embedded into their respective files in Nixtra's codebase.
 
 PSA: If you are a contributor to Nixtra, giving credits isn't only important to uphold values and maintain legitimacy, but also to trace back the origin of the code if any subsequent issues arise!
 

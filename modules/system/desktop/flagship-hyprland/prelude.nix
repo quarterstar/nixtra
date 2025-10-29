@@ -9,5 +9,6 @@
     ./programs/theme/qt.nix
     ./services/udev.nix
     ./services/polkit.nix
+    ./services/udisks2.nix
   ];
 }

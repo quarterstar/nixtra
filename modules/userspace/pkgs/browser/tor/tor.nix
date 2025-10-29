@@ -44,11 +44,11 @@ let
 in {
   home.packages = with pkgs; [
     (nixtraLib.sandbox.wrapFirejail {
-      executable = tor-browser-clearnet-wrapper;
+      executable = "${tor-browser-clearnet-wrapper}/bin/tor-browser-clearnet";
       profile = "tor-browser-other";
     })
     (nixtraLib.sandbox.wrapFirejail {
-      executable = tor-browser-proxy-wrapper;
+      executable = "${tor-browser-proxy-wrapper}/bin/tor-browser-proxy";
       profile = "tor-browser-other";
     })
     (nixtraLib.sandbox.wrapFirejail {
@@ -56,5 +56,7 @@ in {
       profile = "tor-browser-main";
     })
     tor-browser
+    tor-browser-clearnet-wrapper
+    tor-browser-proxy-wrapper
   ];
 }

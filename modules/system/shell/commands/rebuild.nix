@@ -9,7 +9,7 @@ createCommand {
     trap 'cd "$ORIGINAL_DIR"' EXIT
 
     # Backup configuration after successful rebuild
-    BACKUP_DIR="/var/backups/nixos-backups"
+    BACKUP_DIR="/var/backups/nixos-backups/localhost"
     BACKUP_PW="nixtra" # stub for now
     MAX_KEEP=25
 

@@ -14,6 +14,7 @@
     ./services/rainbow-border.nix
     ./services/switch-wallpaper.nix
     ./services/idle-killer/idle-killer.nix
+    ./services/udiskie.nix
 
     ./commands/commands.nix
 

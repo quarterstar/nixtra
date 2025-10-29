@@ -1,4 +1,5 @@
 ignore private-dev
+ignore private-cache
 ignore nou2f
 ignore net none
 ignore nodbus
@@ -14,6 +15,7 @@ include /etc/firejail/common.inc
 include /etc/firejail/gtk.inc
 
 whitelist ${HOME}/.librewolf
+whitelist ${HOME}/.cache/librewolf
 whitelist ${HOME}/.pulse
 whitelist ${HOME}/.config/pulse
 whitelist ${HOME}/.local/share/themes

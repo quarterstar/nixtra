@@ -221,3 +221,164 @@ nixos-rebuild switch
 ```
 
 It builds the full NixOS system you would boot into. In newer Nix syntax, this is identical to `nix build -f '<nixpkgs/nixos>' config.system.build.toplevel`.
+
+## Case Scenarios
+
+### Hunting Down Packages in the Nix Store
+
+In Nix, packages installed on the system do not follow the standard Linux filesystem hierarchy, which makes it hard to track them down for newcomers. Thankfully, NixOS provides a set of utilities to traverse its special quirks, in the form of commands. This article focuses on such commands, and the motivation behind using them.
+
+Before I begin, I need to get a few terms out of the way. A *derivation* is a build recipe for software. It consists of inputs and outputs. Outputs are what we will later discover to be directly connected to the software packages we install.
+
+For the first scenario, suppose you are a programmer and have installed a library like `glm` on your NixOS system, which is a mathematical library for C/C++. If you do not understand what that means, imagine code that exists on your system as a package that you cannot directly run. Since it is not an executable, you cannot simply cheat your way by reading a symlink in your path (though specialized environment variables exist). So unless we want to run `find` in `/nix/store` and wait until the heat death of the universe, and then go through duplicate installations of the library to find the one we are looking for, we need to learn some Nix commands.
+
+First, we need to enter a Nix REPL environment to resolve the package directly. REPL stands for Read-Eval-Print Loop, which is a powerful environment for testing various Nix expressions. We can access it with the primary `nix` command.
+
+```
+> nix repl
+nix-repl> pkgs = import <nixpkgs> {}
+nix-repl> pkgs.glm
+«derivation /nix/store/25rdysybbl5aangkgkdznc57xfihq2zk-glm-1.0.1.drv»
+```
+
+This article assumes you already have basic familiarity with the Nix language, so a crash course for it will not be interleaved. But as a side note, attributes in Nix are evaluated lazily, so we do not worry about the import taking a long time. This is due to the fact that lazy evaluation guarantees expressions are evaluated only when they are needed, not when they are defined.
+
+The last command yields a path because the interpreter treats it as a special kind of attribute set that was introduced as a derivation. Indeed, we can confirm that this attribute is of type derivation by running another command in the environment.
+
+```
+nix-repl> lib = pkgs.lib
+nix-repl> lib.attrsets.isDerivation pkgs.glm
+true
+```
+
+(Pro Tip: Use [noogle.dev](https://noogle.dev/) for looking through `lib` and [mynixos.com](https://mynixos.com/) for looking through `pkgs`.)
+
+From the penultimate set of commands, we infer that the derivation is located at `/nix/store/25rdysybbl5aangkgkdznc57xfihq2zk-glm-1.0.1.drv`. (Derivations always use the `.drv` file extension.)
+
+Every derivation (`.drv`) has a set of outputs. When a derivation is realised (i.e. built), these become what we will find out to be *store paths*.
+
+The next step is finding the actual store path where the library file (`.a` or `.so`) resides in. We can use the `nix-store` command to achieve this.
+
+```
+> nix-store --query --outputs /nix/store/25rdysybbl5aangkgkdznc57xfihq2zk-glm-1.0.1.drv
+/nix/store/gkahdgly8x8z8b6cvgab4gij0niajx7x-glm-1.0.1-doc
+/nix/store/nlrq8s273x3kbm2w4g90pymx1ab9ww3p-glm-1.0.1
+```
+
+The latter is the one we are looking for. This shows that store paths are blobs in the Nix store where different versions of the same package may exist. It is now trivial to list the `lib` directory, which reveals that the library is there and is statically-linked.
+
+```
+> ls /nix/store/nlrq8s273x3kbm2w4g90pymx1ab9ww3p-glm-1.0.1/lib
+libglm.a
+pkgconfig
+```
+
+For programmers, it should be unsurprising that it is not in some sort of path because it need not be resolved automatically. Later, we will see that this is not the case for the other type of libraries.
+
+It is also possible to inspect the derivation itself in a human-readable JSON form with the `nix` command, which lists the mysterious outputs that were mentioned before:
+
+```
+> nix derivation show /nix/store/25rdysybbl5aangkgkdznc57xfihq2zk-glm-1.0.1.drv
+...lots of json output
+```
+
+I will provide a snippet for the part of the JSON that contains the outputs:
+```
+"outputs": {
+  "doc": {
+    "path": "/nix/store/gkahdgly8x8z8b6cvgab4gij0niajx7x-glm-1.0.1-doc"
+  },
+  "out": {
+    "path": "/nix/store/nlrq8s273x3kbm2w4g90pymx1ab9ww3p-glm-1.0.1"
+  }
+}
+```
+
+It is not hard to deduce from this that outputs have a one-to-one correspondence with store paths. So that is what they create when you *realise* (i.e. build) a derivation with:
+
+```
+> nix-store --realize /nix/store/25rdysybbl5aangkgkdznc57xfihq2zk-glm-1.0.1.drv
+```
+
+Note that the `.drv` file that has produced the store path we are looking for is called the *deriver*. The inverse operation—finding a derivation from a store path—simply involves asking for the deriver.
+
+```
+> nix-store --query --deriver /nix/store/nlrq8s273x3kbm2w4g90pymx1ab9ww3p-glm-1.0.1/
+/nix/store/25rdysybbl5aangkgkdznc57xfihq2zk-glm-1.0.1.drv
+```
+
+Now suppose you had a store path with an executable, say `git`. We can leverage the fact that it is in the path to track it down more easily and figure out more stuff about our system. First, we find where its reference is in the path.
+
+```
+> which git
+/home/user/.nix-profile/bin/git
+```
+
+This is part of the running user profile. This is by convention a symlink, so using `ls` we can find its store path:
+
+```
+> ls -l /home/user/.nix-profile/bin/git
+lrwxrwxrwx 20 root root 62 Jan  1  1970 /home/user/.nix-profile/bin/git -> /nix/store/v2rxk9xkcxsas64wl7ds31al15cm2wqd-git-2.50.1/bin/git
+```
+
+Equivalently, NixOS has a system profile, which resides in `/run/current-system`; it is the same as `/nix/var/nix/profiles/system`, whose content follows this structure:
+
+```
+> tree /run/current-system
+/run/current-system
+├── activate
+├── append-initrd-secrets -> /nix/store/854r1y7ds8gpb590ykp80pp8abxvh8rz-append-initrd-secrets/bin/append-initrd-secrets
+├── bin
+│   └── switch-to-configuration
+├── boot.json
+├── dry-activate
+├── etc -> /nix/store/5421s9d4gxacbb1qz4bcpbzpri3fs9rf-etc/etc
+├── extra-dependencies
+├── firmware -> /nix/store/f4qr5qzy42058jdhb3b72hv2jibx66jm-firmware/lib/firmware
+├── init
+├── init-interface-version
+├── initrd -> /nix/store/kbsga64nqsyqmq8yscppi14wzwvpmkh8-initrd-linux-hardened-6.12.43/initrd
+├── kernel -> /nix/store/xdj4kqzlq81vpcivbjfjqs0gjkymd5lp-linux-hardened-6.12.43/bzImage
+├── kernel-modules -> /nix/store/h1675il6j7xik802qcv5lhz2mijz934i-linux-hardened-6.12.43-modules
+├── kernel-params
+├── nixos-version
+├── specialisation
+│   └── no-apparmor -> /nix/store/avbh20p5w5q9014qdargli4dia9j2gg7-nixos-system-nixtra-personal-25.05.20250929.5ed4e25
+├── sw -> /nix/store/fbdm2v6r78w3n0a7f78pbnjdwpdwi12x-system-path
+├── system
+└── systemd -> /nix/store/d84f8nm2na5cr53m4jk0qk2mj7lgr9fx-systemd-257.9
+```
+
+The only difference one needs to understand at this stage of learning is that the packages you install with Home Manager will be in the user profile, and the ones you do not are in the system profile.
+
+Furthermore, `/run/current-system/sw` (where `sw` is a shorthand for "software") is where all of our executables are symlinked to. And unsuprisingly, these symlinks point to the store paths we discussed!
+
+```
+> ls -l /run/current-system/sw
+lrwxrwxrwx 11 root root 55 Jan  1  1970 /run/current-system/sw -> /nix/store/fbdm2v6r78w3n0a7f78pbnjdwpdwi12x-system-path
+> ls /nix/store/fbdm2v6r78w3n0a7f78pbnjdwpdwi12x-system-path
+bin
+etc
+lib
+sbin
+share
+```
+
+An important interjection here is that, since `glm` is a static library, it is not located in the `lib` subdirectory; only shared library files (`.so`) are in it. You can imagine an equivalent `$PATH` existing for shared libraries, which is this path.
+
+Returning to our ongoing investigation, since Git is installed system-wide, you can probably guess that it is in the bin directory, which in turn is symlinked to the store path we previously discovered. 
+
+```
+> ls -l /nix/store/fbdm2v6r78w3n0a7f78pbnjdwpdwi12x-system-path/bin/git
+lrwxrwxrwx 62 root root 65 Jan  1  1970 /nix/store/fbdm2v6r78w3n0a7f78pbnjdwpdwi12x-system-path/bin/git -> /nix/store/gz9a9vvx15cwznzw2h1gr4k7778bbgqk-firejail-wrap/bin/git
+```
+
+And this concludes our witchhunt! We have seen how all of these things are interconnected in the ecosystem, and you have learned basic traversal of this complex monolith called the Nix store. I leave the traversal of the user profile located in `~/.nix-profile` as an exercise to the reader.
+
+To summarize everything that I demonstrated, below is a cheatsheet of the commands and material introduced above.
+
+- `nix-store --query --outputs <derivation>`: fetch the store paths associated with a derivation
+- `nix-store --query --deriver <store-path>`: fetch the derivation that a store path originates from
+- `nix derivation show <derivation>`: inspect a derivation in human-readable JSON form
+- `/run/current-system`: the NixOS system profile; same as `/nix/var/nix/profiles/system`
+- `~/.nix-profile`: the NixOS user profile

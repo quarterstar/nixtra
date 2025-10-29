@@ -1,8 +1,5 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixtraLib, ... }:
 
 {
-  home.packages = with pkgs;
-    [
-      inkscape # SVG tool
-    ];
+  home.packages = with pkgs; [ inkscape ];
 }

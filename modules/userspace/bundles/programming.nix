@@ -13,7 +13,8 @@
     ../pkgs/reading/kiwix.nix
     ../pkgs/reading/newsflash.nix
     ../pkgs/drawing/openboard.nix
-    # ../pkgs/drawing/drawio.nix
+    ../pkgs/drawing/inkscape.nix
+    #../pkgs/drawing/drawio.nix
     ../pkgs/social/element.nix
     ../pkgs/social/dissent.nix
     ../pkgs/emu/wine.nix
@@ -23,6 +24,7 @@
     ../pkgs/programming/lang/node.nix
     ../pkgs/programming/lang/rust.nix
     ../pkgs/programming/lang/c.nix
+    ../pkgs/programming/lang/cpp.nix
     ../pkgs/programming/lang/latex.nix
     ../pkgs/programming/build/cmake.nix
     # ../pkgs/programming/ide/jetbrains.nix

@@ -37,9 +37,9 @@ pkgs.wrapFirejail {
 }
 ```
 
-Notice that the `profile` is set to the string `"prismlauncher"`. The overlay will implicitly translate this to the path `/etc/nixos/firejail/prismlauncher.profile` at build time.
+Notice that the `profile` is set to the string `"prismlauncher"`. The overlay will implicitly translate this to the path `/etc/nixos/modules/system/security/firejail/profiles` at build time.
 
-Replace the package with the one you wish to encapsulate and the profile with a new one that you should create for it. For security reasons, the original package will be made inaccessible unless explicitly cloned in some way.
+Replace the package with the one you wish to encapsulate and the profile with a new one that you create for it in that directory. For security reasons, the original package will be made inaccessible unless explicitly cloned in some way.
 
 You can also compose different sandboxing solutions such as firejail with torify:
 
@@ -49,6 +49,9 @@ pkgs.wrapFirejail {
   profile = "prismlauncher";
 }
 ```
+
+> [!NOTE]
+> If you reasonably sandbox an upstream software package, we recommend that you contribute it to Nixtra for the benefit all of our users.
 
 ## Disable IPv6
 
@@ -70,6 +73,9 @@ sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
 > Some ISPs only provide IPv6 addresses and not IPv4. Check if your ISP provides you with an IPv4 address with `ip addr`.
 
 ## Spoof the Tor Exit Node IP Address in Tor Browser
+
+> [!IMPORTANT]
+> Following this section is redundant; Nixtra's `flagship-hyprland` environment already implements these recommendations with the flavors mechanism.
 
 > [!WARNING]
 > This section explains how you can mask your Tor IP address by configuring a proxy to be used after traffic leaves the exit node. This may reduce your anonymity if done improperly. Make sure to restrict your usage of the Internet while this strategy is in use such that you cannot be tracked across several sites, but instead only the ones that block you.
@@ -189,6 +195,10 @@ It is expected that the files ending with `bzImage.efi` are *not* signed.
 After that, enable Secure Boot in your firmware, and it should work.
 
 For further documentation regarding Lanzaboote, check out its official [page](https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md).
+
+## Prevent BGP attacks in Tor
+
+TODO
 
 ## Day-to-Day Operation Tips
 

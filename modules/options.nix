@@ -272,6 +272,29 @@ let
       # Add other potential template-specific options here if needed in the future
     };
   };
+
+  sshHostType = lib.types.submodule ({ name, ... }: {
+    options = {
+      hostNames = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        description =
+          "A list of hostnames for this SSH host. Can be an IP address or a host name";
+      };
+
+      publicKeySecret = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          The path to the secret containing the public key for this host.
+          This would typically be a path within a secrets management system.
+        '';
+      };
+
+      user = mkNixtraOption lib.types.str "user"
+        "The default user that programs using SSH should connect to.";
+      profile = mkNixtraOption lib.types.str ""
+        "The name of the Nixtra profile that should be associated with this SSH host, if it is using Nixtra. An empty string means that it is not a Nixtra host";
+    };
+  });
 in {
   options.nixtra = {
     user = {
@@ -340,7 +363,8 @@ in {
     };
 
     hardware = {
-      laptop = mkNixtraOption lib.types.bool true "Whether the PC is a laptop.";
+      laptop =
+        mkNixtraOption lib.types.bool false "Whether the PC is a laptop.";
 
       cpu = lib.mkOption {
         type = lib.types.str;
@@ -595,6 +619,13 @@ in {
         "List of DNS servers to use as fallback ONLY if VPN is disabled.";
     };
 
+    kernel = {
+      enableNonfreeFirmware = mkNixtraOption lib.types.bool false
+        "Whether to install and enable non-free firmware. May be needed for things like wireless networking.";
+      extraPackages = mkNixtraOption (lib.types.listOf lib.types.package) [ ]
+        "List of additional kernel module packages to install";
+    };
+
     security = {
       autoUpdate = mkNixtraOption lib.types.bool true
         "Whether to enable automatic system updates.";
@@ -641,6 +672,7 @@ in {
           8080
           53
           51820
+          22
         ] "List of TCP ports to allow through the firewall.";
         allowedUDPPorts =
           mkNixtraOption (lib.types.listOf lib.types.port) [ 8080 51820 53 ]
@@ -875,6 +907,20 @@ in {
           }
         ] "List of repositories to automatically clone.";
       };
+    };
+
+    ssh = {
+      enable = mkNixtraOption lib.types.bool true "Whether to enable SSH";
+      permitRootLogin = mkNixtraOption lib.types.bool false
+        "Whether to permit root login (insecure)";
+      hosts = mkNixtraOption (lib.types.attrsOf sshHostType) { }
+        "Configuration for SSH hosts";
+      rootAuthorizedKeySecrets =
+        mkNixtraOption (lib.types.listOf lib.types.str) [ ]
+        "List of SOPS secret names for connecting to user with authorized SSH keys";
+      userAuthorizedKeySecrets =
+        mkNixtraOption (lib.types.listOf lib.types.str) [ ]
+        "List of SOPS secret names for connecting to root with authorized SSH keys";
     };
 
     i2p = {

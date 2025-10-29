@@ -17,7 +17,6 @@ createCommand {
       exit 1
     fi
 
-    JQ="$(command -v jq || true)"
     HYPRCTL="$(command -v hyprctl || true)"
     if [[ -z "$HYPRCTL" ]]; then
       echo "hyprctl not found in PATH — must run inside Hyprland." >&2
@@ -57,32 +56,17 @@ createCommand {
       fi
     }
     get_focused_class_and_pid() {
-      if [[ -n "$JQ" ]]; then
-        local j; j="$($HYPRCTL activewindow -j 2>/dev/null || true)"
-        if [[ -n "$j" ]]; then
-          local cls pid
-          cls="$(printf '%s' "$j" | $JQ -r '.class // empty')"
-          pid="$(printf '%s' "$j" | $JQ -r '.pid // empty')"
-          echo "''${cls}|''${pid}"
-          return
-        fi
+      local j; j="$($HYPRCTL activewindow -j 2>/dev/null || true)"
+      if [[ -n "$j" ]]; then
+        local cls pid
+        cls="$(printf '%s' "$j" | jq -r '.class // empty')"
+        pid="$(printf '%s' "$j" | jq -r '.pid // empty')"
+        echo "''${cls}|''${pid}"
       fi
-      local out; out="$($HYPRCTL activewindow 2>/dev/null || true)"
-      local cls pid
-      cls="$(printf '%s' "$out" | awk -F'class: ' '/class:/ {print $2; exit}' | awk '{$1=$1;print}')"
-      pid="$(printf '%s' "$out" | awk '/pid:/ {print $2; exit}')"
-      echo "''${cls}|''${pid}"
     }
     get_pids_for_class() {
       local app="$1"
-      if [[ -n "$JQ" ]]; then
-        $HYPRCTL clients -j 2>/dev/null | $JQ -r --arg a "$app" '.[] | select(.class == $a) | .pid' 2>/dev/null || true
-        return
-      fi
-      $HYPRCTL clients 2>/dev/null | awk -v RS= -v app="$app" '
-        /class:/{ if ($0 ~ ("class: " app)) {
-          for(i=1;i<=NF;i++) if($i=="pid:") {print $(i+1); break}
-        }}' || true
+      $HYPRCTL clients -j 2>/dev/null | jq -r --arg a "$app" '.[] | select(.class == $a) | .pid' 2>/dev/null || true
     }
     has_unfinished_work() {
       local app="$1"

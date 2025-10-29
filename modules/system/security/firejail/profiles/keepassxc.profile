@@ -5,6 +5,5 @@ ignore private-cache
 
 include /etc/firejail/common.inc
 
-whitelist ${HOME}/Documents
 whitelist ${HOME}/.config/keepassxc
 whitelist ${HOME}/.cache/keepassxc

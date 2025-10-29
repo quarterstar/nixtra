@@ -122,21 +122,12 @@ in {
 
           "hyprland/workspaces" = {
             format = "{icon}";
-            format-icons = {
-              "1" = "";
-              "2" = "";
-              "3" = "";
-              "4" = "";
-              "5" = "";
-              "6" = "";
-              "7" = "";
-              "8" = "";
-              "9" = "";
-              "10" = "";
-              "11" = "";
-              active = "";
-              default = "";
-            };
+            format-icons = lib.mkMerge ((lib.imap1
+              (i: workspace: { "${builtins.toString i}" = workspace.icon; })
+              config.nixtra.desktop.flagship-hyprland.workspaces) ++ [{
+                active = "";
+                default = "";
+              }]);
             "active-only" = false;
           };
 
@@ -540,7 +531,7 @@ in {
       }
 
       #battery {
-          background-color: #ffffff;
+          background-color: transparent;
           color: #000000;
       }
 

@@ -2,12 +2,12 @@
 
 {
   config = lib.mkIf config.nixtra.flatpak.enable {
-    services.flatpak.enable = true;
-
-    system.activationScripts.installFlathub = (lib.concatStringsSep "\n" (map
-      (source:
-        "${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists ${source.name} ${source.source}")
-      config.nixtra.flatpak.sources));
+    services.flatpak = {
+      enable = true;
+      #packages = [ ];
+      #uninstallUnmanaged = true;
+      #update.auto.enable = false;
+    };
 
     security.wrappers."bwrap" = {
       owner = "root";

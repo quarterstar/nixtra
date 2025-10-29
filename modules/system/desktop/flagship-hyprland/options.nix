@@ -33,34 +33,64 @@ in {
     rainbowShadow = nixtraLib.option.mkNixtraOption lib.types.bool true
       "Whether to enable rainbow window shadows.";
 
-    workspaces = {
-      names = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [
-          "Terminal"
-          "Clearnet Browser"
-          "Video Player"
-          "Anonymous Browser"
-          "Code Editor"
-          "Virtual Machine"
-          "Communication"
-          "Gaming"
-          "Document Viewer"
-          "Drawing & Presentation"
-          "Password Manager"
-        ];
-      };
-      programs = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-        default = {
-          "Terminal" = [ "kitty" "alacritty" ];
-          "Clearnet Browser" = [ "firefox" "librewolf" "chrome" ];
-          "Video Player" = [ "FreeTube" "vlc" "mpv" "com.stremio.stremio" ];
-          "Anonymous Browser" = [ "Tor Browser" ];
-          "Code Editor" = [ "lvim" "vim" "nvim" "codium" ];
-          "Virtual Machine" = [ ".virt-manager-wrapped" ];
-          "Communication" = [ "element-desktop" "discord" "so.libdb.dissent" ];
-          "Gaming" = [
+    workspaces = lib.mkOption {
+      type = lib.types.listOf (lib.types.submodule {
+        options = {
+          name = lib.mkOption {
+            type = lib.types.str;
+            description = "Workspace name";
+          };
+          icon = lib.mkOption {
+            type = lib.types.str;
+            description = "The icon to use to display the workspace";
+          };
+          programs = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            description =
+              "The programs (their classes) to reside in the workspace";
+          };
+        };
+      });
+      default = [
+        {
+          name = "Terminal";
+          icon = "";
+          programs = [ "kitty" "alacritty" ];
+        }
+        {
+          name = "Clearnet Browser";
+          icon = "";
+          programs = [ "firefox" "librewolf" "chrome" ];
+        }
+        {
+          name = "Video Player";
+          icon = "";
+          programs = [ "FreeTube" "vlc" "mpv" "com.stremio.stremio" ];
+        }
+        {
+          name = "Anonymous Browser";
+          icon = "";
+          programs = [ "Tor Browser" ];
+        }
+        {
+          name = "Code Editor";
+          icon = "";
+          programs = [ "lvim" "vim" "nvim" "codium" ];
+        }
+        {
+          name = "Virtual Machine";
+          icon = "";
+          programs = [ ".virt-manager-wrapped" ];
+        }
+        {
+          name = "Communication";
+          icon = "";
+          programs = [ "element-desktop" "discord" "so.libdb.dissent" ];
+        }
+        {
+          name = "Gaming";
+          icon = "";
+          programs = [
             "org.prismlauncher.PrismLauncher"
             "org.prismlauncher.EntryPoint"
             "org.prismlauncher-EntryPoint"
@@ -68,7 +98,11 @@ in {
             "net.lutris.Lutris"
             "^(Minecraft.*)$"
           ];
-          "Document Viewer" = [
+        }
+        {
+          name = "Document Viewer";
+          icon = "";
+          programs = [
             "Zettlr"
             "io.github.alainm23.planify"
             "libreoffice-startcenter"
@@ -77,10 +111,28 @@ in {
             "kiwix"
             "libreoffice-writer"
           ];
-          "Drawing & Presentation" = [ "krita" "gimp" "org.oe-f." ];
-          "Password Manager" = [ "org.keepassxc.KeePassXC" ];
-        };
-      };
+        }
+        {
+          name = "Drawing & Presentation";
+          icon = "";
+          programs = [ "krita" "gimp" "org.oe-f." ];
+        }
+        {
+          name = "Download";
+          icon = "";
+          programs = [ "org.qbittorrent.qBittorrent" ];
+        }
+        {
+          name = "Email";
+          icon = "";
+          programs = [ "thunderbird" ];
+        }
+        {
+          name = "Password Manager";
+          icon = "";
+          programs = [ "org.keepassxc.KeePassXC" ];
+        }
+      ];
     };
 
     idleKiller = {
@@ -91,7 +143,10 @@ in {
       defaultTimeout = mkNixtraOption lib.types.int (30 * 60)
         "Default timeout (in seconds) for apps not explicitly listed";
       appTimeouts =
-        mkNixtraOption (lib.types.listOf idleKillerConcurrentAppSubmodule) [ ]
+        mkNixtraOption (lib.types.listOf idleKillerConcurrentAppSubmodule) [{
+          class = "firefox";
+          timeout = 600;
+        }]
         "Apps that should be checked for inactivity concurrently; with a separate timer";
       killMethod = mkNixtraOption (lib.types.enum [ "pid" "pkill" ]) "pid"
         "The kill method that should be used to stop apps";

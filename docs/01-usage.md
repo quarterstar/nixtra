@@ -73,6 +73,9 @@ You can find more of them by checking for commands with the following prefixes:
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>K</kbd>: Scale the hovered window up.
 - <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>ALT</kbd> + <kbd>J</kbd>: Scale the hovered window down.
 
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>Right</kbd>: Increase brightness by 10%.
+- <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>Left</kbd>: Decrease brightness by 10%.
+
 - <kbd>SUPER</kbd> + <kbd>S</kbd>: Take a screenshot of the entire window. (Stored in `~/Pictures/Screenshots`)
 - <kbd>SUPER</kbd> + <kbd>R</kbd>: Start/stop recording the entire window. (Stored in `~/Videos/Screencasts`)
 - <kbd>SUPER</kbd> + <kbd>C</kbd>: Pick a color from the screen.

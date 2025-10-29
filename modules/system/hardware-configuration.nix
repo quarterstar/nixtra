@@ -3,7 +3,10 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  #config.hardware.enableRedistributableFirmware = true;
+  hardware = lib.mkIf config.nixtra.kernel.enableNonfreeFirmware {
+    firmware = [ pkgs.linux-firmware ];
+    enableRedistributableFirmware = true;
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -17,7 +20,7 @@
       pkgs.linuxKernel.packages.linux_zen)
   ];
   boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot.extraModulePackages = config.nixtra.kernel.extraPackages;
   boot.initrd.supportedFilesystems = config.nixtra.system.supportedFilesystems;
 
   # Fix bwrap exec error on Flatpak
