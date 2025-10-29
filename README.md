@@ -120,7 +120,7 @@ For a complete list and elaboration for the above, view [SECURITY.md](SECURITY.m
 
 ## 💲 Donate
 
-I have put months of research into the development of this project (and most of my sanity). If you wish to support me financially and have the means to do so, feel free to check out the donation methods listed [here](https://www.quarterstar.tech/donate.html).
+I have put months of research into the development of this project (and most of my sanity). If you wish to support me financially and have the means to do so, feel free to check out the donation methods listed [here](https://www.quarterstar.tech/pages/donate.html).
 
 ## 🖥️ Software
 
